@@ -1,10 +1,15 @@
 #ifndef EXTRAS_H
 #define EXTRAS_H
-#include "TDAs/list.h"
-#include "TDAs/map.h"
+#include "list.h"
+#include "map.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#ifdef _WIN32
+    #include <conio.h>
+#else
+    #include <ncurses.h>
+#endif
 
 //--- LISTA PROPIA CON FUNCIONES (Que agarré o creé) ---//
 
@@ -31,6 +36,10 @@ void leer_entrada(char*) ;
 void leer_opcion(char*) ;
 // Solo imprime gatitos.
 void imprimir_gato(void);
+
+void esperar_tecla(void);
+
+int leer_opcion_valida(void);
 
 
 #endif

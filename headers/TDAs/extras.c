@@ -1,12 +1,7 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <errno.h>
 #include "extras.h"
-#include "TDAs/list.h"
+
 #define MAX_LONGITUD_LINEA 1024
 #define MAX_CAMPOS 300
-
 
 char** leer_linea_csv(FILE *archivo, char separador) {
     static char linea[MAX_LONGITUD_LINEA];
@@ -14,7 +9,6 @@ char** leer_linea_csv(FILE *archivo, char separador) {
     int idx = 0;
 
     if (fgets(linea, MAX_LONGITUD_LINEA, archivo) == NULL) {
-        printf("No hay más líneas para leer (EOF o error).\n");
         return NULL;
     }
 
@@ -22,11 +16,8 @@ char** leer_linea_csv(FILE *archivo, char separador) {
     linea[strcspn(linea, "\r")] = '\0';
 
     if (strlen(linea) == 0) {
-        printf("Advertencia: Línea vacía detectada.\n");
         return NULL;
     }
-
-    printf("Línea leída: '%s'\n", linea);
 
     char *ptr = linea;
     char *start = ptr;
@@ -49,12 +40,6 @@ char** leer_linea_csv(FILE *archivo, char separador) {
     }
 
     campos[idx] = NULL;
-
-    printf("Campos procesados: %d\n", idx);
-    for (int i = 0; i < idx; i++) {
-        printf("Campo %d: '%s'\n", i, campos[i]);
-    }
-
     return campos;
 }
 
@@ -88,7 +73,7 @@ void limpiar_pantalla() {
     #ifdef _WIN32
         system("cls");
     #else
-        printf("\033[H\033[J"); 
+        system("clear");
     #endif
 }
 
@@ -141,4 +126,26 @@ void imprimir_gato(void) {
     puts("  )  ( ')             / _ _   ,  ;");
     puts(" (  /  )             `~=`Y'~_<._./");
     puts("  \\(__)|             <`-....__.'");
+}
+
+void esperar_tecla() {
+    printf("Presiona una tecla para continuar...\n");
+    #ifdef _WIN32
+        getch();
+        while (kbhit()) getch();
+    #else
+        initscr();      // Inicia modo ncurses
+        noecho();       // No mostrar la tecla presionada
+        cbreak();       // Capturar teclas sin esperar Enter
+        getch();        // Esperar la tecla
+        endwin();       // Finaliza modo ncurses
+    #endif
+}
+
+int leer_opcion_valida(void) {
+    char buffer[100];
+    int opcion;
+    leer_entrada(buffer);
+    if (*buffer == '\n' || *buffer == '\0') opcion = -1;
+    else opcion = atoi(buffer);
 }
