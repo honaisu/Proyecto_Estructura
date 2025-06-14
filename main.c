@@ -1,5 +1,3 @@
-
-
 #include <stdio.h>                                              // Incluye la biblioteca para mostrar o leer datos en la consola, como escribir (printf) o leer (scanf)
 #include <stdlib.h>                                             // Incluye la biblioteca para reservar espacio en memoria (malloc) o liberarlo (free)
 #include <string.h>                                             // Incluye la biblioteca para trabajar con textos, como copiar (strcpy) o comparar (strcmp) textos
@@ -16,7 +14,6 @@ typedef struct {
     float tamano;
     int puntos_combate;
 } Mon;
-
 
 typedef struct {                                                // Define una estructura para representar un Pokémon
     char nombre[50];                                            // Un espacio para guardar el nombre del Pokémon (hasta 50 letras)
@@ -87,7 +84,7 @@ int mostrar_menu_final() {                                      // Define una fu
 }                                                               // Cierra la función mostrar_menu_final
 
 void cargar_mones_desde_csv(Map* datos_mones) {                 // Define una función para leer Pokémon desde mones.csv
-    FILE* archivo = fopen("C:\\Users\\victor\\OneDrive\\Desktop\\Proyecto_Estructura\\data\\mones.csv", "r"); // Abre el archivo mones.csv para lectura
+    FILE* archivo = fopen("data/mones.csv", "r");               // Abre el archivo mones.csv para lectura
     if (!archivo) {                                             // Verifica si no se pudo abrir el archivo
         printf("Error al cargar mones.csv\n");                  // Muestra un mensaje de error
         return;                                                 // Termina la función
@@ -117,7 +114,7 @@ void cargar_grafo_desde_csv(Map* ubicaciones, int* cantidad_ubicaciones) { // De
         free(datos_mones);                                      // Libera la memoria del mapa
         return;                                                 // Termina la función
     }                                                           // Cierra el bloque if
-    FILE* archivo = fopen("C:\\Users\\victor\\OneDrive\\Desktop\\Proyecto_Estructura\\data\\zonas_pokemon.csv", "r"); // Abre el archivo zonas_pokemon.csv
+    FILE* archivo = fopen("data/zonas_pokemon.csv", "r"); // Abre el archivo zonas_pokemon.csv
     if (!archivo) {                                             // Verifica si no se pudo abrir
         printf("Error al cargar zonas_pokemon.csv\n");          // Muestra un mensaje de error
         map_clean(datos_mones);                                 // Limpia el mapa de Pokémon
