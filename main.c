@@ -1,4 +1,5 @@
 
+
 #include <stdio.h>                                              // Incluye la biblioteca para mostrar o leer datos en la consola, como escribir (printf) o leer (scanf)
 #include <stdlib.h>                                             // Incluye la biblioteca para reservar espacio en memoria (malloc) o liberarlo (free)
 #include <string.h>                                             // Incluye la biblioteca para trabajar con textos, como copiar (strcpy) o comparar (strcmp) textos
@@ -7,6 +8,15 @@
 #include "headers/TDAs/list.h"                                  // Incluye un archivo personalizado que define una lista para guardar elementos en orden
 #include "headers/TDAs/map.h"                                   // Incluye un archivo personalizado que define un mapa para guardar pares clave-valor
 #include "headers/TDAs/extras.h"                                // Incluye un archivo con funciones adicionales, como leer archivos CSV (leer_linea_csv)
+
+// probando git o.o
+
+typedef struct {
+    char nombre[50];
+    float tamano;
+    int puntos_combate;
+} Mon;
+
 
 typedef struct {                                                // Define una estructura para representar un Pokémon
     char nombre[50];                                            // Un espacio para guardar el nombre del Pokémon (hasta 50 letras)

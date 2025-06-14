@@ -1,4 +1,0 @@
-ID,Nombre,Descripción,TipoZona,Items,Arriba,Abajo,Izquierda,Derecha,EsFinal
-1,Pueblo Paleta,Un pueblo tranquilo,Tierra,Monball,5,2,-1,-1,-1,No
-2,Ruta 1,Un camino boscoso,Tierra,1,-1,-1,-1,-1,No
-3,Liga Pokémon,El desafío final,Tierra,-1,-1,-1,-1,Sí
