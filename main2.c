@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <limits.h>
 #include <math.h>
+#include <time.h>
 
 #define MAX 50
 
@@ -258,6 +259,113 @@ void mostrar_puntajes_finales(Entrenador* entrenadores, int num_entrenadores, in
     }
 }
 
+float conseguir_efectividad(Mon *mon_efectividad, Mon *mon_en_contra){
+    if (strcmp(mon_efectividad->tipo, "PLANTA") == 0){
+        if (strcmp(mon_en_contra->tipo, "FUEGO") == 0) return 0.75 ;
+        if (strcmp(mon_en_contra->tipo, "AGUA")) return 1.25 ;
+        if (strcmp(mon_en_contra->tipo, "PLANTA") == 0) return 1.0 ;
+    }
+    else if (strcmp(mon_efectividad->tipo, "FUEGO") == 0){
+        if (strcmp(mon_en_contra->tipo, "AGUA") == 0) return 0.75 ;
+        if (strcmp(mon_en_contra->tipo, "PLANTA")) return 1.25 ;
+        if (strcmp(mon_en_contra->tipo, "FUEGO") == 0) return 1.0 ;
+    }
+    else {
+        if (strcmp(mon_en_contra->tipo, "PLANTA") == 0) return 0.75 ;
+        if (strcmp(mon_en_contra->tipo, "FUEGO")) return 1.25 ;
+        if (strcmp(mon_en_contra->tipo, "AGUA") == 0) return 1.0 ;
+    }
+}
+
+void menu_batalla_salvaje(){
+    printf("1) Atacar \n") ;
+    printf("2) Defender \n") ;
+    printf("3) Usar objeto \n") ;
+    printf("4) Huir \n") ;
+}
+
+void estado_batalla(Mon *mon_jugador, Mon* mon_salvaje){
+    printf("Mon: %s, vida: %d, tipo: %s \n", mon_jugador->apodo, mon_jugador->hp_actual, mon_jugador->tipo) ;
+    printf("Mon salvaje: %s, vida: %d, tipo \n", mon_salvaje->apodo, mon_salvaje->hp_actual, mon_salvaje->tipo) ;
+
+}
+
+void batalla_pokemon_salvaje(Entrenador *jugador, Mon *mon_salvaje){
+
+    List *equipo = jugador->equipo ;
+    Mon *mon_batalla = list_first(equipo) ;
+    bool jugador_en_pie = true ;
+    int dano_recibido ; 
+    float defensa_mon = 1 ;
+    float defensa_salvaje = 1 ;
+    float MC ;
+    while (mon_batalla->hp_actual > 0){
+        float ef_mon_jugador = conseguir_efectividad(mon_batalla, mon_salvaje) ;
+        float ef_mon_salvaje = conseguir_efectividad(mon_salvaje, mon_batalla) ;
+        estado_batalla(mon_batalla, mon_salvaje) ;
+        menu_batalla_salvaje() ;
+        char tecla;
+        #ifdef _WIN32
+            tecla = getch();
+        #else
+            initscr();
+            noecho();
+            cbreak();
+            tecla = getch();
+            endwin();
+        #endif
+        do 
+            switch(tecla){
+                case 1: {
+                    
+                    if (rand() % 100 + 1 <= 10) MC = 1.5 ;
+                    else MC = 1.0 ;
+                    dano_recibido = (mon_salvaje->damage_actual * ef_mon_jugador * MC) - (mon_salvaje->defense_actual * defensa_salvaje) ;
+                    mon_salvaje->hp_actual -= dano_recibido ; // Falta factor random de 0.9-1.1
+                    printf("%s le quita %d de vida a %s \n", mon_batalla->apodo, dano_recibido, mon_salvaje) ;
+                    esperar_enter() ;
+                    break ;
+                }
+                case 2 : {
+                    if (rand() % 100 + 1 <= 50) defensa_mon = 0.5 ; 
+                    // se podria hacer que la defensa solo dure una cantidad de turnos...
+                    break ;
+                }
+                case 3 :
+                    // esperando a implementacion de inventario
+                    // monballs podrian ser infinitas?
+                    break ;
+                case 4 :
+                    // va a huir si o si? se podria implementar que sea una probabilidad como en los juegos
+                    break ;
+                default :
+                    printf("Opcion no valida \n") ;
+
+            }
+            esperar_enter() ;
+        while (tecla != '1' && tecla != '2' && tecla !='4') ;
+        if (tecla == '4'){
+            printf("Huyes de la batalla \n") ;
+            esperar_enter() ;
+            break ;
+
+        } 
+        if (mon_salvaje->hp_actual <= 0){
+            printf("Ganaste! \n") ;
+            esperar_enter() ;
+        }
+        if (rand() % 100 + 1 <= 10) MC = 1.5 ;
+        else MC = 1.0 ;
+        dano_recibido = (mon_salvaje->damage_actual * ef_mon_salvaje * MC) - (mon_salvaje->defense_actual * defensa_salvaje) ;
+        mon_batalla->hp_actual -= dano_recibido ; // Falta factor random de 0.9-1.1
+        printf("%s le quita %d de vida a %s \n", mon_salvaje->apodo, dano_recibido, mon_batalla ) ;
+        esperar_enter() ;
+        
+    }
+
+    return ;
+}
+
 // ------ MODIFICADO: Manejo de entrada de teclado para Linux ------
 void mover(Map* ubicaciones, Entrenador* e, Entrenador* entrenadores, int num_entrenadores, int id_entrenador) {
     MapPair* par = map_search(ubicaciones, &e->id);
@@ -465,6 +573,7 @@ void _mondex(Map* MONDEX) {
 }
 
 int main(void) {
+    srand(time(NULL)) ;
     Map* ubicaciones = map_create(is_equal_int);
     int cantidad_ubicaciones = 0;
 
@@ -483,12 +592,13 @@ int main(void) {
         int opcion = leer_opcion_valida();
         
         switch (opcion) {
-            case 1:
+            case 1: {
                 int num_entrenadores = 1;
                 Entrenador* entrenadores = inicializar_entrenador();
                 int indice_entrenador_actual = 0;
                 menu_jugador(ubicaciones, entrenadores, indice_entrenador_actual, num_entrenadores);
                 break;
+            }
             case 2:
                 // DEBUG MODE
                 break;
