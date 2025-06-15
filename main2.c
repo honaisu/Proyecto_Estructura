@@ -102,7 +102,7 @@ void cargar_mones_desde_csv(Map* datos_mones) {
 Map* MONDEX;
 
 void cargar_grafo_desde_csv(Map* ubicaciones, int* cantidad_ubicaciones) {
-    FILE* archivo = fopen("data/zonas_pokemon.csv", "r");
+    FILE* archivo = fopen("data/zonas_pokemon_2.csv", "r");
     if (!archivo) {
         perror("Error al cargar zonas_pokemon.csv");
         return;
@@ -170,7 +170,7 @@ void mostrar_estado(Map* ubicaciones, Entrenador* e, int id_entrenador) {
     Ubicacion* ubi = (Ubicacion*)par->value;
 
     printf("\n=== Entrenador %d ===\n", id_entrenador);
-    printf("Ubicación: %s\n", ubi->descripcion);
+    printf("Ubicación: %s\n", ubi->nombre);
     printf("Pokémon disponibles: ");
     imprimir_mones(ubi->mones);
     printf("Equipo: ");
