@@ -290,7 +290,7 @@ void estado_batalla(Mon *mon_jugador, Mon* mon_salvaje){
 
 }
 
-void batalla_pokemon_salvaje(Entrenador *jugador, Mon *mon_salvaje){
+int batalla_pokemon_salvaje(Entrenador *jugador, Mon *mon_salvaje){
 
     List *equipo = jugador->equipo ;
     Mon *mon_batalla = list_first(equipo) ;
@@ -341,8 +341,9 @@ void batalla_pokemon_salvaje(Entrenador *jugador, Mon *mon_salvaje){
                 default :
                     printf("Opcion no valida \n") ;
 
-            }
+            
             esperar_enter() ;
+        }
         while (tecla != '1' && tecla != '2' && tecla !='4') ;
         if (tecla == '4'){
             printf("Huyes de la batalla \n") ;
@@ -351,7 +352,7 @@ void batalla_pokemon_salvaje(Entrenador *jugador, Mon *mon_salvaje){
 
         } 
         if (mon_salvaje->hp_actual <= 0){
-            printf("Ganaste! \n") ;
+            printf("Mon fue derrotado! \n") ;
             esperar_enter() ;
         }
         if (rand() % 100 + 1 <= 10) MC = 1.5 ;
@@ -359,11 +360,23 @@ void batalla_pokemon_salvaje(Entrenador *jugador, Mon *mon_salvaje){
         dano_recibido = (mon_salvaje->damage_actual * ef_mon_salvaje * MC) - (mon_salvaje->defense_actual * defensa_salvaje) ;
         mon_batalla->hp_actual -= dano_recibido ; // Falta factor random de 0.9-1.1
         printf("%s le quita %d de vida a %s \n", mon_salvaje->apodo, dano_recibido, mon_batalla ) ;
+        if (mon_batalla->hp_actual <= 0) {
+            mon_batalla = list_next(equipo) ;
+            printf("%s ha sido derrotado...\n") ;
+            if (mon_batalla != NULL){
+                printf("Sacas al combate a %s", mon_batalla->apodo) ; 
+            }
+            else {
+                printf("No te quedan mas mon, has perdido...") ;
+                esperar_enter() ;
+                return 0 ;
+            }
+        }
         esperar_enter() ;
         
     }
 
-    return ;
+    return 1 ;
 }
 
 // ------ MODIFICADO: Manejo de entrada de teclado para Linux ------
