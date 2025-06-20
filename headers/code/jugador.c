@@ -21,7 +21,7 @@ void inicializar_items(Entrenador* e) {
 
 void primer_mon_jugador(Entrenador* e) {
     puts("porfavor elija su mon");
-    MapPair* pair = map_search(MONDEX, "1");
+    MapPair* pair = map_search(MONDEX, "Arayamon");
     if (pair == NULL) return;
     char opcion[MAX];
     leer_entrada(opcion);
@@ -95,12 +95,13 @@ void verInventario(Entrenador *e) {
 }
 
 void mostrar_menu_jugador(void) {
-    const char* opciones[] = {"Moverse", "Ver Mones", "Ver Inventario", "MonDex"};
+    const char* opciones[] = {"Moverse", "Gestionar Mon", "Ver Inventario", "MonDex"};
     imprimir_menu("Opciones del Jugador", opciones, 4);
     puts("(0.) Salir");
 }
 
 void menu_jugador(Map* ubicaciones, Entrenador* entrenador) {
+    limpiar_pantalla();
     while(true) {
         mostrar_estado(ubicaciones, entrenador);
         mostrar_menu_jugador();
@@ -113,17 +114,21 @@ void menu_jugador(Map* ubicaciones, Entrenador* entrenador) {
             case 2: 
                 //gestionar_mones(ubicaciones, entrenador, 0);
                 imprimir_mones(entrenador->equipo_mon);
-                esperar_tecla(NULL);
+                esperar_enter();
                 break;
             case 3: 
                 verInventario(entrenador);
-                esperar_tecla(NULL);
+                esperar_enter();
                 break;
             case 4:
                 _mondex(MONDEX);
                 break;
             case 5: 
-                desafiar_gimnasio(entrenador); 
+                MapPair* pair = map_search(ubicaciones, &entrenador->id);
+                Ubicacion* ubicacion = pair->value;
+                printf("Zona: %s\n", ubicacion->tipoZona);
+                imprimir_mones(ubicacion->mones);
+                esperar_enter();
                 break;
             case 0: 
                 break;
