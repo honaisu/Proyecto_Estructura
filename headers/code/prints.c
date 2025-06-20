@@ -18,12 +18,16 @@ void imprimir_mones(List* mones) {
 
 void imprimir_mondex(Map* MONDEX) {
     MapPair* pair = map_first(MONDEX);
+    unsigned short sep = 0;
 
     while (pair != NULL) {
         Mon* mon = pair->value;
-        printf("(%2d). %s\n", mon->ID, mon->nombre);
+        printf("(%2d). %s   ", mon->ID, mon->nombre);
+        if (sep == 4) { sep = 0; putchar('\n'); }
+        ++sep;
         pair = map_next(MONDEX);
     }
+    putchar('\n');
 }
 /*
 void mostrar_puntajes_finales(Entrenador* entrenadores, int num_entrenadores, int id_ganador) {
@@ -51,8 +55,8 @@ void mostrar_estado(Map* ubicaciones, Entrenador* e) {
     MapPair* par = map_search(ubicaciones, &e->id);
     if (par == NULL) { puts("Ubicación no encontrada."); return; }
     Ubicacion* ubi = (Ubicacion*)par->value;
-    
-    printf("\n=== Entrenador %s ===\n", e->nombre);
+
+    printf("=== Entrenador %s ===\n", e->nombre);
     printf("Ubicación: %s\n", ubi->nombre);
     if (e->equipo_mon != NULL) {
         puts("Equipo:");
