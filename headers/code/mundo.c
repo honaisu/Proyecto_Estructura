@@ -48,7 +48,7 @@ void cargar_grafo_desde_csv(Map* ubicaciones) {
 }
 
 // ------ MODIFICADO: Manejo de entrada de teclado para Linux ------
-void mover(Map* ubicaciones, Entrenador* e) {
+void mover(Map* ubicaciones, Entrenador* e, int *se_movio) {
     MapPair* par = map_search(ubicaciones, &e->id);
     if (par == NULL) { puts("Ubicación no encontrada."); return; }
     Ubicacion* ubi = (Ubicacion*) par->value;
@@ -76,10 +76,9 @@ void mover(Map* ubicaciones, Entrenador* e) {
         MapPair* nuevo_par = map_search(ubicaciones, &nueva_ubicacion);
         if (nuevo_par == NULL) { puts("Nueva ubicación no encontrada."); return; }
         e->id = nueva_ubicacion;
-        
         Ubicacion* nueva_ubi = (Ubicacion*)nuevo_par->value;
         movimiento_valido = 1;
-        
+        *se_movio = 1 ;
         if (nueva_ubi->es_final) {
             printf("\n+----------------------------------+\n");
             printf("| ¡CAMPEÓN POKÉMON!                |\n");

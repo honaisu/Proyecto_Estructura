@@ -24,6 +24,36 @@ Mon* inicializar_mon(char** campos) {
     return mon;    
 }
 
+void copiar_mon(Mon *copy, Mon *paste){
+
+    paste->ID = copy->ID ;
+    strcpy(paste->nombre, copy->nombre) ;
+    strcpy(paste->apodo, copy->apodo) ;
+	strcpy(paste->descripcion, copy->descripcion) ;
+    strcpy(paste->tipo, copy->tipo) ;
+    
+    paste->stats_base.damage_base = copy->stats_base.damage_base ;
+    paste->stats_base.defense_base = copy->stats_base.defense_base ;
+
+    paste->stats_base.hp_base = copy->stats_base.hp_base ;
+
+	paste->hp_actual = paste->stats_base.hp_base ;
+	paste->damage_actual = paste->stats_base.damage_base ;
+    paste->defense_actual = paste->stats_base.defense_base ;
+}
+
+Mon * aparicion_salvaje(List *mones){
+    int tamano = list_size(mones) ;
+    int i = rand() % tamano + 1 ;
+    Mon *recorrer = list_first(mones) ;
+    for(int k = 1 ; k < i; k++){
+        recorrer = list_next(mones) ;
+    }
+    Mon *mon_final = (Mon *) malloc(sizeof(Mon));
+    copiar_mon (recorrer, mon_final);
+
+}
+
 void meter_mon_lista(Mon* mon) {
     if (!strcmp(mon->tipo, "PLANTA")) list_pushBack(MONES_PLANTA, mon);
     else if (!strcmp(mon->tipo, "AGUA")) list_pushBack(MONES_AGUA, mon);
@@ -57,6 +87,7 @@ void cargar_archivo_mones(Map* datos_mones) {
 }
 
 //---//
+
 
 void _mondex(Map* MONDEX) {
     imprimir_mondex(MONDEX);

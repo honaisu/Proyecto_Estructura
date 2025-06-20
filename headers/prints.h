@@ -12,5 +12,6 @@ void imprimir_mondex(Map*);
 void mostrar_puntajes_finales(Entrenador*, int, int);
 void mostrar_estado(Map*, Entrenador*);
 void imprimir_menu(const char*, const char**, int);
+void imprimir_seleccion_items() ;
 
 #endif

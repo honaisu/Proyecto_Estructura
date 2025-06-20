@@ -4,5 +4,5 @@
 
 void menu_jugador(Map*, Entrenador*);
 Entrenador* inicializar_entrenador(void);
-
+Objeto * gestionar_inventario(Entrenador *) ;
 #endif

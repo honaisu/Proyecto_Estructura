@@ -47,5 +47,6 @@ typedef struct Mon {
 void cargar_archivo_mones(Map*);
 void menu_inicial(void);
 void _mondex(Map*);
+Mon * aparicion_salvaje(List*) ;
 
 #endif

@@ -29,6 +29,14 @@ void imprimir_mondex(Map* MONDEX) {
     }
     putchar('\n');
 }
+
+void imprimir_seleccion_items(){
+    puts("1) Monball") ;
+    puts("2) Pocion") ;
+    puts("3) Revivir") ;
+    puts("4) Salir del inventario") ;
+}
+
 /*
 void mostrar_puntajes_finales(Entrenador* entrenadores, int num_entrenadores, int id_ganador) {
     printf("\n¡La Liga Pokémon ha concluido!\n");

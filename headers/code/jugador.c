@@ -43,6 +43,16 @@ Entrenador* inicializar_entrenador(void) {
     return nuevo_entrenador;
 }
 
+Objeto * buscar_objeto(Entrenador *jugador, char obj[30]) {
+    Objeto *recorrer = list_first(jugador->inventario) ;
+    while (recorrer != NULL){
+        if (!strcmp(obj, recorrer->nombre)) return recorrer ;
+    }
+    return NULL ;
+}
+
+
+
 void gestionar_mones_jugador(Entrenador* e) {
     MapPair* par = map_search(MONDEX, &e->id);
     if (par == NULL) { return; }
@@ -94,6 +104,50 @@ void verInventario(Entrenador *e) {
     }
 }
 
+Objeto * gestionar_inventario(Entrenador *jugador) {
+    verInventario(jugador) ;
+    printf("Que objeto quieres usar: ") ;
+    imprimir_seleccion_items() ;
+
+    char tecla ;
+    
+    int opcion_invalida = 1 ;
+    do {
+        #ifdef _WIN32
+            tecla = getch();
+        #else
+            initscr();
+            noecho();
+            cbreak();
+            tecla = getch();
+            endwin();
+        #endif
+
+        switch(tecla){
+            case '1' :
+                return buscar_objeto(jugador, "MonBall") ;
+                break ;
+            case '2' :
+                return buscar_objeto(jugador, "Pocion") ;
+                opcion_invalida = 0 ;
+                break ;
+            case '3' :
+                return buscar_objeto(jugador, "Revivir") ;
+                opcion_invalida = 0 ;
+                break ;
+            case '4' :
+                return NULL ;
+                break ;
+            default :
+                printf("Opcion invalida, intentelo de nuevo \n") ;
+                break ;
+        }
+    }   
+    while (opcion_invalida) ;
+
+    
+}
+
 void mostrar_menu_jugador(void) {
     const char* opciones[] = {"Moverse", "Gestionar Mon", "Ver Inventario", "MonDex"};
     imprimir_menu("Opciones del Jugador", opciones, 4);
@@ -102,16 +156,32 @@ void mostrar_menu_jugador(void) {
 
 void menu_jugador(Map* ubicaciones, Entrenador* entrenador) {
     limpiar_pantalla();
+    int se_movio = 0 ;
     while(true) {
+        limpiar_pantalla() ;
+        if (se_movio == 1) {
+            MapPair* pair = map_search(ubicaciones, &entrenador->id);
+            Ubicacion* ubicacion = pair->value;
+            int randomizador = rand() % 100 + 1 ;
+            if (list_size(ubicacion->mones) != 0 && randomizador <= 40) {
+                Mon *mon_salvaje = aparicion_salvaje(ubicacion->mones) ;
+                printf("Un mon salvaje se acerca! \n") ;
+                esperar_enter() ;
+                int win = batalla_pokemon_salvaje(entrenador, mon_salvaje) ;
+                printf("WIN!!!!! \n") ;
+                esperar_enter() ;
+            }
+            se_movio = 0 ;
+        }
         mostrar_estado(ubicaciones, entrenador);
         mostrar_menu_jugador();
         int opcion_juego = leer_opcion_valida();
         
         switch (opcion_juego) {
             case 1: 
-                mover(ubicaciones, entrenador); 
+                mover(ubicaciones, entrenador, &se_movio); 
                 break;
-            case 2: 
+            case 2:
                 //gestionar_mones(ubicaciones, entrenador, 0);
                 imprimir_mones(entrenador->equipo_mon);
                 esperar_enter();
@@ -123,13 +193,14 @@ void menu_jugador(Map* ubicaciones, Entrenador* entrenador) {
             case 4:
                 _mondex(MONDEX);
                 break;
-            case 5: 
+            case 5: {
                 MapPair* pair = map_search(ubicaciones, &entrenador->id);
                 Ubicacion* ubicacion = pair->value;
                 printf("Zona: %s\n", ubicacion->tipoZona);
                 imprimir_mones(ubicacion->mones);
                 esperar_enter();
                 break;
+            }
             case 0: 
                 break;
         }

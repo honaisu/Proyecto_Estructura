@@ -26,7 +26,7 @@ typedef struct Entrenador {
     List* inventario;
 } Entrenador;
 
-void mover(Map*, Entrenador*);
+void mover(Map*, Entrenador*, int*);
 void cargar_grafo_desde_csv(Map*);
 
 #endif
