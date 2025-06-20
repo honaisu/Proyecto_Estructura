@@ -1,6 +1,10 @@
 #include "../mundo.h"
 #include "../prints.h"
 
+extern List* MONES_AGUA;
+extern List* MONES_FUEGO;
+extern List* MONES_PLANTA;
+
 Ubicacion* agregar_ubicacion(char** campos) {
     Ubicacion* ubicacion = (Ubicacion*)malloc(sizeof(Ubicacion));
     ubicacion->id = atoi(campos[0]);
@@ -12,8 +16,14 @@ Ubicacion* agregar_ubicacion(char** campos) {
     ubicacion->izquierda = atoi(campos[7]);
     ubicacion->derecha = atoi(campos[8]);
     ubicacion->mones = list_create();
-    strcpy(ubicacion->tipoZona, campos[4]);
+    strcpy(ubicacion->tipoZona, campos[3]);
     return ubicacion;
+}
+
+void agregar_lista_mones(Ubicacion* ubicacion) {
+    if (strcmp(ubicacion->tipoZona, "Agua") == 0) ubicacion->mones = MONES_AGUA;
+    if (strcmp(ubicacion->tipoZona, "Fuego") == 0) ubicacion->mones = MONES_FUEGO;
+    if (strcmp(ubicacion->tipoZona, "Planta") == 0) ubicacion->mones = MONES_PLANTA;
 }
 
 void cargar_grafo_desde_csv(Map* ubicaciones) {
@@ -27,21 +37,8 @@ void cargar_grafo_desde_csv(Map* ubicaciones) {
 
     char** campos;
     while ((campos = leer_linea_csv(archivo, ',')) != NULL) {
-        Ubicacion* ubicacion = agregar_ubicacion(campos); 
-        /*
-        List* nombres_mones = split_string(campos[], ";");
-        for (char* nombre = list_first(nombres_mones); nombre != NULL; nombre = list_next(nombres_mones)) {
-            MapPair* par = map_search(MONDEX, nombre);
-            if (par) {
-                Mon* mon_base = (Mon*)par->value;
-                Mon* nuevo_mon = (Mon*)malloc(sizeof(Mon));
-                *nuevo_mon = *mon_base; // Copia la estructura completa
-                list_pushBack(ubicacion->mones, nuevo_mon);
-            }
-        }
-        list_clean(nombres_mones);
-        free(nombres_mones);*/
-
+        Ubicacion* ubicacion = agregar_ubicacion(campos);
+        agregar_lista_mones(ubicacion);
         int* clave = malloc(sizeof(int));
         *clave = ubicacion->id;
         map_insert(ubicaciones, clave, ubicacion);
@@ -58,7 +55,7 @@ void mover(Map* ubicaciones, Entrenador* e) {
     int movimiento_valido = 0;
 
     do {
-        printf("Presione: w (Norte), s (Sur), a (Oeste), d (Este), otra tecla para cancelar\n");
+        puts("Presione: W (Norte), S (Sur), A (Oeste), D (Este). Otra tecla para cancelar");
         
         char tecla;
         esperar_tecla(&tecla);
