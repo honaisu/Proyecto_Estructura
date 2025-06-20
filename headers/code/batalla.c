@@ -31,7 +31,7 @@ float conseguir_efectividad(Mon *mon_atacante, Mon *mon_en_contra){
 
     return tabla[pos_atacante][pos_contra];
 }
-
+/*
 int efectuar_ataque(Mon* mon_jugador, Mon* mon_salvaje) {
     float ef_mon_jugador = conseguir_efectividad(mon_jugador, mon_salvaje) ;
     float ef_mon_salvaje = conseguir_efectividad(mon_salvaje, mon_jugador) ;
@@ -53,57 +53,74 @@ int efectuar_ataque(Mon* mon_jugador, Mon* mon_salvaje) {
         return 0;
     }
 
-}
+}*/
 
 #define MON_VIVO(mon) mon->hp_actual > 0
 
 int batalla_pokemon_salvaje(Entrenador *jugador, Mon *mon_salvaje){
     List *equipo = jugador->equipo_mon ;
-    if (equipo == NULL) { printf("No tienes Mones!"); return 0; }
     Mon *mon_batalla = list_first(equipo) ;
     bool jugador_en_pie = true ;
-    while (MON_VIVO(mon_batalla)) {
+    int dano_recibido ; 
+    float defensa_mon = 1 ;
+    float defensa_salvaje = 1 ;
+    float MC ;
+    while (mon_batalla->hp_actual > 0){
+        float ef_mon_jugador = conseguir_efectividad(mon_batalla, mon_salvaje) ;
+        float ef_mon_salvaje = conseguir_efectividad(mon_salvaje, mon_batalla) ;
         estado_batalla(mon_batalla, mon_salvaje) ;
         menu_batalla_salvaje() ;
         char tecla;
-        do {
-            esperar_tecla(&tecla);
-
+        #ifdef _WIN32
+            tecla = getch();
+        #else
+            initscr();
+            noecho();
+            cbreak();
+            tecla = getch();
+            endwin();
+        #endif
+        do 
             switch(tecla){
                 case 1: {
-                    efectuar_ataque(mon_batalla, mon_salvaje);
+                    
+                    if (rand() % 100 + 1 <= 10) MC = 1.5 ;
+                    else MC = 1.0 ;
+                    dano_recibido = (mon_salvaje->damage_actual * ef_mon_jugador * MC) - (mon_salvaje->defense_actual * defensa_salvaje) ;
+                    mon_salvaje->hp_actual -= dano_recibido ; // Falta factor random de 0.9-1.1
+                    printf("%s le quita %d de vida a %s \n", mon_batalla->apodo, dano_recibido, mon_salvaje) ;
                     esperar_enter() ;
                     break ;
                 }
                 case 2 : {
-                    if (rand() % 100 + 1 <= 50) mon_batalla->defense_actual = 0.5 ; 
+                    if (rand() % 100 + 1 <= 50) defensa_mon = 0.5 ; 
                     // se podria hacer que la defensa solo dure una cantidad de turnos...
                     break ;
                 }
-                case 3 : {
+                case 3 :
                     // esperando a implementacion de inventario
                     // monballs podrian ser infinitas?
                     break ;
-                }
-                case 4 : {
+                case 4 :
                     // va a huir si o si? se podria implementar que sea una probabilidad como en los juegos
                     break ;
-                }
                 default :
                     printf("Opcion no valida \n") ;
-            }
-        } while (tecla != '1' && tecla != '2' && tecla !='4') ;
-        
+
+            
+            esperar_enter() ;
+        }
+        while (tecla != '1' && tecla != '2' && tecla !='4') ;
         if (tecla == '4'){
             printf("Huyes de la batalla \n") ;
             esperar_enter() ;
             break ;
+
         } 
         if (mon_salvaje->hp_actual <= 0){
             printf("Mon fue derrotado! \n") ;
             esperar_enter() ;
         }
-        /*
         if (rand() % 100 + 1 <= 10) MC = 1.5 ;
         else MC = 1.0 ;
         dano_recibido = (mon_salvaje->damage_actual * ef_mon_salvaje * MC) - (mon_salvaje->defense_actual * defensa_salvaje) ;
@@ -111,7 +128,7 @@ int batalla_pokemon_salvaje(Entrenador *jugador, Mon *mon_salvaje){
         printf("%s le quita %d de vida a %s \n", mon_salvaje->apodo, dano_recibido, mon_batalla ) ;
         if (mon_batalla->hp_actual <= 0) {
             mon_batalla = list_next(equipo) ;
-            printf("%s ha sido derrotado...\n", mon_batalla->apodo) ;
+            printf("%s ha sido derrotado...\n") ;
             if (mon_batalla != NULL){
                 printf("Sacas al combate a %s", mon_batalla->apodo) ; 
             }
@@ -121,7 +138,8 @@ int batalla_pokemon_salvaje(Entrenador *jugador, Mon *mon_salvaje){
                 return 0 ;
             }
         }
-        */
+        esperar_enter() ;
+        
     }
 
     return 1 ;
