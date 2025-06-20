@@ -128,16 +128,15 @@ void imprimir_gato(void) {
     puts("  \\(__)|             <`-....__.'");
 }
 
-void esperar_tecla() {
-    printf("Presiona una tecla para continuar...\n");
+void esperar_tecla(char* tecla) {
     #ifdef _WIN32
-        getch();
+        *tecla = getch();
         while (kbhit()) getch();
     #else
         initscr();      // Inicia modo ncurses
         noecho();       // No mostrar la tecla presionada
         cbreak();       // Capturar teclas sin esperar Enter
-        getch();        // Esperar la tecla
+        *tecla = getch();
         endwin();       // Finaliza modo ncurses
     #endif
 }
@@ -148,4 +147,6 @@ int leer_opcion_valida(void) {
     leer_entrada(buffer);
     if (*buffer == '\n' || *buffer == '\0') opcion = -1;
     else opcion = atoi(buffer);
+    return opcion;
 }
+

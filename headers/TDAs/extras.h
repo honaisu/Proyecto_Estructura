@@ -37,7 +37,7 @@ void leer_opcion(char*) ;
 // Solo imprime gatitos.
 void imprimir_gato(void);
 
-void esperar_tecla(void);
+void esperar_tecla(char*);
 
 int leer_opcion_valida(void);
 
