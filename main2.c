@@ -33,13 +33,17 @@ void liberar_recursos(Map* ubicaciones, Entrenador* entrenador) {
 
 void mostrar_menu_principal(void) {
     const char* opciones[] = {"Jugar Partida"};
-    imprimir_menu("THE MON PROJECT", opciones, 1);
+    imprimir_separador("THE MON PROJECT", 30);
+    imprimir_menu("", opciones, 1);
     puts("(0.) Salir");
 }
 
 int main(void) {
     srand(time(NULL)) ;
     Map* ubicaciones = map_create(is_equal_int);
+
+    MONDEX = map_create(is_equal_int);
+    cargar_archivo_mones(MONDEX);
 
     cargar_grafo_desde_csv(ubicaciones);
     if (ubicaciones == NULL) {
@@ -49,8 +53,6 @@ int main(void) {
         return 1;
     }
 
-    MONDEX = map_create(is_equal_int);
-    cargar_archivo_mones(MONDEX);
     while (true) {
         mostrar_menu_principal();
         int opcion = leer_opcion_valida();
@@ -73,7 +75,9 @@ int main(void) {
     }
 
     liberar_recursos(ubicaciones, NULL);
+    map_clean(MONDEX);
+    free(MONDEX);
     free(ubicaciones);
-    printf("¡Hasta luego!\n");
+    puts("¡Hasta luego!\n");
     return 0;
 }
