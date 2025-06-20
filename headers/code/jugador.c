@@ -47,6 +47,7 @@ Objeto * buscar_objeto(Entrenador *jugador, char obj[30]) {
     Objeto *recorrer = list_first(jugador->inventario) ;
     while (recorrer != NULL){
         if (!strcmp(obj, recorrer->nombre)) return recorrer ;
+        recorrer = list_next(jugador->inventario) ;
     }
     return NULL ;
 }
@@ -154,23 +155,28 @@ void mostrar_menu_jugador(void) {
     puts("(0.) Salir");
 }
 
+void posible_batalla(Map *ubicaciones, Entrenador *entrenador){
+    MapPair* pair = map_search(ubicaciones, &entrenador->id);
+    Ubicacion* ubicacion = pair->value;
+    int randomizador = rand() % 100 + 1 ;
+    if (list_size(ubicacion->mones) != 0 && randomizador <= 40) {
+        Mon *mon_salvaje = aparicion_salvaje(ubicacion->mones) ;
+        printf("Un mon salvaje se acerca! \n") ;
+        esperar_enter() ;
+        int win = batalla_pokemon_salvaje(entrenador, mon_salvaje) ;
+        if (win)printf("WIN!!!!! \n") ;
+        else printf("perdiste....\n") ;
+        esperar_enter() ;
+    }
+}
+
 void menu_jugador(Map* ubicaciones, Entrenador* entrenador) {
     limpiar_pantalla();
     int se_movio = 0 ;
     while(true) {
         limpiar_pantalla() ;
         if (se_movio == 1) {
-            MapPair* pair = map_search(ubicaciones, &entrenador->id);
-            Ubicacion* ubicacion = pair->value;
-            int randomizador = rand() % 100 + 1 ;
-            if (list_size(ubicacion->mones) != 0 && randomizador <= 40) {
-                Mon *mon_salvaje = aparicion_salvaje(ubicacion->mones) ;
-                printf("Un mon salvaje se acerca! \n") ;
-                esperar_enter() ;
-                int win = batalla_pokemon_salvaje(entrenador, mon_salvaje) ;
-                printf("WIN!!!!! \n") ;
-                esperar_enter() ;
-            }
+            posible_batalla(ubicaciones, entrenador) ;
             se_movio = 0 ;
         }
         mostrar_estado(ubicaciones, entrenador);

@@ -113,6 +113,7 @@ int batalla_pokemon_salvaje(Entrenador *jugador, Mon *mon_salvaje){
                             if (tiro <= PC) {
                                 list_pushBack(jugador->equipo_mon, mon_salvaje) ;
                                 printf("%s ha sido capturado!", mon_salvaje->apodo) ;
+                                obj->cantidad -= 1 ;
                                 esperar_enter() ;
                                 return 1 ;
                             }
@@ -121,12 +122,12 @@ int batalla_pokemon_salvaje(Entrenador *jugador, Mon *mon_salvaje){
                             }
                         }
                         else if (!strcmp(obj->nombre, "Pocion")){
-                            printf("despues lo implemento... \n") ;
+                            mon_batalla->hp_actual += 3 ;
+                            printf("%s recupera 4 de vida! \n", mon_salvaje->apodo) ;
                         }
                         obj_ocupado = 0 ;
                         esperar_enter() ;
                     }
-                    // monballs podrian ser infinitas?
                     break ;
                 }
                 case '4' :
