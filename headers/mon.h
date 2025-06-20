@@ -14,6 +14,9 @@
 #define MAX_MONES 10 
 
 extern Map* MONDEX;
+extern List* MONES_FUEGO;
+extern List* MONES_AGUA;
+extern List* MONES_PLANTA;
 
 // BASE DE LOS MONES. Tendrá los valores Base de cada Mon.
 typedef struct Mon_Base {
