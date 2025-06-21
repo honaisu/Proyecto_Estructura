@@ -6,16 +6,19 @@ void inicializar_items(Entrenador* e) {
     Objeto* monball = (Objeto*) malloc (sizeof(Objeto)) ;
     strcpy(monball -> nombre, "MonBall") ;
     monball -> cantidad = 5 ;
+    monball -> valor = 100 ;
     list_pushBack(e ->inventario, monball) ;
 
     Objeto* pocion = (Objeto*) malloc (sizeof(Objeto)) ;
     strcpy(pocion -> nombre, "Pocion") ;
     pocion -> cantidad = 3 ;
+    pocion -> valor = 150 ;
     list_pushBack(e -> inventario, pocion) ;
 
     Objeto* revivir = (Objeto*) malloc (sizeof(Objeto)) ;
     strcpy(revivir -> nombre, "Revivir") ;
     revivir -> cantidad = 1 ;
+    revivir -> valor = 250 ;
     list_pushBack(e -> inventario, revivir) ;
 }
 
@@ -150,8 +153,8 @@ Objeto * gestionar_inventario(Entrenador *jugador) {
 }
 
 void mostrar_menu_jugador(void) {
-    const char* opciones[] = {"Moverse", "Gestionar Mon", "Ver Inventario", "MonDex"};
-    imprimir_menu("Opciones del Jugador", opciones, 4);
+    const char* opciones[] = {"Moverse", "Gestionar Mon", "Ver Inventario", "MonDex", "Entrar a CentroMON"};
+    imprimir_menu("Opciones del Jugador", opciones, 5);
     puts("(0.) Salir");
 }
 
@@ -199,14 +202,21 @@ void menu_jugador(Map* ubicaciones, Entrenador* entrenador) {
             case 4:
                 _mondex(MONDEX);
                 break;
-            case 5: {
-                MapPair* pair = map_search(ubicaciones, &entrenador->id);
-                Ubicacion* ubicacion = pair->value;
-                printf("Zona: %s\n", ubicacion->tipoZona);
-                imprimir_mones(ubicacion->mones);
-                esperar_enter();
-                break;
-            }
+            case 5: 
+                MapPair* par = map_search(ubicaciones, &entrenador -> id) ;
+                if (par == NULL) {
+                    printf("ERROR : NO SE PUDO OBTENER LA UBICACION ACTUAL\n") ;
+                    break ;
+                }
+                Ubicacion* ubicacion = par -> value ;
+                if (ubicacion -> hayTienda) {
+                    ver_tienda(entrenador) ;
+                } else {
+                    printf("NO HAY TIENDA =)\n") ;
+                }
+                esperar_enter() ;
+                break; 
+
             case 0: 
                 break;
         }

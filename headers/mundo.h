@@ -4,7 +4,8 @@
 
 typedef struct {
     char nombre[50]; 
-    int cantidad;    
+    int cantidad;
+    int valor ;    
 } Objeto;
 
 typedef struct Ubicacion {
@@ -14,6 +15,7 @@ typedef struct Ubicacion {
     int es_final;
     int arriba, abajo, izquierda, derecha;
     char tipoZona[MAX];
+    bool hayTienda;
     Objeto objeto;
     List* mones;
 } Ubicacion;
@@ -28,5 +30,6 @@ typedef struct Entrenador {
 
 void mover(Map*, Entrenador*, int*);
 void cargar_grafo_desde_csv(Map*);
+void ver_tienda(Entrenador*) ;
 
 #endif

@@ -17,8 +17,10 @@ Ubicacion* agregar_ubicacion(char** campos) {
     ubicacion->derecha = atoi(campos[8]);
     ubicacion->mones = list_create();
     strcpy(ubicacion->tipoZona, campos[3]);
+    ubicacion -> hayTienda = !strcmp(campos[10], "Si") ? true : false;
     return ubicacion;
 }
+
 
 void agregar_lista_mones(Ubicacion* ubicacion) {
     if (strcmp(ubicacion->tipoZona, "Agua") == 0) ubicacion->mones = MONES_AGUA;
@@ -89,4 +91,109 @@ void mover(Map* ubicaciones, Entrenador* e, int *se_movio) {
             exit(0);
         }
     } while (!movimiento_valido);
+}
+
+    
+void ver_tienda(Entrenador* entrenador) {
+    int opcion;
+    while (1) {
+        printf("\n=== CENTRO MON ===\n");
+        printf("Dinero actual: $%d\n", entrenador -> dinero);
+        printf("1. Comprar Monball ($100)\n");
+        printf("2. Comprar Poción ($150)\n");
+        printf("3. Comprar Revivir ($250)\n");
+        printf("4. Vender objeto\n");
+        printf("5. Curar a todo el equipo\n") ;
+        printf("0. Salir de la tienda\n");
+        printf("Seleccione una opción: ");
+        scanf("%d", &opcion);
+
+        if (opcion == 0) break ;
+
+        char nombre_obj[50] ;
+        int precio = 0 ;
+        // ...COMPRAR OBJETOS...
+        if (opcion >= 1 && opcion <= 3) {
+            if (opcion == 1) { strcpy(nombre_obj, "MonBall") ; precio = 100 ; }
+            else if (opcion == 2) { strcpy(nombre_obj, "Pocion") ; precio = 150 ; }
+            else if (opcion == 3) { strcpy(nombre_obj, "Revivir") ; precio = 250 ; }
+
+            if (entrenador -> dinero < precio) {
+                printf("No tienes suficiente dinero para comprar %s.\n", nombre_obj) ;
+                continue ;
+            }
+
+            Objeto* obj = list_first(entrenador -> inventario) ;
+            int encontrado = 0 ;
+            while (obj != NULL) {
+                if (strcmp(obj -> nombre, nombre_obj) == 0)  {
+                    obj -> cantidad += 1 ;
+                    entrenador -> dinero -= precio ;
+                    printf("Compraste 1 %s.\n", nombre_obj) ;
+                    encontrado = 1 ;
+                    break ;
+                }
+                obj = list_next(entrenador -> inventario) ;
+            }
+
+            if (!encontrado) {
+                Objeto* nuevo = malloc(sizeof(Objeto)) ;
+                strcpy(nuevo -> nombre, nombre_obj) ;
+                nuevo -> cantidad = 1 ;
+                nuevo -> valor = precio ;
+                list_pushBack(entrenador -> inventario, nuevo) ;
+                entrenador -> dinero -= precio ;
+                printf("Compraste 1 %s.\n", nombre_obj) ;
+            }
+        }
+
+        // ...VENDER OBJETOS...
+        else if (opcion == 4) {
+            printf("\nInventario Actual:\n") ;
+            Objeto* obj = list_first(entrenador -> inventario) ;
+            while (obj != NULL) {
+                printf("- %s (x%d)\n", obj -> nombre, obj -> cantidad) ;
+                obj = list_next(entrenador -> inventario) ;
+            }
+
+            printf("Nombre del objeto a vender: ") ;
+            scanf("%s", nombre_obj) ;
+
+            obj = list_first(entrenador -> inventario) ;
+            while (obj != NULL) {
+                if (strcmp(obj -> nombre, nombre_obj) == 0) {
+                    int cantidad ;
+                    printf("¿Cuantos deseas vender?: ") ;
+                    scanf("%d, &cantidad") ;
+                    if (cantidad <= 0 || cantidad > obj -> cantidad ) {
+                        printf("Cantidad Inválida.\n") ;
+                        break ;
+                    }
+                    int valor_venta = (obj -> valor * cantidad) / 2 ;
+                    entrenador -> dinero += valor_venta ;
+                    obj -> cantidad -= cantidad ;
+                    printf("Vnediste %d %s por $%d\n", cantidad, obj -> nombre, valor_venta) ;
+                    if (obj -> cantidad == 0) {
+                        list_popCurrent(entrenador -> inventario) ;
+                        printf("Ya no tienes mas %s Eliminado del inventario.\n", obj -> nombre) ;
+                    }
+                    break ;
+                }
+                obj = list_next(entrenador -> inventario) ;
+            }
+
+            if (obj == NULL) printf("No tienes este objeto en tu inventario.\n") ;
+
+        }
+
+        else if (opcion == 5) {
+            // IMPLEMENTAR CURAR 
+            printf("OPCION INVALIDA. Intente de nuevo.\n") ;
+        }
+
+        // ...OPCION INVALIDA...
+        else {
+            printf("OPCION INVALIDA. Intente de nuevo.\n") ;
+        }
+    }
 }
