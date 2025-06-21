@@ -68,6 +68,7 @@ int batalla_pokemon_salvaje(Entrenador *jugador, Mon *mon_salvaje){
     float MC ;
     int obj_ocupado = 1 ;
     while (mon_batalla->hp_actual > 0){
+        limpiar_pantalla() ;
         float ef_mon_jugador = conseguir_efectividad(mon_batalla, mon_salvaje) ;
         float ef_mon_salvaje = conseguir_efectividad(mon_salvaje, mon_batalla) ;
         estado_batalla(mon_batalla, mon_salvaje) ;
@@ -112,7 +113,7 @@ int batalla_pokemon_salvaje(Entrenador *jugador, Mon *mon_salvaje){
                             float tiro = rand() % 100 + 1 ;
                             if (tiro <= PC) {
                                 list_pushBack(jugador->equipo_mon, mon_salvaje) ;
-                                printf("%s ha sido capturado!", mon_salvaje->apodo) ;
+                                printf("%s ha sido capturado! \n", mon_salvaje->apodo) ;
                                 obj->cantidad -= 1 ;
                                 esperar_enter() ;
                                 return 1 ;
@@ -122,8 +123,10 @@ int batalla_pokemon_salvaje(Entrenador *jugador, Mon *mon_salvaje){
                             }
                         }
                         else if (!strcmp(obj->nombre, "Pocion")){
-                            mon_batalla->hp_actual += 3 ;
-                            printf("%s recupera 4 de vida! \n", mon_salvaje->apodo) ;
+                            mon_batalla->hp_actual += 4 ;
+                            if (mon_batalla->hp_actual > mon_batalla->stats_base.hp_base < mon_batalla->hp_actual){
+                            }
+                            printf("%s recupera algo de vida! \n", mon_batalla->apodo) ;
                         }
                         obj_ocupado = 0 ;
                         esperar_enter() ;
@@ -131,7 +134,7 @@ int batalla_pokemon_salvaje(Entrenador *jugador, Mon *mon_salvaje){
                     break ;
                 }
                 case '4' :
-                    // va a huir si o si? se podria implementar que sea una probabilidad como en los juegos
+                    return 2 ;
                     break ;
                 default :
                     printf("Opcion no valida \n") ;
@@ -175,6 +178,122 @@ int batalla_pokemon_salvaje(Entrenador *jugador, Mon *mon_salvaje){
     return 1 ;
 }
 
+// retorna 1 si gana la batalla, retorna 2 si la pierde.
+int batalla_entrenador(Entrenador *jugador, Entrenador *rival){
+    Mon *mon_jugador = list_first(jugador->equipo_mon) ;
+    Mon *mon_rival = list_first(rival->equipo_mon) ;
+    bool jugador_en_pie = true ;
+    int dano_recibido ; 
+    float defensa_mon = 1 ;
+    float defensa_rival = 1 ;
+    float MC ;
+    while (1){
+        float ef_mon_jugador = conseguir_efectividad(mon_jugador, mon_rival) ;
+        float ef_mon_salvaje = conseguir_efectividad(mon_rival, mon_jugador) ;
+        estado_batalla(mon_jugador, mon_rival) ;
+        menu_batalla_salvaje() ;
+        char tecla;
+        #ifdef _WIN32
+            tecla = getch();
+        #else
+            initscr();
+            noecho();
+            cbreak();
+            tecla = getch();
+            endwin();
+        #endif
+        int obj_ocupado ;
+        do 
+            switch(tecla){
+                case 1: {
+                    if (rand() % 100 + 1 <= 10) MC = 1.5 ;
+                    else MC = 1.0 ;
+                    dano_recibido = ceil((mon_rival->damage_actual * ef_mon_jugador * MC) - (mon_rival->defense_actual * defensa_rival)) ;
+                    mon_rival->hp_actual -= dano_recibido ; // Falta factor random de 0.9-1.1
+                    printf("%s le quita %d de vida a %s \n", mon_jugador->apodo, dano_recibido, mon_rival->apodo) ;
+                    esperar_enter() ;
+                    break ;
+                }
+                case 2 : {
+                    if (rand() % 100 + 1 <= 50) defensa_mon = 0.5 ; 
+                    // se podria hacer que la defensa solo dure una cantidad de turnos...
+                    break ;
+                }
+                case 3 : {
+                    Objeto * obj = gestionar_inventario(jugador) ;
+                    
+                    if (obj != NULL) {
+                        if (obj->cantidad == 0) {
+                            printf("No tienes ese objeto...") ;
+                            break ;
+                        }
+                        if (!strcmp(obj->nombre, "MonBall")) {
+                            printf("No puedes usar una MonBall en una batalla contra otro entrenador! \n") ;
+                            printf("Eso seria robo... \n") ;
+                            break ;
+                        }
+                        else if (!strcmp(obj->nombre, "Pocion")){
+                            mon_jugador->hp_actual += 4 ;
+                            if (mon_jugador->hp_actual > mon_jugador->stats_base.hp_base < mon_jugador->hp_actual){
+                            }
+                            printf("%s recupera algo de vida! \n", mon_jugador->apodo) ;
+                        }
+                        obj_ocupado = 0 ;
+                        esperar_enter() ;
+                    }
+                    break ;
+                }
+                case 4 :
+                    // va a huir si o si? se podria implementar que sea una probabilidad como en los juegos
+                    break ;
+                default :
+                    printf("Opcion no valida \n") ;
+
+            
+            esperar_enter() ;
+        }
+        while (tecla != '1' && tecla != '2' && tecla !='4' && obj_ocupado) ;
+        if (tecla == '4'){
+            printf("Huyes de la batalla \n") ;
+            esperar_enter() ;
+            break ;
+
+        } 
+        if (mon_rival->hp_actual <= 0){
+            mon_rival = list_next(rival->equipo_mon) ;
+            if (mon_rival != NULL){
+                printf("%s saca a %s", rival, mon_rival) ;
+            }
+            else {
+                printf("%s fue derrotado! \n", rival) ; // falta el nombre del rival
+                return 1 ;
+            }
+            
+            esperar_enter() ;
+        }
+        if (rand() % 100 + 1 <= 10) MC = 1.5 ;
+        else MC = 1.0 ;
+        dano_recibido = (mon_rival->damage_actual * ef_mon_salvaje * MC) - (mon_jugador->defense_actual * defensa_mon) ;
+        mon_jugador->hp_actual -= dano_recibido ; // Falta factor random de 0.9-1.1
+        printf("%s le quita %d de vida a %s \n", mon_rival->apodo, dano_recibido, mon_jugador) ;
+        if (mon_jugador->hp_actual <= 0) {
+            mon_jugador = list_next(jugador->equipo_mon) ;
+            printf("%s ha sido derrotado...\n") ;
+            if (mon_jugador != NULL){
+                printf("Sacas al combate a %s", mon_jugador->apodo) ; 
+            }
+            else {
+                printf("No te quedan mas mon, has perdido...") ;
+                esperar_enter() ;
+                return 0 ;
+            }
+        }
+        esperar_enter() ;
+        
+    }
+
+    return 1 ;
+}
 
 
 // --- //

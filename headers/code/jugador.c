@@ -107,7 +107,7 @@ void verInventario(Entrenador *e) {
 
 Objeto * gestionar_inventario(Entrenador *jugador) {
     verInventario(jugador) ;
-    printf("Que objeto quieres usar: ") ;
+    printf("Que objeto quieres usar: \n") ;
     imprimir_seleccion_items() ;
 
     char tecla ;
