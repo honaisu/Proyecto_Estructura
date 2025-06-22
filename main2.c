@@ -70,13 +70,15 @@ int main(void) {
                 puts("Por favor, ingrese una opción válida");
                 break;
         }
-        if (opcion == 0) break;
+        if (opcion == 0){
+            break ;
+        } 
         limpiar_pantalla();
     }
-
     liberar_recursos(ubicaciones, NULL);
     map_clean(MONDEX);
     free(MONDEX);
+
     free(ubicaciones);
     puts("¡Hasta luego!\n");
     return 0;

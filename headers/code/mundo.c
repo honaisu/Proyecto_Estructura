@@ -192,7 +192,7 @@ void ver_tienda(Entrenador* entrenador) {
                     int valor_venta = (obj -> valor * cantidad) / 2 ;
                     entrenador -> dinero += valor_venta ;
                     obj -> cantidad -= cantidad ;
-                    printf("Vnediste %d %s por $%d\n", cantidad, obj -> nombre, valor_venta) ;
+                    printf("Vendiste %d %s por $%d\n", cantidad, obj -> nombre, valor_venta) ;
                     if (obj -> cantidad == 0) {
                         list_popCurrent(entrenador -> inventario) ;
                         printf("Ya no tienes mas %s Eliminado del inventario.\n", obj -> nombre) ;
