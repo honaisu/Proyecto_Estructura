@@ -153,7 +153,7 @@ Objeto * gestionar_inventario(Entrenador *jugador) {
 }
 
 void mostrar_menu_jugador(void) {
-    const char* opciones[] = {"Moverse", "Gestionar Mon", "Ver Inventario", "MonDex", "Entrar a CentroMON"};
+    const char* opciones[] = {"Moverse", "Gestionar Mon", "Ver Inventario", "MonDex", "Entrar a Centro Mon"};
     imprimir_menu("Opciones del Jugador", opciones, 5);
     puts("(0.) Salir");
 }

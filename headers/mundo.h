@@ -31,5 +31,6 @@ typedef struct Entrenador {
 void mover(Map*, Entrenador*, int*);
 void cargar_grafo_desde_csv(Map*);
 void ver_tienda(Entrenador*) ;
+void curar_equipo(Entrenador* entrenador) ;
 
 #endif

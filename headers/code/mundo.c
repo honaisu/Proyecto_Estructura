@@ -93,7 +93,27 @@ void mover(Map* ubicaciones, Entrenador* e, int *se_movio) {
     } while (!movimiento_valido);
 }
 
-    
+// CURAR AL 100%
+void curar_equipo(Entrenador* entrenador) {
+    if (!entrenador || !entrenador -> equipo_mon) return ;
+
+    Mon* mon = list_first(entrenador -> equipo_mon) ;
+
+    while (mon != NULL) {
+        if (mon -> hp_actual < mon -> stats_base.hp_base || mon -> is_dead) {
+            mon -> hp_actual = mon -> stats_base.hp_base ;
+            mon -> is_dead = false ;
+        }
+        mon = list_next(entrenador -> equipo_mon) ;
+    }
+
+    printf("\nSE HAN CURADO TODOS LOS MONES DEL EQUIPO.\n") ;
+}
+
+
+
+// VER LA TIENDA 
+
 void ver_tienda(Entrenador* entrenador) {
     int opcion;
     while (1) {
@@ -104,7 +124,7 @@ void ver_tienda(Entrenador* entrenador) {
         printf("3. Comprar Revivir ($250)\n");
         printf("4. Vender objeto\n");
         printf("5. Curar a todo el equipo\n") ;
-        printf("0. Salir de la tienda\n");
+        printf("0. Salir del CENTRO MON\n");
         printf("Seleccione una opción: ");
         scanf("%d", &opcion);
 
@@ -147,7 +167,7 @@ void ver_tienda(Entrenador* entrenador) {
             }
         }
 
-        // ...VENDER OBJETOS...
+        // ...VENDER OBJETOS... SE CAE XD
         else if (opcion == 4) {
             printf("\nInventario Actual:\n") ;
             Objeto* obj = list_first(entrenador -> inventario) ;
@@ -164,7 +184,7 @@ void ver_tienda(Entrenador* entrenador) {
                 if (strcmp(obj -> nombre, nombre_obj) == 0) {
                     int cantidad ;
                     printf("¿Cuantos deseas vender?: ") ;
-                    scanf("%d, &cantidad") ;
+                    scanf("%d", &cantidad) ;
                     if (cantidad <= 0 || cantidad > obj -> cantidad ) {
                         printf("Cantidad Inválida.\n") ;
                         break ;
@@ -187,8 +207,8 @@ void ver_tienda(Entrenador* entrenador) {
         }
 
         else if (opcion == 5) {
-            // IMPLEMENTAR CURAR 
-            printf("OPCION INVALIDA. Intente de nuevo.\n") ;
+            printf("\nCURANDO A TODOS LOS MONES....\n") ;
+            curar_equipo(entrenador) ;
         }
 
         // ...OPCION INVALIDA...
