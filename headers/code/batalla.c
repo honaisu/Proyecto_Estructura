@@ -159,7 +159,6 @@ int batalla_pokemon_salvaje(Entrenador *jugador, Mon *mon_salvaje){
         if (dano_recibido <= 0) dano_recibido = 1 ;
         mon_batalla->hp_actual -= dano_recibido ; // Falta factor random de 0.9-1.1
         printf("%s le quita %d de vida a %s \n", mon_salvaje->apodo, dano_recibido, mon_batalla->apodo) ;
-        printf("%f DANO \n", dano_recibido) ;
         if (mon_batalla->hp_actual <= 0) {
             printf("%s ha sido derrotado...\n", mon_batalla->apodo ) ;
             mon_batalla = list_next(equipo) ;
