@@ -202,7 +202,7 @@ void menu_jugador(Map* ubicaciones, Entrenador* entrenador) {
             case 4:
                 _mondex(MONDEX);
                 break;
-            case 5: 
+            case 5: {
                 MapPair* par = map_search(ubicaciones, &entrenador -> id) ;
                 if (par == NULL) {
                     printf("ERROR : NO SE PUDO OBTENER LA UBICACION ACTUAL\n") ;
@@ -216,7 +216,7 @@ void menu_jugador(Map* ubicaciones, Entrenador* entrenador) {
                 }
                 esperar_enter() ;
                 break; 
-
+            }
             case 0: 
                 break;
         }

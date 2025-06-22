@@ -96,7 +96,7 @@ int batalla_pokemon_salvaje(Entrenador *jugador, Mon *mon_salvaje){
                     break ;
                 }
                 case '2' : {
-                    if (rand() % 100 + 1 <= 50) defensa_mon = 0.5 ; 
+                    if (rand() % 100 + 1 <= 50) defensa_mon = 1.5 ; 
                     // se podria hacer que la defensa solo dure una cantidad de turnos...
                     break ;
                 }
@@ -155,12 +155,15 @@ int batalla_pokemon_salvaje(Entrenador *jugador, Mon *mon_salvaje){
         }
         if (rand() % 100 + 1 <= 10) MC = 1.5 ;
         else MC = 1.0 ;
-        dano_recibido = ceil((mon_salvaje->damage_actual * ef_mon_salvaje * MC) - (mon_salvaje->defense_actual * defensa_salvaje)) ;
+        dano_recibido = ceil((mon_salvaje->damage_actual * ef_mon_salvaje * MC) - (mon_batalla->defense_actual * defensa_mon)) ;
+        if (dano_recibido <= 0) dano_recibido = 1 ;
         mon_batalla->hp_actual -= dano_recibido ; // Falta factor random de 0.9-1.1
         printf("%s le quita %d de vida a %s \n", mon_salvaje->apodo, dano_recibido, mon_batalla->apodo) ;
+        printf("%f DANO \n", dano_recibido) ;
         if (mon_batalla->hp_actual <= 0) {
+            printf("%s ha sido derrotado...\n", mon_batalla->apodo ) ;
             mon_batalla = list_next(equipo) ;
-            printf("%s ha sido derrotado...\n") ;
+            
             if (mon_batalla != NULL){
                 printf("Sacas al combate a %s", mon_batalla->apodo) ; 
             }
@@ -215,7 +218,7 @@ int batalla_entrenador(Entrenador *jugador, Entrenador *rival){
                     break ;
                 }
                 case 2 : {
-                    if (rand() % 100 + 1 <= 50) defensa_mon = 0.5 ; 
+                    if (rand() % 100 + 1 <= 50) defensa_mon = 1.5 ; 
                     // se podria hacer que la defensa solo dure una cantidad de turnos...
                     break ;
                 }
