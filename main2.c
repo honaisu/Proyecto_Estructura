@@ -40,9 +40,9 @@ void mostrar_menu_principal(void) {
 
 int main(void) {
     srand(time(NULL)) ;
-    Map* ubicaciones = map_create(is_equal_int);
+    Map* ubicaciones = map_create(100);
 
-    MONDEX = map_create(is_equal_int);
+    MONDEX = map_create(100);
     cargar_archivo_mones(MONDEX);
 
     cargar_grafo_desde_csv(ubicaciones);

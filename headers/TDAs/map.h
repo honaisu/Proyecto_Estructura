@@ -11,9 +11,7 @@ typedef struct {
 
 typedef struct Map Map;
 
-Map *map_create(int (*is_equal)(void *key1, void *key2)); // unsorted map
-
-Map *sorted_map_create(int (*lower_than)(void *key1, void *key2));
+Map *map_create(long capacity); // unsorted map
 
 void map_insert(Map *map, void *key, void *value);
 
@@ -25,6 +23,6 @@ MapPair *map_first(Map *map);
 
 MapPair *map_next(Map *map);
 
-void map_clean(Map *map);
+void map_clean(Map *map) ;
 
 #endif /* MAP_H */
