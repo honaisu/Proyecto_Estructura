@@ -5,6 +5,8 @@
 #include <ctype.h>
 #include <string.h>
 
+// test
+
 struct Map {
     MapPair ** buckets;
     long size; //cantidad de datos/pairs en la tabla
