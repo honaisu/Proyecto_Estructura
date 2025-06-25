@@ -107,7 +107,7 @@ void cargar_mones_desde_csv(Map* datos_mones) {                 // Define una fu
 }                                                               // Cierra la función cargar_mones_desde_csv
 
 void cargar_grafo_desde_csv(Map* ubicaciones, int* cantidad_ubicaciones) { // Define una función para leer ubicaciones desde zonas_pokemon.csv
-    Map* datos_mones = map_create(100);                // Crea un mapa para guardar Pokémon, comparando claves como texto
+    Map* datos_mones = map_create(is_equal_str);                // Crea un mapa para guardar Pokémon, comparando claves como texto
     cargar_mones_desde_csv(datos_mones);                        // Carga los Pokémon desde mones.csv
     if (!datos_mones || map_first(datos_mones) == NULL) {       // Verifica si no se cargaron Pokémon
         printf("Error al cargar mones.csv\n");                  // Muestra un mensaje de error
@@ -463,7 +463,7 @@ void liberar_recursos(Map* ubicaciones, Entrenador* entrenadores, int num_entren
 }                                                               // Cierra la función liberar_recursos
 
 int main() {                                                    // Define la función principal del programa
-    Map* ubicaciones = map_create(100);                // Crea un mapa para las ubicaciones, comparando claves como números
+    Map* ubicaciones = map_create(es_igual_int);                // Crea un mapa para las ubicaciones, comparando claves como números
     int cantidad_ubicaciones = 0;                               // Inicializa un contador para las ubicaciones
     int ejecutando = 1;                                         // Inicializa una variable para mantener el juego activo
     cargar_grafo_desde_csv(ubicaciones, &cantidad_ubicaciones); // Carga las ubicaciones desde zonas_pokemon.csv

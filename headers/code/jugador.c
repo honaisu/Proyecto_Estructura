@@ -153,7 +153,7 @@ Objeto * gestionar_inventario(Entrenador *jugador) {
 }
 
 void mostrar_menu_jugador(void) {
-    const char* opciones[] = {"Moverse", "Gestionar Mon", "Ver Inventario", "MonDex", "Entrar a Centro Mon"};
+    const char* opciones[] = {"Moverse", "Gestionar Mon", "Ver Inventario", "MonDex", "Entrar a CentroMON"};
     imprimir_menu("Opciones del Jugador", opciones, 5);
     puts("(0.) Salir");
 }
@@ -171,6 +171,7 @@ void posible_batalla(Map *ubicaciones, Entrenador *entrenador){
         else printf("perdiste....\n") ;
         esperar_enter() ;
     }
+    randomizador = rand() % 100 + 1 ; // para un entrenador enemigo
 }
 
 void menu_jugador(Map* ubicaciones, Entrenador* entrenador) {
