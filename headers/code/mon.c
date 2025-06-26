@@ -80,7 +80,7 @@ void cargar_archivo_mones(Map* datos_mones, List *nombre_mons) {
         meter_mon_lista(mon);
         
         char* clave = strdup(campos[1]);
-        list_pushBack(nombre_mons, clave) ;
+        list_pushBack(nombre_mons, mon) ;
         map_insert(datos_mones, clave, mon);
     }
 
