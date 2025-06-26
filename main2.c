@@ -5,6 +5,7 @@
 // gcc main2.c headers/TDAs/*.c headers/code/*.c -o main -lm
 
 extern Map* MONDEX;
+extern List *nombres ;
 
 void liberar_recursos(Map* ubicaciones, Entrenador* entrenador) {
     if (ubicaciones) {
@@ -43,7 +44,8 @@ int main(void) {
     Map* ubicaciones = map_create(100);
 
     MONDEX = map_create(100);
-    cargar_archivo_mones(MONDEX);
+    nombres = list_create();
+    cargar_archivo_mones(MONDEX, nombres);
 
     cargar_grafo_desde_csv(ubicaciones);
     if (ubicaciones == NULL) {

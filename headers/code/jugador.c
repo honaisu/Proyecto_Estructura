@@ -201,7 +201,7 @@ void menu_jugador(Map* ubicaciones, Entrenador* entrenador) {
                 esperar_enter();
                 break;
             case 4:
-                _mondex(MONDEX);
+                _mondex(MONDEX, nombres);
                 break;
             case 5: {
                 MapPair* par = map_search(ubicaciones, &entrenador -> id) ;
