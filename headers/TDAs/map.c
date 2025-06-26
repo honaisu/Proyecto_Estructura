@@ -121,22 +121,35 @@ MapPair * map_remove(Map * map,  void * key) {
 }
 
 
-MapPair * map_search(Map * map,  void * key) {   
-    long capacidad = map->capacity ;
-    
-    long posible_pos = hash(key, capacidad) ;
-    if (is_equal(map->buckets[posible_pos]->key, key)){ 
-        map->current = posible_pos ;
-        return map->buckets[posible_pos] ;
+MapPair * map_search(Map * map, void * key) {   
+    long capacidad = map->capacity;
+    long posible_pos = hash(key, capacidad);
+
+    MapPair * par = map->buckets[posible_pos];
+
+    if (par != NULL && is_equal(par->key, key)) { 
+        map->current = posible_pos;
+        return par;
     }
-    while (1){
-        posible_pos = (posible_pos + 1) % capacidad ;
-        MapPair * par = map->buckets[posible_pos] ;
-        if (par == NULL) break ;
-        if (is_equal(par->key, key)) return par ;
+
+    long inicio = posible_pos;
+    while (1) {
+        posible_pos = (posible_pos + 1) % capacidad;
+
+        if (posible_pos == inicio) break; 
+
+        par = map->buckets[posible_pos];
+        if (par == NULL) break;
+
+        if (is_equal(par->key, key)) {
+            map->current = posible_pos;
+            return par;
+        }
     }
-    return NULL ;
+
+    return NULL;
 }
+
 
 MapPair * map_first(Map * map) {
     long capacidad = map->capacity ;

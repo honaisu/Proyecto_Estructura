@@ -99,7 +99,11 @@ void _mondex(Map* MONDEX, List *nombres) {
     if (*entrada == '0' || *entrada == '\n') return;
     
     MapPair* pair = map_search(MONDEX, entrada);
-    if (pair == NULL) { puts("No se encontró este Mon."); return; }
+    if (pair == NULL) { 
+        puts("No se encontró este Mon."); 
+        esperar_enter() ;
+        return; 
+    }
     Mon* mon = pair->value;
 
     limpiar_pantalla();
