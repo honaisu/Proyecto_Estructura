@@ -167,8 +167,6 @@ void posible_batalla(Map *ubicaciones, Entrenador *entrenador){
         printf("Un mon salvaje se acerca! \n") ;
         esperar_enter() ;
         int win = batalla_pokemon_salvaje(entrenador, mon_salvaje) ;
-        if (win)printf("WIN!!!!! \n") ;
-        else printf("perdiste....\n") ;
         esperar_enter() ;
     }
 }
