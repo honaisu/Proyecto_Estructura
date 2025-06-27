@@ -109,6 +109,7 @@ int batalla_pokemon_salvaje(Entrenador *jugador, Mon *mon_salvaje){
                     else MC = 1.0 ;
                     dano_recibido = ceil((mon_salvaje->damage_actual * ef_mon_jugador * MC) - (mon_salvaje->defense_actual * defensa_salvaje)) ;
                     mon_salvaje->hp_actual -= dano_recibido ;
+                    if (dano_recibido <= 0) dano_recibido = 1 ;
                     printf("%s le quita %d de vida a %s \n", mon_batalla->apodo, dano_recibido, mon_salvaje->apodo) ;
                     esperar_enter() ;
                     opcion_valida = 1;
@@ -181,13 +182,11 @@ int batalla_pokemon_salvaje(Entrenador *jugador, Mon *mon_salvaje){
         }
         if (tecla == '4'){
             printf("Huyes de la batalla \n") ;
-            esperar_enter() ;
             break ;
 
         } 
         if (mon_salvaje->hp_actual <= 0){
             printf("Mon fue derrotado! \n") ;
-            esperar_enter() ;
             return 1 ;
         }
         if (rand() % 100 + 1 <= 10) MC = 1.5 ;
@@ -209,7 +208,6 @@ int batalla_pokemon_salvaje(Entrenador *jugador, Mon *mon_salvaje){
             }
             else {
                 printf("No te quedan mas mon, has perdido... \n") ;
-                esperar_enter() ;
                 free(mon_salvaje) ;
                 return 0 ;
             }
@@ -218,7 +216,7 @@ int batalla_pokemon_salvaje(Entrenador *jugador, Mon *mon_salvaje){
         
     }
 
-    return 1 ;
+    return 0 ;
 }
 
 // retorna 1 si gana la batalla, retorna 2 si la pierde.
@@ -293,12 +291,10 @@ int batalla_entrenador(Entrenador *jugador, Entrenador *rival){
                     printf("Opcion no valida \n") ;
 
             
-            esperar_enter() ;
         }
         while (tecla != '1' && tecla != '2' && tecla !='4' && obj_ocupado) ;
         if (tecla == '4'){
             printf("Huyes de la batalla \n") ;
-            esperar_enter() ;
             break ;
 
         } 
@@ -327,7 +323,6 @@ int batalla_entrenador(Entrenador *jugador, Entrenador *rival){
             }
             else {
                 printf("No te quedan mas mon, has perdido...") ;
-                esperar_enter() ;
                 return 0 ;
             }
         }
@@ -335,7 +330,7 @@ int batalla_entrenador(Entrenador *jugador, Entrenador *rival){
         
     }
 
-    return 1 ;
+    return 0 ;
 }
 
 
