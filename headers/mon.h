@@ -45,9 +45,16 @@ typedef struct Mon {
 	bool is_dead; // Verifica si está muerto el Mon o no
 } Mon;
 
+// Función para cargar el CSV MONES
 void cargar_archivo_mones(Map*, List*);
+
+// Función para ver el menu inicial (1, 2, 0)
 void menu_inicial(void);
+
+// Función para ver / acceder la MONDEX
 void _mondex(Map*, List*);
+
+// Función para seleccionar un mon salvaje dentro de una lista
 Mon * aparicion_salvaje(List*) ;
 
 #endif
