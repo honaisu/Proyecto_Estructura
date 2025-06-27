@@ -31,9 +31,10 @@ void primer_mon_jugador(Entrenador* e) {
     list_pushBack(e->equipo_mon, pair->value);
 }
 
+char NOMBRE_JUGADOR[MAX];
+
 Entrenador* inicializar_entrenador(void) {
     Entrenador* nuevo_entrenador = (Entrenador*) malloc(sizeof(Entrenador));
-    extern char NOMBRE_JUGADOR[MAX];
     strcpy(nuevo_entrenador->nombre, NOMBRE_JUGADOR);
     nuevo_entrenador->id = 1;
     nuevo_entrenador->equipo_mon = list_create();

@@ -7,6 +7,7 @@
 
 extern Map* MONDEX;
 extern List *nombres ;
+extern char NOMBRE_JUGADOR[MAX];
 
 void liberar_recursos(Map* ubicaciones, Entrenador* entrenador) {
     if (ubicaciones) {
