@@ -26,6 +26,9 @@ typedef struct Entrenador {
     int dinero;
     List* equipo_mon;
     List* inventario;
+    int mons_capturados ;
+    int mons_wins ;
+    int entrenadores_wins ;
 } Entrenador;
 
 void mover(Map*, Entrenador*, int*);

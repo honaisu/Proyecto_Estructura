@@ -88,6 +88,11 @@ void mover(Map* ubicaciones, Entrenador* e, int *se_movio) {
             printf("+----------------------------------+\n");
             printf("Equipo: ");
             imprimir_mones(e->equipo_mon);
+            printf("Mons capturados: %d", e->mons_capturados) ;
+            printf("Batallas contra mons salvaje ganadas: %d \n",e->mons_wins) ;
+            printf("Batallas contra entrenadores ganadas: %d \n", e->entrenadores_wins) ;
+            printf("Dinero final: %d", e->dinero) ;
+            
             exit(0);
         }
     } while (!movimiento_valido);
@@ -107,7 +112,7 @@ void curar_equipo(Entrenador* entrenador) {
         mon = list_next(entrenador -> equipo_mon) ;
     }
 
-    printf("\nSE HAN CURADO TODOS LOS MONES DEL EQUIPO.\n") ;
+    printf("\nSE HAN CURADO TODOS1 LOS MONES DEL EQUIPO.\n") ;
 }
 
 
