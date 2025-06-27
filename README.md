@@ -2,9 +2,9 @@
 
 **The Mon Project** es un proyecto basado en Pokémon para el ramo de **Estructura de Datos**. Busca poder otorgar la experiencia ofrecida por los juegos de Pokémon de una forma simplificada y divertida, hecho para poder ser adaptado al lenguaje de programación del curso y aplicando, también, los conocimientos y habilidades formados en el transcurso del ramo. 
 
-Es un juego interactivo que sumerge al usuario en un mundo de aventuras donde puede explorar regiones, capturar criaturas (Mones), hacer compras en tiendas con un sistema de inventario y participar en combates por turnos.
+Es un juego interactivo que sumerge al usuario en un mundo de aventuras donde puede explorar regiones, capturar criaturas (Mones), hacer compras en tiendas con un sistema de inventario y participar en combates por turnos. El jugador podrá ganar si es que **logra llegar a uno de los gimnasios** y enfrentar al **líder del gimnasio**.
 
-El jugador es capaz de explorar y hacer las diferentes funciones que se presentan dentro del programa, iniciando en el **“Pueblo IBC”**. Es recomendable que, a la hora de estar jugando, se utilice o se tenga el **mapa del juego a mano**, con tal de poder saber qué zonas poseen Mones, y cuáles no.
+El jugador es capaz de explorar y hacer las diferentes funciones que se presentan dentro del programa. Es recomendable que, a la hora de estar jugando, se utilice o se tenga el **mapa del juego a mano**, con tal de poder saber qué zonas poseen Mones, y cuáles no; no es crucial para la experiencia del juego.
 
 Fue un trabajo colaborativo entre los miembros de este repositorio, cada uno aportó de distintas formas al proyecto, otorgando sus conocimientos individuales y trabajando todos de una manera ordenada en cada parte que nos decidimos.
 
@@ -75,13 +75,14 @@ Una forma alternativa de compilación, funcional para <b>Windows</b> y <b>Linux<
 
 ## Funciones del programa
 
-El programa incluye dos **menús esenciales** que son utilizados para la carga del programa:
+El programa incluye dos **menús esenciales** y nuestro **sistema de combate por turnos** que es utilizado para la carga del programa:
 
 <details> 
 <summary> <b> Menú Principal: </b> </summary>
 
-1. `Jugar Partida`: El usuario va a ser capaz de iniciar una partida dentro del juego, donde iniciará en el **Pueblo IBC** dentro del mapa.
-2. `Salir del Programa`: Sale del programa.
+1. `Jugar Partida`: El usuario va a ser capaz de iniciar una partida dentro del juego. El jugador será capaz de poder escoger **uno** de **tres Mones iniciales**, siendo **Iruiza (tipo Fuego)**, **Alimun (tipo Agua)**, o **Mecamon (tipo Planta)**. Al escoger un Mon inicial, iniciará en el **Pueblo IBC** dentro del mapa.
+2. `Ingresar Nombre`: Permite al usuario poder escoger un nombre propio para su entrenador. Este permanecerá incluso aunque el jugador reinicie o salga de su partida.
+3. `Salir del Programa`: Sale del programa.
 
 </details>
 
@@ -89,14 +90,42 @@ El programa incluye dos **menús esenciales** que son utilizados para la carga d
 <details>
 <summary> <b> Menú del Jugador: </b> </summary>
 
+El jugador podrá ver los datos de la ubicación en la que se encuentra, junto con su equipo y rutas disponibles hacia donde puede moverse.
+
+Las opciones del jugador son:
+1. `Moverse`: Permite poder mover el jugador utilizando las teclas **W (Norte), A (Oeste), S (Sur), D (Este)**. Al momento en que se mueve por el mundo, existe una probabilidad de poder luchar contra un **Mon** o **Entrenador** dependiendo del tipo de zona en el que se encuentre.
+    - Si el jugador está en una zona con un **tipo definido** (Agua, Fuego, Planta), tendrá un 40% de probabilidad de **luchar contra un Mon salvaje**, el cuál **será un Mon del tipo de la zona**.
+    - Si el jugador está en una zona sin **tipo definido**, tendrá un 20% de probabilidad de **luchar contra un Entrenador aleatorio**.
+2. `Gestionar Mon`: Permite al jugador poder gestionar su equipo, permitiéndole poder cambiar de orden a sus mones, ver sus estadísticas actuales, o liberarlos.
+3. `Ver Inventario`: Permite ver el inventario del jugador. Mostrará la lista de Objetos que posee y la cantidad de ellos.
+4. `MonDex`: Diccionario global que permite poder acceder a la información de un Mon que se escoja.
+5. `Entrar a CentroMon`: Función que permite poder entrar a los CentroMon que se ubiquen en el mapa. Estos no aparecen en todas las zonas, ya que solo están disponibles en las zonas de "Pueblo".
+6. `Salir`: Sale de la partida actual.
 
 </details>
 
+---
+
+<details>
+<summary> <b> Sistema de Combate: </b> </summary>
+
+El sistema de combate utilizado en el programa funciona en base **a turnos**.
+
+</details>
+
+
 ### Headers Propios
 
-Este proyecto posee headers segmentados, encargados cada uno de distintas **funciones** que se implementaron. Al ser algo más enrevesado, mostraré los **headers esenciales** creados:
+Este proyecto posee headers segmentados, encargados cada uno de distintas **funciones** que se implementaron. Al ser algo más enrevesado, se mostrarán los **headers esenciales** creados:
 
 - `Extras`: Encargado de funciones varias. Es la **cabeza de los headers**, implementando los **headers de C** (y **TDAs**) que más ocupamos (`stdio`, `stdlib` y `string`; `list` y `map`) para usarlos en **todos** los demás headers.
+- `Mundo`: Es el header que se dedica a poder cargar el grafo utilizado para la **representación del mapa del juego**. Posee las estructuras que se usan en el `Entrenador`, una estructura propia (`Ubicacion`) para poder representar cada nodo del mapa. Se encarga también del **movimiento del jugador a lo largo del mapa**.
+- `Mon`: Es la **cabeza general del programa**, ya que se encarga de la lógica interna de los **Mones** del juego. Es el que permite la **inicialización de los Mones** a través de su propio archivo, junto con implementar lo que es conocida en el programa como la **MonDex** (biblioteca para ver datos de los Mones), y la **lógica de aparición aleatoria** de un Mon salvaje al caminar.
+- `Jugador`: Header encargado de funciones propias del jugador. Es el que otorga el **menú interactivo** donde el jugador verá sus opciones, junto con todo lo que viene de la **gestión del inventario** y su **inicialización**.
+- `Entrenadores`: Header que carga a los **NPCs** que se utilizan en el juego para las batallas aleatorias en nodos sin tipo, o en gimnasios. Similar al header `Mon`, pero dedicado únicamente a los NPCs.
+- `Tienda`: Header que implementa la **lógica utilizada para los CentroMon**. Es el que permite la **compra y venta de objetos** para el jugador.
+- `Batalla`: Es el encargado de implementar la lógica de las **batallas contra Mones y Entrenadores**, permitiendo que se efectuen de manera correcta.
+- `Prints`: Un header únicamente dedicado a poder **imprimir ciertos aspectos del juego**. Posee, también, una función que automatiza la impresión de opciones de un menú.
 
 ### Advertencias generales
 
