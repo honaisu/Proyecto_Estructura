@@ -1,6 +1,7 @@
 #include "../mundo.h"
 #include "../entrenadores.h"
 #include "../prints.h"
+#include "../batalla.h"
 
 extern List* MONES_AGUA;
 extern List* MONES_FUEGO;
@@ -83,12 +84,20 @@ void mover(Map* ubicaciones, Entrenador* e, int *se_movio) {
         *se_movio = 1 ;
         if (nueva_ubi->es_final) {
             Entrenador* lider = elegir_lider(nueva_ubi);
-            printf("%s\n", lider->nombre);
+            printf("Lider %s te desafia a un combate por el titulo de campeón!\n", lider->nombre);
+
             esperar_enter();
             limpiar_pantalla();
-            puts("ganaste!!!!");
-            esperar_enter();
-            mensaje_final(e);
+            int win = batalla_entrenador(e, lider) ;
+            if (win) {
+                esperar_enter();
+                mensaje_final(e);
+            }
+            else {
+                puts("Estuviste cerca de ganar, pero no fue suficiente...\n") ;
+                esperar_enter() ;
+            }
+            
             exit(0);
         }
     } while (!movimiento_valido);

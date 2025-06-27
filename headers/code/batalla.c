@@ -141,19 +141,20 @@ int batalla_pokemon_salvaje(Entrenador *jugador, Mon *mon_salvaje) {
                             if (tiro <= PC) {
                                 list_pushBack(jugador->equipo_mon, mon_salvaje);
                                 printf("%s ha sido capturado! \n", mon_salvaje->apodo);
-                                obj->cantidad -= 1;
-                                esperar_enter();
+                                
                                 return 2;
                             } else {
                                 printf("Has fallado el tiro... \n");
                                 esperar_enter();
                             }
+                            obj->cantidad -= 1;
                             opcion_valida = 1;
                         } else if (!strcmp(obj->nombre, "Pocion")) {
                             mon_batalla->hp_actual += 4;
                             if (mon_batalla->hp_actual > mon_batalla->stats_base.hp_base)
                                 mon_batalla->hp_actual = mon_batalla->stats_base.hp_base;
                             printf("%s recupera algo de vida! \n", mon_batalla->apodo);
+                            obj->cantidad -= 1 ;
                             esperar_enter();
                             opcion_valida = 1;
                         } else if (!strcmp(obj->nombre, "Revivir")) {
@@ -287,6 +288,7 @@ int batalla_entrenador(Entrenador *jugador, Entrenador *rival){
                             if (mon_jugador->hp_actual > mon_jugador->stats_base.hp_base)
                                 mon_jugador->hp_actual = mon_jugador->stats_base.hp_base;
                             printf("%s recupera algo de vida! \n", mon_jugador->apodo);
+                            obj->cantidad -= 1 ;
                             esperar_enter();
                             opcion_valida = 1;
                         } else if (!strcmp(obj->nombre, "Revivir")) {
@@ -322,7 +324,7 @@ int batalla_entrenador(Entrenador *jugador, Entrenador *rival){
             printf("%s fue derrotado! \n", mon_rival->apodo);
             mon_rival = obtener_primer_mon_vivo(equipo_rival) ;
             if (mon_rival != NULL){
-                printf("%s saca a %s !", rival->nombre, mon_rival) ;
+                printf("%s saca a %s !", rival->nombre, mon_rival->nombre) ;
                 esperar_enter() ;
                 continue ;
             }
