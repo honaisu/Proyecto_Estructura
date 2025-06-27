@@ -322,13 +322,13 @@ int batalla_entrenador(Entrenador *jugador, Entrenador *rival){
             printf("%s fue derrotado! \n", mon_rival->apodo);
             mon_rival = obtener_primer_mon_vivo(equipo_rival) ;
             if (mon_rival != NULL){
-                printf("%s saca a %s !") ;
+                printf("%s saca a %s !", rival->nombre, mon_rival) ;
                 esperar_enter() ;
                 continue ;
             }
             else {
-                printf("Has ganado!") ;
-                printf("Obtienes 200$") ;
+                printf("Has ganado!\n") ;
+                printf("Obtienes 200$\n") ;
                 jugador->dinero += 200 ;
                 return 1;
             }

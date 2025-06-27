@@ -190,10 +190,14 @@ void menu_jugador(Map* ubicaciones, Entrenador* entrenador) {
     int se_movio = 0 ;
     while(true) {
         limpiar_pantalla() ;
-        if (!entrenador->vivo) { puts("GAME OVER!!!"); return; }
         if (se_movio == 1) {
             posible_batalla(ubicaciones, entrenador) ;
             se_movio = 0 ;
+        }
+        if (!entrenador->vivo) { 
+            puts("GAME OVER!!! \n");
+            esperar_enter() ;
+            return; 
         }
         mostrar_estado(ubicaciones, entrenador);
         mostrar_menu_jugador();
