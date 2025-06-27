@@ -2,7 +2,7 @@
 #define JUGADOR_H
 #include "mundo.h"
 
-// Una cadena que me guarda el nombre del jugador
+// Una cadena que guarda el nombre del jugador
 extern char NOMBRE_JUGADOR[MAX];
 extern List* NPCs;
 

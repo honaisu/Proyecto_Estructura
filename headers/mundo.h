@@ -17,8 +17,8 @@ typedef struct Ubicacion {
     int es_final; // Un int que pregunta si el lugar donde estoy es el final = 1 
     int arriba, abajo, izquierda, derecha; // Un int que permite saber si se puede mover en aquellas direcciones
     char tipoZona[MAX]; // Zona que se está en el momento (AGUA, FUEGO, PLANTA)
-    bool hayTienda; // Booleano que permite saber 
-    Objeto objeto; // Inventario actualizable
+    bool hayTienda; // Booleano que permite saber si existe una tienda = true
+    Objeto objeto; // inicializacion de los objetos
     List* mones; // Equipo mon en una lista actualizable
 } Ubicacion;
 
@@ -44,7 +44,7 @@ void cargar_grafo_desde_csv(Map*);
 // Función que permite ver el centro-MON
 void ver_tienda(Entrenador*) ;
 
-//Función que permite curar al equipo al 100%
+//Función que permite curar al equipo mon al 100%
 void curar_equipo(Entrenador* entrenador) ;
 
 #endif
