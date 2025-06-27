@@ -12,7 +12,7 @@ ID,Nombre,Descripción,TipoZona,Items,Arriba,Abajo,Izquierda,Derecha,EsFinal,Tie
 11,Cueva Oscura,Un refugio profundo y silencioso donde la luz apenas alcanza y los secretos esperan ser revelados,,Súper Poción,5,-1,35,12,No,No
 12,Pradera Brasil,Un paraíso verde donde flores exóticas y fauna diversa crean un ambiente lleno de vida y color,Planta,,13,11,-1,-1,No,No
 13,Ruta 5,Un camino tranquilo que conecta paisajes diversos invitando a los viajeros a perderse en su belleza,,Monball,-1,12,10,14,No,No
-14,Puerto Ratón,Un pequeño puerto pesquero lleno de encanto donde las olas susurran canciones antiguas,,,-1,-1,13,15,No,Si
+14,Pueblo Ratón,Un pequeño puerto pesquero lleno de encanto donde las olas susurran canciones antiguas,,,-1,-1,13,15,No,Si
 15,Pescadería,Un lugar bullicioso donde el aroma del mar y las risas de los pescadores llenan el aire de alegría,,,-1,17,14,16,No,No
 16,Valle Aguoso,Un valle misterioso donde las aguas cristalinas reflejan los sueños y leyendas del pasado,,,-1,17,15,-1,No,No
 17,Cueva Inundada,Un laberinto sumergido donde la aventura y el misterio se entrelazan bajo el manto del agua,Agua,Repelente,15,-1,18,16,No,No
