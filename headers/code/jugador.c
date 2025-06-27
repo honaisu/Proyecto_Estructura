@@ -36,8 +36,16 @@ Entrenador* inicializar_entrenador(void) {
     strcpy(nuevo_entrenador->nombre, "Hola Mundo!");
     nuevo_entrenador->id = 1;
     nuevo_entrenador->equipo_mon = list_create();
+<<<<<<< HEAD
+    nuevo_entrenador->dinero = 100;
+    nuevo_entrenador->inventario = list_create() ;
+    nuevo_entrenador->entrenadores_wins = 0 ;
+    nuevo_entrenador->mons_capturados = 0 ;
+    nuevo_entrenador->mons_wins = 0 ;
+=======
     nuevo_entrenador->dinero = 250;
     nuevo_entrenador->inventario = list_create();
+>>>>>>> c3b69cb43e0656933fda4581785c38db392b4ef4
     inicializar_items(nuevo_entrenador);
     primer_mon_jugador(nuevo_entrenador);
 
@@ -140,6 +148,8 @@ void posible_batalla(Map *ubicaciones, Entrenador *entrenador){
         printf("Un mon salvaje se acerca! \n") ;
         esperar_enter() ;
         int win = batalla_pokemon_salvaje(entrenador, mon_salvaje) ;
+        if (win == 1) entrenador->mons_wins += 1 ;
+        else if (win == 2) entrenador->mons_capturados += 1 ;
         esperar_enter() ;
     }
 }

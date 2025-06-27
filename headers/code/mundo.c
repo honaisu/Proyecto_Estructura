@@ -88,6 +88,11 @@ void mover(Map* ubicaciones, Entrenador* e, int *se_movio) {
             printf("+----------------------------------+\n");
             printf("Equipo: ");
             imprimir_mones(e->equipo_mon);
+            printf("Mons capturados: %d", e->mons_capturados) ;
+            printf("Batallas contra mons salvaje ganadas: %d \n",e->mons_wins) ;
+            printf("Batallas contra entrenadores ganadas: %d \n", e->entrenadores_wins) ;
+            printf("Dinero final: %d", e->dinero) ;
+            
             exit(0);
         }
     } while (!movimiento_valido);
@@ -107,7 +112,7 @@ void curar_equipo(Entrenador* entrenador) {
         mon = list_next(entrenador -> equipo_mon) ;
     }
 
-    printf("\nSE HAN CURADO TODOS LOS MONES DEL EQUIPO.\n") ;
+    printf("\nSE HAN CURADO TODOS1 LOS MONES DEL EQUIPO.\n") ;
 }
 
 
@@ -126,7 +131,13 @@ void ver_tienda(Entrenador* entrenador) {
         printf("5. Curar a todo el equipo\n") ;
         printf("0. Salir del CENTRO MON\n");
         printf("Seleccione una opción: ");
-        scanf("%d", &opcion);
+        char buffer[100];
+        fgets(buffer, sizeof(buffer), stdin);
+        if (sscanf(buffer, "%d", &opcion) != 1) {
+            printf("Entrada inválida. Por favor, ingrese un número.\n");
+            continue;
+        }
+
 
         if (opcion == 0) break ;
 
@@ -167,7 +178,6 @@ void ver_tienda(Entrenador* entrenador) {
             }
         }
 
-        // ...VENDER OBJETOS... SE CAE XD
         else if (opcion == 4) {
             printf("\nInventario Actual:\n") ;
             Objeto* obj = list_first(entrenador -> inventario) ;
@@ -177,14 +187,21 @@ void ver_tienda(Entrenador* entrenador) {
             }
 
             printf("Nombre del objeto a vender: ") ;
-            scanf("%s", nombre_obj) ;
+            char buffer[100];
+            fgets(buffer, sizeof(buffer), stdin);
+            sscanf(buffer, "%s", nombre_obj);
 
             obj = list_first(entrenador -> inventario) ;
             while (obj != NULL) {
                 if (strcmp(obj -> nombre, nombre_obj) == 0) {
                     int cantidad ;
-                    printf("¿Cuantos deseas vender?: ") ;
-                    scanf("%d", &cantidad) ;
+                    printf("¿Cuántos deseas vender?: ");
+                    fgets(buffer, sizeof(buffer), stdin);
+                    if (sscanf(buffer, "%d", &cantidad) != 1) {
+                        printf("Entrada inválida para cantidad.\n");
+                        break;
+                    }
+
                     if (cantidad <= 0 || cantidad > obj -> cantidad ) {
                         printf("Cantidad Inválida.\n") ;
                         break ;

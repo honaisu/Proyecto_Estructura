@@ -137,7 +137,7 @@ int batalla_pokemon_salvaje(Entrenador *jugador, Mon *mon_salvaje){
                                 printf("%s ha sido capturado! \n", mon_salvaje->apodo) ;
                                 obj->cantidad -= 1 ;
                                 esperar_enter() ;
-                                return 1 ;
+                                return 2 ;
                             }
                             else {
                                 printf("Has fallado el tiro... \n") ;
