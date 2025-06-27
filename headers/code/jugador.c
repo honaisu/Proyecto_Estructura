@@ -120,12 +120,13 @@ void gestionar_mones_jugador(Entrenador* entrenador) {
                 printf("\n" ANSI_COLOR_WHITE "Vida Actual: " ANSI_COLOR_RESET "%d PC\n", mon_jugador->hp_actual);
                 esperar_enter();
                 break;
-            case 2:
+            case 2: {
                 Mon* mon_cambio;
                 copiar_mon(mon_jugador, mon_cambio);
                 list_popCurrent(entrenador->equipo_mon);
                 list_pushFront(entrenador->equipo_mon, mon_cambio);
                 break;
+            }
             case 3:
                 printf("Inserte el " ANSI_COLOR_WHITE "nuevo apodo" ANSI_COLOR_RESET " de su Mon: ");
                 leer_entrada(entrada);
