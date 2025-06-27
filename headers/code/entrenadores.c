@@ -86,6 +86,7 @@ Entrenador* elegir_lider(Ubicacion* ubicacion) {
     // Elegir un entrenador final
     if      (strcmp(ubicacion->tipoZona, "Agua") == 0) copiar_npc(lider_agua, nuevo_lider);
     else if (strcmp(ubicacion->tipoZona, "Planta") == 0) copiar_npc(lider_planta, nuevo_lider);
-    else copiar_npc(lider_fuego, nuevo_lider);
+    else if (strcmp(ubicacion->tipoZona, "Fuego") == 0) copiar_npc(lider_fuego, nuevo_lider);
+    else return NULL; // Solo porsiacaso la verdad
     return nuevo_lider;
 }

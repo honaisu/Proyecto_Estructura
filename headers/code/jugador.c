@@ -213,8 +213,11 @@ void posible_batalla(Map *ubicaciones, Entrenador *entrenador){
         printf("Un entrenador cabreado llamado %s se acerca!\n", npc_batalla->nombre);
         esperar_enter();
         int win = batalla_entrenador(entrenador, npc_batalla);
-        if (win == 1) ++entrenador->entrenadores_wins;
-        else { puts("Mala cuea"); entrenador->vivo = false; }
+        if (win == 1) { 
+            puts("Obtienes 200$") ;
+            entrenador->dinero += 200 ; 
+            ++entrenador->entrenadores_wins; 
+        }
         esperar_enter();
     }
 }
