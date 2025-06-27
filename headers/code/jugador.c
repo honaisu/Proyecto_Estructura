@@ -36,7 +36,7 @@ Entrenador* inicializar_entrenador(void) {
     strcpy(nuevo_entrenador->nombre, "Hola Mundo!");
     nuevo_entrenador->id = 1;
     nuevo_entrenador->equipo_mon = list_create();
-    nuevo_entrenador->dinero = 100;
+    nuevo_entrenador->dinero = 10000;
     nuevo_entrenador->inventario = list_create();
     inicializar_items(nuevo_entrenador);
     primer_mon_jugador(nuevo_entrenador);

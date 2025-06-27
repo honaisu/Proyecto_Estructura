@@ -32,31 +32,7 @@ float conseguir_efectividad(Mon *mon_atacante, Mon *mon_en_contra){
 
     return tabla[pos_atacante][pos_contra];
 }
-/*
-int efectuar_ataque(Mon* mon_jugador, Mon* mon_salvaje) {
-    float ef_mon_jugador = conseguir_efectividad(mon_jugador, mon_salvaje) ;
-    float ef_mon_salvaje = conseguir_efectividad(mon_salvaje, mon_jugador) ;
-    float MC = 0;
-    int dano_recibido = 0; 
 
-    if (rand() % 100 + 1 <= 10) MC = 1.5 ;
-    else MC = 1.0 ;
-    
-    dano_recibido = (mon_salvaje->damage_actual * ef_mon_jugador * MC) - mon_salvaje->defense_actual;
-    mon_salvaje->hp_actual -= dano_recibido ; // Falta factor random de 0.9-1.1
-    printf("%s le quita %d de vida a %s\n", mon_jugador->apodo, dano_recibido, mon_salvaje->nombre) ;
-    
-    if (mon_salvaje->hp_actual <= 0) {
-        printf("Ganaste!");
-        return 1;
-    } else if (mon_jugador->hp_actual <= 0) {
-        printf("Perdiste");
-        return 0;
-    }
-
-}*/
-
-#define MON_VIVO(mon) mon->hp_actual > 0
 
 Mon* obtener_primer_mon_vivo(List *equipo) {
     Mon *actual = list_first(equipo);
@@ -363,47 +339,3 @@ int batalla_entrenador(Entrenador *jugador, Entrenador *rival){
 }
 
 
-// --- //
-void desafiar_gimnasio(Entrenador* e) {
-    limpiar_pantalla();
-    printf("\n=== Desafíos de Gimnasio ===\n");
-    printf("Resuelve el desafío para ganar una medalla.\n");
-    int opcion;
-    do {
-        opcion = leer_opcion_valida(); 
-        printf("Seleccione gimnasio (1: Roca, 2: Agua, 3: Eléctrico, 0: Salir): ");
-        if (opcion == 0) {
-            return;
-        }
-        
-        int respuesta_correcta = 0;
-        int puntaje_otorgado = 0;
-        
-        switch (opcion) {
-            case 1:
-                printf("\nGimnasio Roca:\nBrock te desafía: Calcula la fuerza de un Geodude (integral de x^3 de 1 a 2).\n");
-                respuesta_correcta = 4; // (2^4/4) - (1^4/4) = 4 - 0.25 ≈ 4
-                puntaje_otorgado = 10;
-                break;
-            case 2:
-                printf("\nGimnasio Agua:\nMisty te reta: Un Staryu tiene un poder que satisface x^2 - 8x + 16 = 0. Multiplica su nivel por 5.\n");
-                respuesta_correcta = 20; // (x-4)^2 = 0 => x=4. 4*5=20
-                puntaje_otorgado = 10;
-                break;
-            case 3:
-                printf("\nGimnasio Eléctrico:\nLt. Surge te desafía: La velocidad de un Voltorb es 10x^2. Calcula su cambio en el nivel 1 (deriva y evalúa en x=1).\n");
-                respuesta_correcta = 20; // f'(x) = 20x. f'(1) = 20.
-                puntaje_otorgado = 10;
-                break;
-        }
-
-        int respuesta_usuario = leer_opcion_valida();
-        printf("Ingresa la respuesta: ");
-
-        if (respuesta_usuario == respuesta_correcta) {
-            printf("\n¡Correcto! Has ganado una medalla y %d puntos.\n", puntaje_otorgado);
-        } else {
-            printf("\nRespuesta incorrecta. Intenta de nuevo.\n");
-        }
-    } while (opcion != 0);
-}
