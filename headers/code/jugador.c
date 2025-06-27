@@ -129,7 +129,7 @@ Objeto * gestionar_inventario(Entrenador *jugador) {
 }
 
 void mostrar_menu_jugador(void) {
-    const char* opciones[] = {"Moverse", "Gestionar Mon", "Ver Inventario", "MonDex", "Entrar a Centro Mon"};
+    const char* opciones[] = {"Moverse", "Gestionar Mon", "Ver Inventario", "MonDex", "Entrar a CentroMON"};
     imprimir_menu("Opciones del Jugador", opciones, 5);
     puts("(0.) Salir");
 }
@@ -147,6 +147,7 @@ void posible_batalla(Map *ubicaciones, Entrenador *entrenador){
         else if (win == 2) entrenador->mons_capturados += 1 ;
         esperar_enter() ;
     }
+    randomizador = rand() % 100 + 1 ; // para un entrenador enemigo
 }
 
 void menu_jugador(Map* ubicaciones, Entrenador* entrenador) {
@@ -176,7 +177,7 @@ void menu_jugador(Map* ubicaciones, Entrenador* entrenador) {
                 esperar_enter();
                 break;
             case 4:
-                _mondex(MONDEX);
+                _mondex(MONDEX, nombres);
                 break;
             case 5: {
                 MapPair* par = map_search(ubicaciones, &entrenador -> id) ;

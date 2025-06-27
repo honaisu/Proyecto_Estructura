@@ -4,7 +4,7 @@
 #include <math.h>
 
 void menu_batalla_salvaje(){
-    const char* opciones[] = {"Atacar", "Defender", "Usar Objeto", "Huir"};
+    const char* opciones[] = {"Atacar", "Defender", "Usar Objeto", "Huir", "Cambiar de Mon"};
     imprimir_menu("", opciones, 4);
 }
 
@@ -73,26 +73,27 @@ Mon* seleccionar_mon_muerto(List *equipo) {
     return muertos[opcion - 1];
 }
 
-int batalla_pokemon_salvaje(Entrenador *jugador, Mon *mon_salvaje){
-    List *equipo = jugador->equipo_mon ;
-    Mon *mon_batalla = obtener_primer_mon_vivo(jugador->equipo_mon) ;
-    bool jugador_en_pie = true ;
-    int dano_recibido ; 
-    float defensa_mon = 1 ;
-    float defensa_salvaje = 1 ;
-    float MC ;
-    int obj_ocupado = 1 ;
+int batalla_pokemon_salvaje(Entrenador *jugador, Mon *mon_salvaje) {
+    List *equipo = jugador->equipo_mon;
+    Mon *mon_batalla = obtener_primer_mon_vivo(equipo);
+    bool jugador_en_pie = true;
+    int dano_recibido;
+    float defensa_mon = 1;
+    float defensa_salvaje = 1;
+    float MC;
+    int obj_ocupado = 1;
     char tecla;
-    while (1){
-        float ef_mon_jugador = conseguir_efectividad(mon_batalla, mon_salvaje) ;
-        float ef_mon_salvaje = conseguir_efectividad(mon_salvaje, mon_batalla) ;
-        int opcion_valida = 0 ;
-        
+
+    while (1) {
+        float ef_mon_jugador = conseguir_efectividad(mon_batalla, mon_salvaje);
+        float ef_mon_salvaje = conseguir_efectividad(mon_salvaje, mon_batalla);
+        int opcion_valida = 0;
+
         while (!opcion_valida) {
-            limpiar_pantalla() ;
-            estado_batalla(mon_batalla, mon_salvaje) ;
-            menu_batalla_salvaje() ;
-            
+            limpiar_pantalla();
+            estado_batalla(mon_batalla, mon_salvaje);
+            menu_batalla_salvaje();
+
             #ifdef _WIN32
                 tecla = getch();
             #else
@@ -103,120 +104,112 @@ int batalla_pokemon_salvaje(Entrenador *jugador, Mon *mon_salvaje){
                 endwin();
             #endif
 
-            switch(tecla){
+            switch (tecla) {
                 case '1': {
-                    if (rand() % 100 + 1 <= 10) MC = 1.5 ;
-                    else MC = 1.0 ;
-                    dano_recibido = ceil((mon_salvaje->damage_actual * ef_mon_jugador * MC) - (mon_salvaje->defense_actual * defensa_salvaje)) ;
-                    mon_salvaje->hp_actual -= dano_recibido ;
-                    if (dano_recibido <= 0) dano_recibido = 1 ;
-                    printf("%s le quita %d de vida a %s \n", mon_batalla->apodo, dano_recibido, mon_salvaje->apodo) ;
-                    esperar_enter() ;
+                    MC = (rand() % 100 + 1 <= 10) ? 1.5 : 1.0;
+                    dano_recibido = ceil((mon_batalla->damage_actual * ef_mon_jugador * MC) - (mon_salvaje->defense_actual * defensa_salvaje));
+                    if (dano_recibido <= 0) dano_recibido = 1;
+                    mon_salvaje->hp_actual -= dano_recibido;
+                    printf("%s le quita %d de vida a %s \n", mon_batalla->apodo, dano_recibido, mon_salvaje->apodo);
+                    esperar_enter();
                     opcion_valida = 1;
-                    break ;
+                    break;
                 }
                 case '2': {
-                    if (rand() % 100 + 1 <= 50) defensa_mon = 1.5 ; 
+                    defensa_mon = (rand() % 100 + 1 <= 50) ? 1.5 : defensa_mon;
                     printf("%s aumento su defensa\n", mon_batalla->apodo);
                     esperar_enter();
                     opcion_valida = 1;
-                    break ;
+                    break;
                 }
                 case '3': {
-                    Objeto * obj = gestionar_inventario(jugador) ;                
+                    Objeto *obj = gestionar_inventario(jugador);
                     if (obj != NULL) {
                         if (obj->cantidad == 0) {
-                            printf("No tienes ese objeto...\n") ;
+                            printf("No tienes ese objeto...\n");
                             esperar_enter();
-                            break ;
+                            break;
                         }
                         if (!strcmp(obj->nombre, "MonBall")) {
                             float PC = ((float)(mon_salvaje->stats_base.hp_base - mon_salvaje->hp_actual) / mon_salvaje->stats_base.hp_base) * 100;
-                            float tiro = rand() % 100 + 1 ;
+                            float tiro = rand() % 100 + 1;
                             if (tiro <= PC) {
-                                list_pushBack(jugador->equipo_mon, mon_salvaje) ;
-                                printf("%s ha sido capturado! \n", mon_salvaje->apodo) ;
-                                obj->cantidad -= 1 ;
-                                esperar_enter() ;
-                                return 2 ;
-                            }
-                            else {
-                                printf("Has fallado el tiro... \n") ;
+                                list_pushBack(jugador->equipo_mon, mon_salvaje);
+                                printf("%s ha sido capturado! \n", mon_salvaje->apodo);
+                                obj->cantidad -= 1;
+                                esperar_enter();
+                                return 2;
+                            } else {
+                                printf("Has fallado el tiro... \n");
+                                esperar_enter();
                             }
                             opcion_valida = 1;
-                        }
-                        else if (!strcmp(obj->nombre, "Pocion")){
-                            mon_batalla->hp_actual += 4 ;
+                        } else if (!strcmp(obj->nombre, "Pocion")) {
+                            mon_batalla->hp_actual += 4;
                             if (mon_batalla->hp_actual > mon_batalla->stats_base.hp_base)
-                                mon_batalla->hp_actual = mon_batalla->stats_base.hp_base ;
-                            printf("%s recupera algo de vida! \n", mon_batalla->apodo) ;
+                                mon_batalla->hp_actual = mon_batalla->stats_base.hp_base;
+                            printf("%s recupera algo de vida! \n", mon_batalla->apodo);
+                            esperar_enter();
                             opcion_valida = 1;
-                        }
-                        else if (!strcmp(obj->nombre, "Revivir")) {
-                            Mon *muerto = seleccionar_mon_muerto(jugador->equipo_mon);
+                        } else if (!strcmp(obj->nombre, "Revivir")) {
+                            Mon *muerto = seleccionar_mon_muerto(equipo);
                             if (muerto) {
                                 muerto->hp_actual = muerto->stats_base.hp_base / 2;
                                 muerto->is_dead = false;
                                 printf("%s ha sido revivido con mitad de vida!\n", muerto->apodo);
                                 obj->cantidad -= 1;
-                                opcion_valida = 1;
                             } else {
                                 printf("No fue posible revivir ningún Mon.\n");
                             }
+                            esperar_enter();
+                            opcion_valida = 1;
                         }
-                        obj_ocupado = 0 ;
-                        esperar_enter() ;
-                        
                     }
-                    break ;
+                    break;
                 }
                 case '4': {
+                    printf("Huyes de la batalla \n");
                     return 2;
                 }
                 default: {
-                    printf("Opcion no valida \n") ;
-                    esperar_enter() ;
-                    break ;
+                    printf("Opcion no valida \n");
+                    esperar_enter();
+                    break;
                 }
             }
         }
-        if (tecla == '4'){
-            printf("Huyes de la batalla \n") ;
-            break ;
 
-        } 
-        if (mon_salvaje->hp_actual <= 0){
-            printf("Mon fue derrotado! \n") ;
-            return 1 ;
+        if (mon_salvaje->hp_actual <= 0) {
+            printf("Mon fue derrotado! \n");
+            return 1;
         }
-        if (rand() % 100 + 1 <= 10) MC = 1.5 ;
-        else MC = 1.0 ;
-        dano_recibido = ceil((mon_salvaje->damage_actual * ef_mon_salvaje * MC) - (mon_batalla->defense_actual * defensa_mon)) ;
-        if (dano_recibido <= 0) dano_recibido = 1 ;
-        mon_batalla->hp_actual -= dano_recibido ; // Falta factor random de 0.9-1.1
-        
-        printf("%s le quita %d de vida a %s \n", mon_salvaje->apodo, dano_recibido, mon_batalla->apodo) ;
+
+        MC = (rand() % 100 + 1 <= 10) ? 1.5 : 1.0;
+        dano_recibido = ceil((mon_salvaje->damage_actual * ef_mon_salvaje * MC) - (mon_batalla->defense_actual * defensa_mon));
+        if (dano_recibido <= 0) dano_recibido = 1;
+        mon_batalla->hp_actual -= dano_recibido;
+
+        printf("%s le quita %d de vida a %s \n", mon_salvaje->apodo, dano_recibido, mon_batalla->apodo);
+
         if (mon_batalla->hp_actual <= 0) {
             mon_batalla->hp_actual = 0;
             mon_batalla->is_dead = true;
             printf("%s ha sido derrotado...\n", mon_batalla->apodo);
 
             mon_batalla = obtener_primer_mon_vivo(equipo);
-            
-            if (mon_batalla != NULL){
-                printf("\nSacas al combate a %s \n", mon_batalla->apodo) ; 
-            }
-            else {
-                printf("No te quedan mas mon, has perdido... \n") ;
-                free(mon_salvaje) ;
-                return 0 ;
+            if (mon_batalla != NULL) {
+                printf("\nSacas al combate a %s \n", mon_batalla->apodo);
+            } else {
+                printf("No te quedan más Mon, has perdido... \n");
+                free(mon_salvaje);
+                return 0;
             }
         }
-        esperar_enter() ;
-        
+
+        esperar_enter();
     }
 
-    return 0 ;
+    return 0;
 }
 
 // retorna 1 si gana la batalla, retorna 2 si la pierde.

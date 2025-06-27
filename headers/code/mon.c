@@ -5,6 +5,7 @@ Map* MONDEX = NULL;
 List* MONES_AGUA = NULL;
 List* MONES_FUEGO = NULL;
 List* MONES_PLANTA = NULL;
+List *nombres = NULL ;
 
 Mon* inicializar_mon(char** campos) {
     Mon* mon = (Mon*)malloc(sizeof(Mon));
@@ -60,7 +61,7 @@ void meter_mon_lista(Mon* mon) {
     else if (!strcmp(mon->tipo, "FUEGO")) list_pushBack(MONES_FUEGO, mon);     
 }
 
-void cargar_archivo_mones(Map* datos_mones) {
+void cargar_archivo_mones(Map* datos_mones, List *nombre_mons) {
     FILE* archivo = fopen("data/mones.csv", "r");
     if (!archivo) {
         perror("Error al cargar mones.csv");
@@ -79,6 +80,7 @@ void cargar_archivo_mones(Map* datos_mones) {
         meter_mon_lista(mon);
         
         char* clave = strdup(campos[1]);
+        list_pushBack(nombre_mons, mon) ;
         map_insert(datos_mones, clave, mon);
     }
 
@@ -86,15 +88,20 @@ void cargar_archivo_mones(Map* datos_mones) {
     printf("Se cargó correctamente mones.csv\n");
 }
 
-void _mondex(Map* MONDEX) {
-    imprimir_mondex(MONDEX);
+
+void _mondex(Map* MONDEX, List *nombres) {
+    imprimir_mondex(nombres);
     printf("Ingrese el nombre del Mon que desee buscar ('0' - Ninguno): ");
     char entrada[MAX];
     leer_entrada(entrada);
     if (*entrada == '0' || *entrada == '\n') return;
     
     MapPair* pair = map_search(MONDEX, entrada);
-    if (pair == NULL) { puts("No se encontró este Mon."); return; }
+    if (pair == NULL) { 
+        puts("No se encontró este Mon."); 
+        esperar_enter() ;
+        return; 
+    }
     Mon* mon = pair->value;
 
     limpiar_pantalla();
