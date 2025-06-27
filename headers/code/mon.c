@@ -90,26 +90,10 @@ void cargar_archivo_mones(Map* datos_mones, List *nombre_mons) {
     printf("Se cargó correctamente mones.csv\n");
 }
 
-<<<<<<< HEAD
 
 void _mondex(Map* MONDEX, List *nombres) {
-    imprimir_mondex(nombres);
-    printf("Ingrese el nombre del Mon que desee buscar ('0' - Ninguno): ");
-    char entrada[MAX];
-    leer_entrada(entrada);
-    if (*entrada == '0' || *entrada == '\n') return;
-    
-    MapPair* pair = map_search(MONDEX, entrada);
-    if (pair == NULL) { 
-        puts("No se encontró este Mon."); 
-        esperar_enter() ;
-        return; 
-    }
-    Mon* mon = pair->value;
-=======
-void _mondex(Map* MONDEX) {
     while (1) {
-        imprimir_mondex(MONDEX);
+        imprimir_mondex(nombres);
         printf("Ingrese el nombre del Mon que desee buscar ('0' - Ninguno): ");
         char entrada[MAX];
         leer_entrada(entrada);
@@ -119,7 +103,6 @@ void _mondex(Map* MONDEX) {
             puts("Saliendo...");
             break;
         }
->>>>>>> 8acc0cff21f7aa3d95c7c125418edb48d3994a11
 
         // Validar entrada vacía
         if (entrada[0] == '\n' || entrada[0] == '\0') {
@@ -148,11 +131,15 @@ void _mondex(Map* MONDEX) {
         // Buscar en el mapa
         MapPair* pair = map_search(MONDEX, entrada);
         if (pair == NULL) {
-            puts("No se encontró este Mon. Inserte una opción correcta.");
+            
+        puts("No se encontró este Mon. Inserte una opción correcta."); 
+        esperar_enter() ;
+       
             esperar_enter();
             limpiar_pantalla();
             continue;
-        }
+        
+    }
         
         Mon* mon = pair->value;
         limpiar_pantalla();
