@@ -3,4 +3,4 @@ set -e
 
 echo "[🐈] Compilando THE MON PROJECT..."
 
-gcc -g *.c headers/code/*.c headers/TDAs/*.c -o main -lm && ./main.exe
+gcc *.c headers/code/*.c headers/TDAs/*.c -o main -lm && ./main.exe
