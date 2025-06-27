@@ -36,7 +36,7 @@ Entrenador* inicializar_entrenador(void) {
     strcpy(nuevo_entrenador->nombre, "Hola Mundo!");
     nuevo_entrenador->id = 1;
     nuevo_entrenador->equipo_mon = list_create();
-    nuevo_entrenador->dinero = 10000;
+    nuevo_entrenador->dinero = 250;
     nuevo_entrenador->inventario = list_create();
     inicializar_items(nuevo_entrenador);
     primer_mon_jugador(nuevo_entrenador);
@@ -60,34 +60,7 @@ Objeto * buscar_objeto(Entrenador *jugador, char obj[30]) {
 void gestionar_mones_jugador(Entrenador* e) {
     MapPair* par = map_search(MONDEX, &e->id);
     if (par == NULL) { return; }
-    /*
-    int opcion;
-    do {
-        printf("Seleccione el Mon (0 para terminar): ");
-        opcion = leer_opcion_valida();
-        if (opcion == 0) break;
-        
-        ptr = list_first(origen);
-        for (i = 1; i < opcion && ptr; i++) {
-            ptr = list_next(origen);
-        }
-
-        if (ptr) {
-            Mon* mon_seleccionado = (Mon*)ptr;
-            if (capturar) {
-                Mon* nuevo_mon = (Mon*)malloc(sizeof(Mon));
-                *nuevo_mon = *mon_seleccionado; // Copiar datos
-                list_pushBack(e->equipo_mon, nuevo_mon);
-                list_popCurrent(origen); // Elimina de la ubicación
-                free(mon_seleccionado);
-                printf("%s ha sido añadido a tu equipo.\n", nuevo_mon->nombre);
-            } else {
-                printf("%s ha sido liberado.\n", mon_seleccionado->nombre);
-                list_popCurrent(origen);
-                free(mon_seleccionado);
-            }
-        }
-    } while (opcion != 0);*/
+    
 }
 
 void verInventario(Entrenador *e) {
