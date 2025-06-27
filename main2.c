@@ -60,8 +60,6 @@ int main(void) {
     while (true) {
         mostrar_menu_principal();
         int opcion = leer_opcion_valida();
-        char NOMBRE_JUGADOR[MAX] = "Entrenador";
-        
         switch (opcion) {
             case 1: {
                 Entrenador* entrenador = inicializar_entrenador();

@@ -31,7 +31,7 @@ void primer_mon_jugador(Entrenador* e) {
     list_pushBack(e->equipo_mon, pair->value);
 }
 
-char NOMBRE_JUGADOR[MAX];
+char NOMBRE_JUGADOR[MAX] = "Ash Ketchup";
 
 Entrenador* inicializar_entrenador(void) {
     Entrenador* nuevo_entrenador = (Entrenador*) malloc(sizeof(Entrenador));
