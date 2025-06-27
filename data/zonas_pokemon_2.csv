@@ -1,55 +1,55 @@
 ID,Nombre,Descripción,TipoZona,Items,Arriba,Abajo,Izquierda,Derecha,EsFinal,Tienda
-1,Pueblo IBC,,,Monball,-1,4,3,2,No,Si
-2,Ruta 1,,,,-1,-1,1,6,No,No
-3,Ruta 2,,,Poción,-1,-1,41,1,No,No
-4,Ruta 3,,,,1,35,-1,-1,No,No
-5,Ciudad en Ruinas,,Fuego,Monball,8,11,7,10,No,No
-6,Pradera Ígnea,,Fuego,,-1,7,2,8,No,No
-7,Piso 2 IBC,,Fuego,,6,-1,-1,5,No,No
-8,Montaña,,Fuego,Antídoto,9,5,6,10,No,No
-9,Volcán,,Fuego,,23,8,-1,10,No,No
-10,Camino Destrozado,,Fuego,,9,5,8,13,No,No
-11,Cueva Oscura,,,Súper Poción,5,-1,35,12,No,No
-12,Pradera Brasil,,Planta,,13,11,-1,-1,No,No
-13,Ruta 5,,,Monball,-1,12,10,14,No,No
-14,Puerto Ratón,,,,-1,-1,13,15,No,Si
-15,Pescadería,,,,-1,17,14,16,No,No
-16,Valle Aguoso,,,,-1,17,15,-1,No,No
-17,Cueva Inundada,,Agua,Repelente,15,-1,18,16,No,No
-18,Aguapolis,,Agua,,-1,20,19,17,No,No
-19,Valle Pescáme,,Agua,,18,21,-1,20,No,No
-20,Sendero Marítimo,,Agua,,18,21,19,-1,No,No
-21,Estatua de Atún,Una estructura interesante.,Agua,,19,22,-1,20,No,No
-22,Gimnasio FIN,Final 1.,Agua,Poción,-1,-1,-1,-1,Sí,No
-23,Ruta 6,,,,24,9,-1,-1,No,No
-24,Praderina,,Planta,Monball,27,23,-1,25,No,No
-25,Ruta ?,,,,26,-1,24,28,No,No
-26,Praderon,,Planta,,30,25,27,-1,No,No
-27,Ruta !,,,Revivir,-1,24,29,26,No,No
-28,Mar de Obsidiana,,Agua,,-1,-1,25,32,No,No
-29,Sendero Rocoso,,,,-1,,31,27,No,No
-30,Pueblo Integral,Un lugar Matemáticamente curioso.,,,33,26,31,32,No,Si
-31,Bastión en Ruinas,,Fuego,Monball,-1,-1,29,30,No,No
-32,CC,El infierno hecho realidad.,Fuego,,-1,-1,30,28,No,No
-33,Camino Derivado,,Fuego,,34,30,-1,-1,No,No
-34,Gimnasio AU,,Fuego,Poción,-1,-1,-1,-1,Sí,No
-35,Lago de Agua,Wow.,Agua,,4,-1,36,11,No,No
-36,Ruta 7,,,Antídoto,-1,-1,40,35,No,No
-37,Ruta 8,,,,38,41,-1,-1,No,No
-38,Ruta 9,,,,47,37,44,-1,No,No
-39,Ruta 10,,,,-1,-1,54,52,No,No
-40,PraderaMon,,Planta,Súper Poción,41,36,42,-1,No,No
-41,Lago Colorado,,Agua,,37,40,42,3,No,No
-42,Mini-Volcán,,Fuego,,41,-1,-1,40,No,No
-43,Casa del Árbol,,,Repelente,48,-1,-1,44,No,No
-44,A Not So Mini-Volcán,,Fuego,,-1,-1,43,38,No,No
-45,Mar I,,Agua,,46,-1,47,29,No,No
-46,Mar II,,Agua,,-1,45,50,-1,No,No
-47,Camino de Tierra,,Planta,,-1,38,-1,45,No,No
-48,Sendero Arcoíris,,Planta,Monball,52,43,-1,53,No,No
-49,Valle de Ponys,Un  hermoso lugar con Ponys.,Planta,Poción,-1,51,-1,-1,No,No
-50,Granja del Tío Tom,,Planta,,-1,53,51,46,No,No
-51,Victor,,Planta,Antídoto,49,53,52,50,No,No
-52,Benja,,Planta,,-1,48,39,51,No,No
-53,Diego,,Planta,Súper Poción,51,-1,48,50,No,No
-54,Gimnasio RA,,Planta,,-1,-1,-1,-1,Sí,No
+1,Pueblo IBC,Un lugar tranquilo donde la vida diaria transcurre en armonía entre sus amables habitantes siendo un entorno lleno de naturaleza,,Monball,-1,4,3,2,No,Si
+2,Ruta 1,Un camino serpenteante que invita a los viajeros a descubrir secretos escondidos y paisajes impresionantes,,,-1,-1,1,6,No,No
+3,Ruta 2,Un sendero fresco donde las hojas susurran historias antiguas mientras el viento acaricia suavemente el rostro,,Poción,-1,-1,41,1,No,No
+4,Ruta 3,Un pasaje misterioso que se adentra en lo desconocido lleno de aventuras por descubrir,,,1,35,-1,-1,No,No
+5,Ciudad en Ruinas,Una metrópolis olvidada cubierta por la historia donde las llamas eternas iluminan sus calles desiertas,Fuego,Monball,8,11,7,10,No,No
+6,Pradera Ígnea,Una vasta extensión de pastizales donde el fuego danza con el viento creando un espectáculo hipnótico,Fuego,,-1,7,2,8,No,No
+7,Piso 2 IBC,Un nivel elevado repleto de desafíos y sorpresas para aquellos valientes que buscan el conocimiento,Fuego,,6,-1,-1,5,No,No
+8,Montaña,Una imponente cumbre que toca el cielo y ofrece vistas majestuosas acompañadas del aroma fresco del bosque,Fuego,Antídoto,9,5,6,10,No,No
+9,Volcán,Un coloso dormido lleno de energía latente que guarda tesoros bajo su superficie ardiente,Fuego,,23,8,-1,10,No,No
+10,Camino Destrozado,Un sendero marcado por batallas pasadas donde la naturaleza lentamente reclama su espacio,Fuego,,9,5,8,13,No,No
+11,Cueva Oscura,Un refugio profundo y silencioso donde la luz apenas alcanza y los secretos esperan ser revelados,,Súper Poción,5,-1,35,12,No,No
+12,Pradera Brasil,Un paraíso verde donde flores exóticas y fauna diversa crean un ambiente lleno de vida y color,Planta,,13,11,-1,-1,No,No
+13,Ruta 5,Un camino tranquilo que conecta paisajes diversos invitando a los viajeros a perderse en su belleza,,Monball,-1,12,10,14,No,No
+14,Puerto Ratón,Un pequeño puerto pesquero lleno de encanto donde las olas susurran canciones antiguas,,,-1,-1,13,15,No,Si
+15,Pescadería,Un lugar bullicioso donde el aroma del mar y las risas de los pescadores llenan el aire de alegría,,,-1,17,14,16,No,No
+16,Valle Aguoso,Un valle misterioso donde las aguas cristalinas reflejan los sueños y leyendas del pasado,,,-1,17,15,-1,No,No
+17,Cueva Inundada,Un laberinto sumergido donde la aventura y el misterio se entrelazan bajo el manto del agua,Agua,Repelente,15,-1,18,16,No,No
+18,Aguapolis,Una ciudad acuática vibrante y llena de vida donde el movimiento del agua marca el ritmo cotidiano,Agua,,-1,20,19,17,No,No
+19,Valle Pescáme,Un valle fértil que alberga una gran diversidad de peces y plantas acuáticas ofreciendo un espectáculo natural,Agua,,18,21,-1,20,No,No
+20,Sendero Marítimo,Un camino costero donde las brisas marinas refrescan el alma y las olas cuentan historias de viajes lejanos,Agua,,18,21,19,-1,No,No
+21,Estatua de Atún,Una imponente estructura que honra a las criaturas del mar y guarda leyendas olvidadas,Agua,,19,22,-1,20,No,No
+22,Gimnasio FIN,El destino final de los héroes un lugar de pruebas definitivas donde solo los más fuertes prevalecen,Agua,Poción,-1,-1,-1,-1,Sí,No
+23,Ruta 6,Un tramo del camino que invita a descubrir nuevos horizontes rodeado de naturaleza cambiante,,,24,9,-1,-1,No,No
+24,Praderina,Un rincón verde lleno de vida donde las flores silvestres pintan el paisaje con colores vibrantes,Planta,Monball,27,23,-1,25,No,No
+25,Ruta ?,Un camino enigmático que despierta la curiosidad y desafía a los viajeros a encontrar su destino,,,26,-1,24,28,No,No
+26,Praderon,Una pradera extensa y serena que invita a la contemplación y al descanso en medio de la naturaleza,Planta,,30,25,27,-1,No,No
+27,Ruta !,Un sendero lleno de sorpresas donde cada paso puede revelar algo inesperado y maravilloso,,Revivir,-1,24,29,26,No,No
+28,Mar de Obsidiana,Un vasto mar oscuro y brillante que refleja las estrellas creando un paisaje mágico y misterioso,Agua,,-1,-1,25,32,No,No
+29,Sendero Rocoso,Un camino accidentado rodeado de formaciones pétreas que desafían el equilibrio y la valentía,,,-1,,31,27,No,No
+30,Pueblo Integral,Un pueblo matemáticamente curioso donde cada rincón es un enigma por resolver y un misterio por descubrir,,,33,26,31,32,No,Si
+31,Bastión en Ruinas, Un antiguo bastión que guarda secretos de batallas pasadas y ecos de héroes olvidados,Fuego,Monball,-1,-1,29,30,No,No
+32,CC,El infierno hecho realidad un lugar intenso donde el calor y la furia de la naturaleza se manifiestan sin piedad,Fuego,,-1,-1,30,28,No,No
+33,Camino Derivado,Un sendero alternativo que ofrece nuevas perspectivas y desafíos inesperados para los viajeros,Fuego,,34,30,-1,-1,No,No
+34,Gimnasio AU,Un recinto de fuego y poder donde se prueban las habilidades de los más valientes en combates ardientes,Fuego,Poción,-1,-1,-1,-1,Sí,No
+35,Lago de Agua,Un lago sereno y cristalino que invita a la calma y a la reflexión bajo un cielo infinito,Agua,,4,-1,36,11,No,No
+36,Ruta 7,Un camino apacible rodeado de naturaleza que guía hacia nuevas aventuras y descubrimientos,,Antídoto,-1,-1,40,35,No,No
+37,Ruta 8,Un sendero que se abre paso entre bosques y colinas ofreciendo un respiro para el alma viajera,,,38,41,-1,-1,No,No
+38,Ruta 9,Un tramo misterioso donde la naturaleza y el tiempo parecen detenerse para observar al caminante,,,47,37,44,-1,No,No
+39,Ruta 10,Un sendero silencioso que invita a la introspección y a la conexión con el entorno natural,,,-1,-1,54,52,No,No
+40,PraderaMon,Una pradera vibrante donde la magia de la naturaleza se manifiesta en cada brizna de hierba,Planta,Súper Poción,41,36,42,-1,No,No
+41,Lago Colorado,Un lago de aguas rojizas que cuentan historias antiguas y reflejan la pasión del sol poniente,Agua,,37,40,42,3,No,No
+42,Mini-Volcán,Un pequeño volcán lleno de energía contenida listo para sorprender con su poder y belleza,Fuego,,41,-1,-1,40,No,No
+43,Casa del Árbol,Un refugio elevado entre las ramas un lugar de paz y conexión con la naturaleza circundante,,Repelente,48,-1,-1,44,No,No
+44,A Not So Mini-Volcán,Un volcán que aunque pequeño en tamaño guarda una gran fuerza en su interior,Fuego,,-1,-1,43,38,No,No
+45,Mar I,Un mar sereno donde las olas acarician suavemente la orilla invitando al descanso y la contemplación,Agua,,46,-1,47,29,No,No
+46,Mar II,Un extenso mar que refleja el cielo y guarda misterios profundos bajo su superficie azul,Agua,,-1,45,50,-1,No,No
+47,Camino de Tierra,Un sendero rústico rodeado de naturaleza que invita a caminar sin prisa y disfrutar el paisaje,Planta,,-1,38,-1,45,No,No
+48,Sendero Arcoíris,Un camino colorido lleno de vida y esperanza donde cada paso es una promesa de alegría,Planta,Monball,52,43,-1,53,No,No
+49,Valle de Ponys,Un hermoso valle habitado por ponys libres que galopan entre flores y cielos despejados,Planta,Poción,-1,51,-1,-1,No,No
+50,Granja del Tío Tom,Un lugar acogedor lleno de animales felices y campos fértiles donde se siente la calidez del hogar,Planta,,-1,53,51,46,No,No
+51,Victor,Un espacio especial donde la naturaleza y la tranquilidad se unen para brindar paz y armonía,Planta,Antídoto,49,53,52,50,No,No
+52,Benja,Un rincón apacible rodeado de flora exuberante y aire fresco que invita a la relajación,Planta,,-1,48,39,51,No,No
+53,Diego,Un lugar vibrante lleno de energía y vitalidad donde la naturaleza se expresa con todo su esplendor,Planta,Súper Poción,51,-1,48,50,No,No
+54,Gimnasio RA,Un templo de retos y superación donde la determinación y la fuerza interior son la clave del éxito,Planta,,-1,-1,-1,-1,Sí,No

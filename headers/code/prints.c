@@ -46,6 +46,7 @@ void mostrar_estado(Map* ubicaciones, Entrenador* e) {
 
     printf("=== Entrenador %s ===\n", e->nombre);
     printf("Ubicación: %s\n", ubi->nombre);
+    printf("Descripción: %s\n", ubi->descripcion);
     if (e->equipo_mon != NULL) {
         puts("Equipo:");
         imprimir_mones(e->equipo_mon);
