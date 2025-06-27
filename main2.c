@@ -43,9 +43,9 @@ void mostrar_menu_principal(void) {
 
 int main(void) {
     srand(time(NULL)) ;
-    Map* ubicaciones = map_create(is_equal_int);
+    Map* ubicaciones = map_create(50);
 
-    MONDEX = map_create(is_equal_int);
+    MONDEX = map_create(20);
     nombres = list_create(); 
     cargar_archivo_mones(MONDEX, nombres);
 
