@@ -115,11 +115,12 @@ void gestionar_mones_jugador(Entrenador* entrenador) {
         mon_jugador = buscar_mon_equipo(entrenador, entrada);
         if (mon_jugador == NULL) { puts("No existe ese Mon en el equipo!"); continue; }
         switch (opcion) {
-            case 1:
+            case 1: {
                 imprimir_datos_mon(mon_jugador);
                 printf("\n" ANSI_COLOR_WHITE "Vida Actual: " ANSI_COLOR_RESET "%d PC\n", mon_jugador->hp_actual);
                 esperar_enter();
                 break;
+            }
             case 2: {
                 Mon* mon_cambio;
                 copiar_mon(mon_jugador, mon_cambio);
@@ -127,19 +128,22 @@ void gestionar_mones_jugador(Entrenador* entrenador) {
                 list_pushFront(entrenador->equipo_mon, mon_cambio);
                 break;
             }
-            case 3:
+            case 3: {
                 printf("Inserte el " ANSI_COLOR_WHITE "nuevo apodo" ANSI_COLOR_RESET " de su Mon: ");
                 leer_entrada(entrada);
                 strcpy(mon_jugador->apodo, entrada);
                 printf("El nuevo apodo de su mon es: %s\n", mon_jugador->apodo);
                 break;
-            case 4:
+            }
+            case 4: {
                 printf("El Mon eliminado del equipo es: %s\n", mon_jugador->apodo);
                 list_popCurrent(entrenador->equipo_mon);
                 if (!list_size(entrenador->equipo_mon)) {
                     entrenador->vivo = false;
                     return;
                 }
+                break;
+            }
             default:
                 puts("Esta opción no existe.");
         }
