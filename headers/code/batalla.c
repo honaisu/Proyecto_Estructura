@@ -115,14 +115,15 @@ bool usar_item(Entrenador* jugador, Mon* mon_batalla, Mon* mon_contrario) {
             }
             else if (atrapar_mon(jugador, mon_contrario)) { obj->cantidad -= 1; return true; }
             break;
-        case 'P':
+        case 'P': {
             mon_batalla->hp_actual += 4;
             if (mon_batalla->hp_actual > mon_batalla->stats_base.hp_base)
                 mon_batalla->hp_actual = mon_batalla->stats_base.hp_base;
             printf("%s recupera algo de vida! \n", mon_batalla->apodo);
             obj->cantidad -= 1 ;
             break;
-        case 'R':
+        }
+        case 'R': {
             Mon *muerto = seleccionar_mon_muerto(jugador->equipo_mon);
             if (muerto) {
                 muerto->hp_actual = muerto->stats_base.hp_base / 2;
@@ -131,6 +132,7 @@ bool usar_item(Entrenador* jugador, Mon* mon_batalla, Mon* mon_contrario) {
                 obj->cantidad -= 1;
             } else puts("No fue posible revivir ningún Mon.");
             break;
+        }
     }
     return false;
 }
