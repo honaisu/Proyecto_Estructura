@@ -43,9 +43,6 @@ Entrenador* inicializar_entrenador(void) {
     nuevo_entrenador->mons_wins = 0 ;
     inicializar_items(nuevo_entrenador);
     primer_mon_jugador(nuevo_entrenador);
-
-    int* id = malloc(sizeof(int));
-    *id = 1;
     return nuevo_entrenador;
 }
 
