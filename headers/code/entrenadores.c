@@ -62,3 +62,21 @@ Entrenador* aparicion_npc(void) {
     copiar_npc(recorrer, npc_final);
     return npc_final;
 }
+
+Entrenador* elegir_lider(Ubicacion* ubicacion) {
+    char entrenador[MAX];
+    // Elegir un entrenador final
+    if      (strcmp(ubicacion->tipoZona, "Agua") == 0) strcpy(entrenador, "Tenna") ;
+    else if (strcmp(ubicacion->tipoZona, "Planta") == 0) strcpy(entrenador, "Estela");
+    else strcpy(entrenador, "Roland") ;
+    // Crearlo
+    Entrenador* puntero_npcs = list_first(NPCs);
+    while (puntero_npcs != NULL 
+        && strcmp(entrenador, puntero_npcs->nombre) != 0) {
+        puntero_npcs = list_next(NPCs);
+    }
+    Entrenador* nuevo_lider = (Entrenador*) malloc(sizeof(Entrenador)); 
+    copiar_npc(puntero_npcs, nuevo_lider);
+    // Retornarlo
+    return nuevo_lider;
+}

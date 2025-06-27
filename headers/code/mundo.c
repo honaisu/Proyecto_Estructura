@@ -1,4 +1,5 @@
 #include "../mundo.h"
+#include "../entrenadores.h"
 #include "../prints.h"
 
 extern List* MONES_AGUA;
@@ -81,17 +82,13 @@ void mover(Map* ubicaciones, Entrenador* e, int *se_movio) {
         movimiento_valido = 1;
         *se_movio = 1 ;
         if (nueva_ubi->es_final) {
-            printf("\n+----------------------------------+\n");
-            printf("| ¡CAMPEÓN POKÉMON!                |\n");
-            printf("| Has conquistado la Liga Pokémon  |\n");
-            printf("+----------------------------------+\n");
-            printf("Equipo: ");
-            imprimir_mones(e->equipo_mon);
-            printf("\nMons capturados: %d", e->mons_capturados) ;
-            printf("Batallas contra mons salvaje ganadas: %d \n",e->mons_wins) ;
-            printf("Batallas contra entrenadores ganadas: %d \n", e->entrenadores_wins) ;
-            printf("Dinero final: %d", e->dinero) ;
-            
+            Entrenador* lider = elegir_lider(nueva_ubi);
+            printf("%s\n", lider->nombre);
+            esperar_enter();
+            limpiar_pantalla();
+            puts("ganaste!!!!");
+            esperar_enter();
+            mensaje_final(e);
             exit(0);
         }
     } while (!movimiento_valido);

@@ -52,4 +52,4 @@ ID,Nombre,Descripción,TipoZona,Items,Arriba,Abajo,Izquierda,Derecha,EsFinal,Tie
 51,Victor,Un espacio especial donde la naturaleza y la tranquilidad se unen para brindar paz y armonía,Planta,Antídoto,49,53,52,50,No,No
 52,Benja,Un rincón apacible rodeado de flora exuberante y aire fresco que invita a la relajación,Planta,,-1,48,39,51,No,No
 53,Diego,Un lugar vibrante lleno de energía y vitalidad donde la naturaleza se expresa con todo su esplendor,Planta,Súper Poción,51,-1,48,50,No,No
-54,Gimnasio RA,Un templo de retos y superación donde la determinación y la fuerza interior son la clave del éxito,Planta,,-1,-1,-1,-1,Sí,No
+54,Gimnasio ICT,Un templo de retos y superación donde la determinación y la fuerza interior son la clave del éxito,Planta,,-1,-1,-1,-1,Sí,No

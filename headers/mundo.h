@@ -41,10 +41,5 @@ void mover(Map*, Entrenador*, int*);
 //Función que permite cargar el mapa CSV
 void cargar_grafo_desde_csv(Map*);
 
-// Función que permite ver el centro-MON
-void ver_tienda(Entrenador*) ;
-
-//Función que permite curar al equipo mon al 100%
-void curar_equipo(Entrenador* entrenador) ;
 
 #endif

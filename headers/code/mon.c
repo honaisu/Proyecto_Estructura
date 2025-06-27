@@ -2,11 +2,17 @@
 #include "../prints.h"
 #include <ctype.h>
 
+// Declaraciones Globales de las variables que se usan de los mones
 
+// MONDEX: Mapa que guarda como clave el nombre de un Mon y de valor los datos del Mon
 Map* MONDEX = NULL;
+// Usado para las zonas de agua
 List* MONES_AGUA = NULL;
+// Usado para las zonas de fuego
 List* MONES_FUEGO = NULL;
+// Usado para las zonas de planta
 List* MONES_PLANTA = NULL;
+// Nombres de los mones, estos se usan para la correcta impresión en la MONDEX
 List *nombres = NULL ;
 
 Mon* inicializar_mon(char** campos) {
@@ -27,17 +33,16 @@ Mon* inicializar_mon(char** campos) {
     return mon;    
 }
 
+// Copia todos los valores que se encuentran en un Mon a otro. Crea una copia de este Mon
 void copiar_mon(Mon *copy, Mon *paste){
-
     paste->ID = copy->ID ;
     strcpy(paste->nombre, copy->nombre) ;
     strcpy(paste->apodo, copy->apodo) ;
 	strcpy(paste->descripcion, copy->descripcion) ;
     strcpy(paste->tipo, copy->tipo) ;
-    
+
     paste->stats_base.damage_base = copy->stats_base.damage_base ;
     paste->stats_base.defense_base = copy->stats_base.defense_base ;
-
     paste->stats_base.hp_base = copy->stats_base.hp_base ;
 
 	paste->hp_actual = paste->stats_base.hp_base ;
@@ -94,7 +99,7 @@ void cargar_archivo_mones(Map* datos_mones, List *nombre_mons) {
 void _mondex(Map* MONDEX, List *nombres) {
     while (true) {
         imprimir_mondex(nombres);
-        printf("Ingrese el nombre del Mon que desee buscar ('0' - Ninguno): ");
+        printf("Ingrese el " ANSI_COLOR_WHITE "nombre" ANSI_COLOR_RESET " del Mon que desee buscar ('0' - Ninguno): ");
         char entrada[MAX];
         leer_entrada(entrada);
         
@@ -140,12 +145,12 @@ void _mondex(Map* MONDEX, List *nombres) {
         Mon* mon = pair->value;
         limpiar_pantalla();
         imprimir_separador("DATOS DEL MON", 40);
-        printf("ID. %d  Nombre: %s  Tipo: %s\n", mon->ID, mon->nombre, mon->tipo);
+        printf("ID. %d  Nombre: " ANSI_COLOR_WHITE "%s " ANSI_COLOR_RESET "Tipo: %s\n", mon->ID, mon->nombre, mon->tipo);
         printf("Descripción: %s\n", mon->descripcion);
-        puts("\nStats");
-        printf("Vida: %d\n", mon->stats_base.hp_base);
-        printf("Daño: %d\n", mon->stats_base.damage_base);
-        printf("Defensa: %d\n", mon->stats_base.defense_base);
+        puts(ANSI_COLOR_WHITE "\nStats Base" ANSI_COLOR_RESET);
+        printf("Vida: %d PC\n", mon->stats_base.hp_base);
+        printf("Daño: %d DMG\n", mon->stats_base.damage_base);
+        printf("Defensa: %d DEF\n", mon->stats_base.defense_base);
         esperar_enter();
         break;
     }

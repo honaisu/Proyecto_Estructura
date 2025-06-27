@@ -26,4 +26,6 @@ void imprimir_menu(const char*, const char**, int);
 // Función que permite ver los items que puedes seleccionar para ser usados en combate
 void imprimir_seleccion_items(void) ;
 
+void mensaje_final(Entrenador*);
+
 #endif

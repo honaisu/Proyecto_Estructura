@@ -17,6 +17,7 @@
 #define ANSI_COLOR_YELLOW  "\x1b[33m"
 #define ANSI_COLOR_BLUE    "\x1b[34m"
 #define ANSI_COLOR_RESET   "\x1b[0m"
+#define ANSI_COLOR_WHITE   "\x1b[1;37m"
 
 //--- LISTA PROPIA CON FUNCIONES (Que agarré o creé) ---//
 

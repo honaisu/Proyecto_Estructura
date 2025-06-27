@@ -41,7 +41,7 @@ void primer_mon_jugador(Entrenador* e) {
         leer_opcion(&opcion);
         switch (opcion) {
             case '1':
-                strcpy(mon_inicial, "Arayamon");
+                strcpy(mon_inicial, "Iruiza");
                 break;
             case '2':
                 strcpy(mon_inicial, "Alimun");
