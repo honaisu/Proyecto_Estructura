@@ -225,7 +225,7 @@ int batalla_entrenador(Entrenador *jugador, Entrenador *rival){
     Mon *mon_jugador = obtener_primer_mon_vivo(jugador->equipo_mon) ;
     Mon *mon_rival = obtener_primer_mon_vivo(rival->equipo_mon) ;
     List *equipo_jugador = jugador->equipo_mon ;
-    List *equipo_rival = jugador->equipo_mon ;
+    List *equipo_rival = rival->equipo_mon ;
     bool jugador_en_pie = true ;
     int dano_recibido ; 
     float defensa_mon = 1 ;
@@ -281,6 +281,7 @@ int batalla_entrenador(Entrenador *jugador, Entrenador *rival){
                         if (!strcmp(obj->nombre, "MonBall")) {
                             printf("No puedes usar una MonBall en una pelea contra otro entrenador! \n") ;
                             printf("Eso seria un robo... \n") ;
+                            esperar_enter() ;
                         } else if (!strcmp(obj->nombre, "Pocion")) {
                             mon_jugador->hp_actual += 4;
                             if (mon_jugador->hp_actual > mon_jugador->stats_base.hp_base)
@@ -306,7 +307,8 @@ int batalla_entrenador(Entrenador *jugador, Entrenador *rival){
                 }
                 case '4': {
                     printf("No puedes huir contra un entrenador! \n");
-                    return 2;
+                    esperar_enter() ;
+                    break ;
                 }
                 default: {
                     printf("Opcion no valida \n");
@@ -317,16 +319,16 @@ int batalla_entrenador(Entrenador *jugador, Entrenador *rival){
         }
 
         if (mon_rival->hp_actual <= 0) {
-            printf("%s fue derrotado! \n");
+            printf("%s fue derrotado! \n", mon_rival->apodo);
             mon_rival = obtener_primer_mon_vivo(equipo_rival) ;
             if (mon_rival != NULL){
-                printf("%s saca a %s !") ;
+                printf("%s saca a %s !", rival->nombre, mon_rival) ;
                 esperar_enter() ;
                 continue ;
             }
             else {
-                printf("Has ganado!") ;
-                printf("Obtienes 200$") ;
+                printf("Has ganado!\n") ;
+                printf("Obtienes 200$\n") ;
                 jugador->dinero += 200 ;
                 return 1;
             }
