@@ -33,19 +33,19 @@ void primer_mon_jugador(Entrenador* e) {
 
 Entrenador* inicializar_entrenador(void) {
     Entrenador* nuevo_entrenador = (Entrenador*) malloc(sizeof(Entrenador));
-    strcpy(nuevo_entrenador->nombre, "Hola Mundo!");
+    extern char NOMBRE_JUGADOR[MAX];
+    strcpy(nuevo_entrenador->nombre, NOMBRE_JUGADOR);
     nuevo_entrenador->id = 1;
     nuevo_entrenador->equipo_mon = list_create();
-<<<<<<< HEAD
+
     nuevo_entrenador->dinero = 100;
     nuevo_entrenador->inventario = list_create() ;
     nuevo_entrenador->entrenadores_wins = 0 ;
     nuevo_entrenador->mons_capturados = 0 ;
     nuevo_entrenador->mons_wins = 0 ;
-=======
     nuevo_entrenador->dinero = 250;
     nuevo_entrenador->inventario = list_create();
->>>>>>> c3b69cb43e0656933fda4581785c38db392b4ef4
+
     inicializar_items(nuevo_entrenador);
     primer_mon_jugador(nuevo_entrenador);
 

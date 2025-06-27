@@ -32,9 +32,9 @@ void liberar_recursos(Map* ubicaciones, Entrenador* entrenador) {
 }
 
 void mostrar_menu_principal(void) {
-    const char* opciones[] = {"Jugar Partida"};
+    const char* opciones[] = {"Jugar Partida", "Ingresar Nombre"};
     imprimir_separador("THE MON PROJECT", 30);
-    imprimir_menu("", opciones, 1);
+    imprimir_menu("", opciones, 2);
     puts("(0.) Salir");
 }
 
@@ -56,6 +56,7 @@ int main(void) {
     while (true) {
         mostrar_menu_principal();
         int opcion = leer_opcion_valida();
+        char NOMBRE_JUGADOR[MAX] = "Entrenador";
         
         switch (opcion) {
             case 1: {
@@ -64,6 +65,16 @@ int main(void) {
                 liberar_recursos(NULL, entrenador);   
                 break;
             }
+
+            case 2 : {
+                printf("Ingresa tu nombre de entrenador: ");
+                fgets(NOMBRE_JUGADOR, MAX, stdin);
+                NOMBRE_JUGADOR[strcspn(NOMBRE_JUGADOR, "\n")] = 0; // Eliminar salto de línea
+                printf("Nombre actualizado: %s\n", NOMBRE_JUGADOR);
+                esperar_enter();
+                break;
+                }
+
             case 0:
                 break;
             default:
