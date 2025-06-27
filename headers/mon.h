@@ -35,9 +35,7 @@ typedef struct Mon {
 	char tipo[MAX]; // Tipo del Mon
 	
 	Mon_Base stats_base; // Base para los stats de cierto Mon
-	int hp_actual;
-	int damage_actual;
-	int defense_actual;
+	int hp_actual; // La vida actual del Mon
 	bool is_dead; // Verifica si está muerto el Mon o no
 } Mon;
 

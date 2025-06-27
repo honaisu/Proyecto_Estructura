@@ -26,8 +26,6 @@ Mon* inicializar_mon(char** campos) {
     mon->stats_base.damage_base = atoi(campos[4]);
     mon->stats_base.defense_base = atoi(campos[5]);
     mon->hp_actual = mon->stats_base.hp_base;
-    mon->damage_actual = mon->stats_base.damage_base;
-    mon->defense_actual = mon->stats_base.defense_base;
     
     strcpy(mon->descripcion, campos[6]);
     return mon;    
@@ -45,9 +43,7 @@ void copiar_mon(Mon *copy, Mon *paste){
     paste->stats_base.defense_base = copy->stats_base.defense_base ;
     paste->stats_base.hp_base = copy->stats_base.hp_base ;
 
-	paste->hp_actual = paste->stats_base.hp_base ;
-	paste->damage_actual = paste->stats_base.damage_base ;
-    paste->defense_actual = paste->stats_base.defense_base ;
+	paste->hp_actual = copy->hp_actual ;
     paste->is_dead = false;
 }
 
