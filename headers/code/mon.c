@@ -86,9 +86,6 @@ void cargar_archivo_mones(Map* datos_mones) {
     printf("Se cargó correctamente mones.csv\n");
 }
 
-//---//
-
-
 void _mondex(Map* MONDEX) {
     imprimir_mondex(MONDEX);
     printf("Ingrese el nombre del Mon que desee buscar ('0' - Ninguno): ");
