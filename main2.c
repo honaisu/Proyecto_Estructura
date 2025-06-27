@@ -2,6 +2,7 @@
 #include "headers/batalla.h"
 #include "headers/prints.h"
 
+
 // gcc main2.c headers/TDAs/*.c headers/code/*.c -o main -lm
 
 extern Map* MONDEX;
@@ -83,3 +84,4 @@ int main(void) {
     puts("¡Hasta luego!\n");
     return 0;
 }
+

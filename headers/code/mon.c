@@ -1,5 +1,7 @@
 #include "../mon.h"
 #include "../prints.h"
+#include <ctype.h>
+
 
 Map* MONDEX = NULL;
 List* MONES_AGUA = NULL;
@@ -87,23 +89,61 @@ void cargar_archivo_mones(Map* datos_mones) {
 }
 
 void _mondex(Map* MONDEX) {
-    imprimir_mondex(MONDEX);
-    printf("Ingrese el nombre del Mon que desee buscar ('0' - Ninguno): ");
-    char entrada[MAX];
-    leer_entrada(entrada);
-    if (*entrada == '0' || *entrada == '\n') return;
-    
-    MapPair* pair = map_search(MONDEX, entrada);
-    if (pair == NULL) { puts("No se encontró este Mon."); return; }
-    Mon* mon = pair->value;
+    while (1) {
+        imprimir_mondex(MONDEX);
+        printf("Ingrese el nombre del Mon que desee buscar ('0' - Ninguno): ");
+        char entrada[MAX];
+        leer_entrada(entrada);
+        
+        // Salir si el usuario ingresa '0'
+        if (entrada[0] == '0') {
+            puts("Saliendo...");
+            break;
+        }
 
-    limpiar_pantalla();
-    imprimir_separador("DATOS DEL MON", 40);
-    printf("ID. %d  Nombre: %s  Tipo: %s\n", mon->ID, mon->nombre, mon->tipo);
-    printf("Descripción: %s\n", mon->descripcion);
-    puts("\nStats");
-    printf("Vida: %d\n", mon->stats_base.hp_base);
-    printf("Daño: %d\n", mon->stats_base.damage_base);
-    printf("Defensa: %d\n", mon->stats_base.defense_base);
-    esperar_enter();
+        // Validar entrada vacía
+        if (entrada[0] == '\n' || entrada[0] == '\0') {
+            puts("Error: Inserte una opción correcta.");
+            esperar_enter();
+            limpiar_pantalla();
+            continue;
+        }
+
+        // Validar entrada: solo letras y espacios
+        int entrada_valida = 1;
+        for (int i = 0; entrada[i] != '\0'; i++) {
+            if (!isalpha(entrada[i]) && !isspace(entrada[i])) {
+                entrada_valida = 0;
+                break;
+            }
+        }
+
+        if (!entrada_valida) {
+            puts("Error: Carácter no válido. El nombre solo puede contener letras y espacios.");
+            esperar_enter();
+            limpiar_pantalla();
+            continue;
+        }
+
+        // Buscar en el mapa
+        MapPair* pair = map_search(MONDEX, entrada);
+        if (pair == NULL) {
+            puts("No se encontró este Mon. Inserte una opción correcta.");
+            esperar_enter();
+            limpiar_pantalla();
+            continue;
+        }
+        
+        Mon* mon = pair->value;
+        limpiar_pantalla();
+        imprimir_separador("DATOS DEL MON", 40);
+        printf("ID. %d  Nombre: %s  Tipo: %s\n", mon->ID, mon->nombre, mon->tipo);
+        printf("Descripción: %s\n", mon->descripcion);
+        puts("\nStats");
+        printf("Vida: %d\n", mon->stats_base.hp_base);
+        printf("Daño: %d\n", mon->stats_base.damage_base);
+        printf("Defensa: %d\n", mon->stats_base.defense_base);
+        esperar_enter();
+        break; // Salir después de mostrar los datos
+    }
 }
