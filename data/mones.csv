@@ -1,19 +1,19 @@
 ID,NOMBRE,TIPO,HP BASE,DAÑO BASE,DEFENSA BASE,DESCRIPCIÓN
-1,Alimun,AGUA,10,4,1,Un Mon que se dedica a vagar por los mares.
-2,Noumar,AGUA,11,3,2,sos
-3,Benjini,AGUA,16,2,1,miau
-4,Vicrubion,FUEGO,14,2,1,guau
-5,Iruiza,FUEGO,10,2,2,wof wof
-6,Arayamon,PLANTA,13,5,3,El mejor amigo de un Entrenador.
-7,Mecamon,PLANTA,10,4,1,gato
-8,Virtualmon,FUEGO,10,3,1,perro
-9,Metromon,PLANTA,15,3,2,conejo
-10,Godzillamon,FUEGO,16,3,3,pollito
-11,Musgo,PLANTA,13,3,2,a
-12,Silvanilo,AGUA,15,4,4,ab
-13,Almaflor,PLANTA,14,3,5,b
-14,Seresombra,AGUA,10,2,4,c
-15,Emberling,AGUA,13,3,2,c
-16,Nebulú,FUEGO,12,2,2,d
-17,Solun,FUEGO,15,4,2,f
-18,Auroriel,PLANTA,15,4,3,g
+1,Alimun,AGUA,10,4,1,Surfea las olas como si bailara con ellas.
+2,Noumar,AGUA,11,3,2,Sueña con ser un pinguino Rey.
+3,Benjini,AGUA,16,2,1,Siempre llega temprano junto a una tormena que lo sigue en su caminar.
+4,Vicrubion,FUEGO,14,2,1,Arde con estilo aunque no sepa por qué.
+5,Iruiza,FUEGO,10,2,2,Sus ladridos escupen fuego cuando se emociona.
+6,Arayamon,PLANTA,13,5,3,El mon mas exigente junto a sus lentes.
+7,Mecamon,PLANTA,10,4,1,Una planta con alma de robot.
+8,Virtualmon,FUEGO,10,3,1,Corre más rápido que el WiFi del IBC.
+9,Metromon,PLANTA,15,3,2,Florece en medio del caos universitario.
+10,Godzillamon,FUEGO,16,3,3,Pequeño pero con alma de gigante no lo hagas enojar.
+11,Musgo,PLANTA,13,3,2,Parece tranquilo hasta que se mueve.
+12,Silvanilo,AGUA,15,4,4,Un mon muy elegante que hasta toda la costa lo aplaude.
+13,Almaflor,PLANTA,14,3,5,Florece con ternura y con armadura.
+14,Seresombra,AGUA,10,2,4,Habita subterraneos del IBC lugares donde nadie visita dos veces. 
+15,Emberling,AGUA,13,3,2,Pequeño chispante pero travieso.
+16,Nebulu,FUEGO,12,2,2,Una chispa perdida entre las estrellas.
+17,Solun,FUEGO,15,4,2,Brilla de dia arde de noche.
+18,Auroriel,PLANTA,15,4,3,Trae la calma con cada hoja que agita en especial en avenida Brasil.
