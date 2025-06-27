@@ -50,12 +50,28 @@ void cargar_grafo_desde_csv(Map* ubicaciones) {
     printf("[🌐] Se cargó correctamente mundo_mon.csv\n");
 }
 
-// ------ MODIFICADO: Manejo de entrada de teclado para Linux ------
-void mover(Map* ubicaciones, Entrenador* e, int *se_movio) {
+void caso_final(Entrenador* entrenador, Ubicacion* nueva_ubi) {
+    Entrenador* lider = elegir_lider(nueva_ubi);
+    printf("Lider %s te desafia a un combate por el titulo de campeón!\n", lider->nombre);
+    esperar_enter();
+    limpiar_pantalla();
+    int win = batalla_entrenador(entrenador, lider) ;
+    if (win) {
+        mensaje_final(entrenador);
+        esperar_enter();
+    } else {
+        puts("Estuviste cerca de ganar, pero no fue suficiente...") ;
+        esperar_enter() ;
+    }
+    
+    exit(0);
+}
+
+void mover(Map* ubicaciones, Entrenador* e) {
     MapPair* par = map_search(ubicaciones, &e->id);
     if (par == NULL) { puts("Ubicación no encontrada."); return; }
     Ubicacion* ubi = (Ubicacion*) par->value;
-    int movimiento_valido = 0;
+    bool movimiento_valido = false;
 
     do {
         puts("Presione: W (Norte), S (Sur), A (Oeste), D (Este). Otra tecla para cancelar");
@@ -66,39 +82,26 @@ void mover(Map* ubicaciones, Entrenador* e, int *se_movio) {
         int nueva_ubicacion = -1;
         char* direccion = "Dir";
         switch (tecla) {
-            case 'w': case 'W': nueva_ubicacion = ubi->arriba; direccion = "Norte"; break;
-            case 's': case 'S': nueva_ubicacion = ubi->abajo; direccion = "Sur"; break;
-            case 'a': case 'A': nueva_ubicacion = ubi->izquierda; direccion = "Oeste"; break;
-            case 'd': case 'D': nueva_ubicacion = ubi->derecha; direccion = "Este"; break;
+            case 'w': case 'W': nueva_ubicacion = ubi->arriba;    direccion = "Norte";  break;
+            case 's': case 'S': nueva_ubicacion = ubi->abajo;     direccion = "Sur";    break;
+            case 'a': case 'A': nueva_ubicacion = ubi->izquierda; direccion = "Oeste";  break;
+            case 'd': case 'D': nueva_ubicacion = ubi->derecha;   direccion = "Este";   break;
             default:
                 puts("Viaje cancelado.");
+                esperar_enter();
                 return;
         }
+        if (nueva_ubicacion == -1) { puts("No hay ruta hacia esa dirección.") ; return; } // Porsiacaso
 
-        if (nueva_ubicacion == -1) { printf("\nNo hay ruta hacia %s.\n", direccion); return; } 
         MapPair* nuevo_par = map_search(ubicaciones, &nueva_ubicacion);
         if (nuevo_par == NULL) { puts("Nueva ubicación no encontrada."); return; }
+        
         e->id = nueva_ubicacion;
         Ubicacion* nueva_ubi = (Ubicacion*)nuevo_par->value;
-        movimiento_valido = 1;
-        *se_movio = 1 ;
+        movimiento_valido = true;
+        
         if (nueva_ubi->es_final) {
-            Entrenador* lider = elegir_lider(nueva_ubi);
-            printf("Lider %s te desafia a un combate por el titulo de campeón!\n", lider->nombre);
-
-            esperar_enter();
-            limpiar_pantalla();
-            int win = batalla_entrenador(e, lider) ;
-            if (win) {
-                mensaje_final(e);
-                esperar_enter();
-            }
-            else {
-                puts("Estuviste cerca de ganar, pero no fue suficiente...\n") ;
-                esperar_enter() ;
-            }
-            
-            exit(0);
+            caso_final(e, nueva_ubi);
         }
     } while (!movimiento_valido);
 }

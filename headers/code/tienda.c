@@ -131,10 +131,9 @@ void ver_tienda(Entrenador* entrenador) {
                 break;
             }
             case 5:
-                printf("\nCURANDO A TODOS LOS MONES....\n") ;
-                esperar_enter() ;
+                puts("CURANDO A TODOS LOS MONES....\n") ;
                 curar_equipo(entrenador) ;
-                
+                esperar_enter() ;
                 break;
             default:
                 puts("OPCION INVALIDA. Intente de nuevo.\n") ;

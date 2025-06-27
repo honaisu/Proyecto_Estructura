@@ -224,25 +224,26 @@ void posible_batalla(Map *ubicaciones, Entrenador *entrenador){
 
 void menu_jugador(Map* ubicaciones, Entrenador* entrenador) {
     limpiar_pantalla();
-    int se_movio = 0 ;
+    bool se_movio = false ;
     while(true) {
         limpiar_pantalla() ;
-        if (se_movio == 1) {
+        if (se_movio == true) {
             posible_batalla(ubicaciones, entrenador) ;
-            se_movio = 0 ;
+            se_movio = false ;
         }
-        if (!entrenador->vivo) { 
-            puts("GAME OVER!!! \n");
+        if (!entrenador->vivo) {
+            limpiar_pantalla(); 
+            puts(ANSI_COLOR_WHITE "GAME OVER..." ANSI_COLOR_RESET);
             esperar_enter() ;
             return; 
         }
         mostrar_estado(ubicaciones, entrenador);
         mostrar_menu_jugador();
         int opcion_juego = leer_opcion_valida();
-        
         switch (opcion_juego) {
             case 1: 
-                mover(ubicaciones, entrenador, &se_movio); 
+                mover(ubicaciones, entrenador);
+                se_movio = true; 
                 break;
             case 2:
                 gestionar_mones_jugador(entrenador);
@@ -258,23 +259,20 @@ void menu_jugador(Map* ubicaciones, Entrenador* entrenador) {
                 MapPair* par = map_search(ubicaciones, &entrenador -> id) ;
                 if (par == NULL) {
                     puts("ERROR : NO SE PUDO OBTENER LA UBICACION ACTUAL") ;
-                    break ;
+                    return ; // En caso de que, de repente se mueva a un lugar nada que ver
                 }
                 Ubicacion* ubicacion = par -> value ;
-                if (ubicacion -> hayTienda) {
-                    ver_tienda(entrenador) ;
-                } else {
-                    printf("NO HAY TIENDA =)\n") ;
-                }
+                if (ubicacion -> hayTienda) ver_tienda(entrenador) ;
+                else puts(ANSI_COLOR_BLUE "NO HAY TIENDA =)" ANSI_COLOR_RESET) ;
                 esperar_enter() ;
                 break; 
             }
             case 0: 
                 break;
+            default:
+                puts("Por favor, ingrese una opción válida!");
         }
 
         if (opcion_juego == 0) break;
-        
-        limpiar_pantalla();
     }
 }

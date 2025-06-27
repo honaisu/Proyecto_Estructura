@@ -14,13 +14,17 @@ void menu_batalla(void){
 }
 
 void estado_batalla(Mon *mon_jugador, Mon* mon_salvaje){
-    printf("Mon: %s, vida: %d, tipo: %s\n", mon_jugador->nombre, mon_jugador->hp_actual, mon_jugador->tipo) ;
-    printf("Mon salvaje: %s, vida: %d, tipo: %s\n", mon_salvaje->nombre, mon_salvaje->hp_actual, mon_salvaje->tipo) ;
+    printf("Mon: " ANSI_COLOR_WHITE "%s" ANSI_COLOR_RESET ", vida: %d, tipo: %s\n", mon_jugador->nombre, mon_jugador->hp_actual, mon_jugador->tipo) ;
+    printf("Mon salvaje: " ANSI_COLOR_WHITE "%s" ANSI_COLOR_RESET ", vida: %d, tipo: %s\n", mon_salvaje->nombre, mon_salvaje->hp_actual, mon_salvaje->tipo) ;
 }
 
 void estado_batalla_entrenador(Entrenador *jugador, Entrenador *rival, Mon *mon_jugador, Mon *mon_rival){
-    printf("Tu: %s ---- Mon: %s, vida: %d, tipo: %s\n",jugador->nombre, mon_jugador->nombre, mon_jugador->hp_actual, mon_jugador->tipo) ;
-    printf("Rival: %s ---- Mon: %s, vida: %d, tipo: %s\n",rival->nombre, mon_rival->nombre, mon_rival->hp_actual, mon_rival->tipo) ;
+    printf("Tu: " ANSI_COLOR_WHITE "%s" ANSI_COLOR_RESET 
+        "  ---- Mon: " ANSI_COLOR_WHITE "%s" ANSI_COLOR_RESET 
+        ", vida: %d, tipo: %s\n",jugador->nombre, mon_jugador->nombre, mon_jugador->hp_actual, mon_jugador->tipo) ;
+    printf("Rival: " ANSI_COLOR_WHITE "%s" ANSI_COLOR_RESET 
+        " ---- Mon: " ANSI_COLOR_WHITE "%s" ANSI_COLOR_RESET 
+        ", vida: %d, tipo: %s\n",rival->nombre, mon_rival->nombre, mon_rival->hp_actual, mon_rival->tipo) ;
 }
 
 float conseguir_efectividad(Mon *mon_atacante, Mon *mon_en_contra){
@@ -59,7 +63,7 @@ Mon* seleccionar_mon_muerto(List *equipo) {
     Mon *muertos[10];
     int total_muertos = 0;
 
-    printf("Elige un Mon muerto para revivir:\n");
+    puts("Elige un Mon muerto para revivir:");
     while (actual) {
         if (actual->is_dead || actual->hp_actual <= 0) {
             printf("%d. %s (HP: %d)\n", total_muertos + 1, actual->apodo, actual->hp_actual);
@@ -69,13 +73,13 @@ Mon* seleccionar_mon_muerto(List *equipo) {
     }
 
     if (total_muertos == 0) {
-        printf("No tienes Mons muertos.\n");
+        puts("No tienes Mons muertos.");
         esperar_enter();
         return NULL;
     }
 
     int opcion;
-    printf("Número: ");
+    printf("Elige un número: ");
     scanf("%d", &opcion);
     getchar(); // limpiar '\n'
     if (opcion < 1 || opcion > total_muertos) return NULL;
@@ -98,6 +102,12 @@ bool atrapar_mon(Entrenador* jugador, Mon* mon_salvaje) {
     return false;
 }
 
+void imprimir_dano(Mon* mon_batalla, Mon* mon_contrario, int dano_recibido) {
+    printf(ANSI_COLOR_WHITE "%s" ANSI_COLOR_RESET 
+    " le quita %d de vida a " 
+    ANSI_COLOR_WHITE "%s" ANSI_COLOR_RESET "\n", mon_batalla->apodo, dano_recibido, mon_contrario->apodo);
+}
+
 bool usar_item(Entrenador* jugador, Mon* mon_batalla, Mon* mon_contrario) {
     Objeto *obj = gestionar_inventario(jugador);
     if (obj == NULL) return false;
@@ -113,7 +123,8 @@ bool usar_item(Entrenador* jugador, Mon* mon_batalla, Mon* mon_contrario) {
                 puts("Eso seria un robo...") ;
                 return false;
             }
-            else if (atrapar_mon(jugador, mon_contrario)) { obj->cantidad -= 1; return true; }
+            if (atrapar_mon(jugador, mon_contrario)) { --obj->cantidad; return true; }
+            else { --obj->cantidad; }
             break;
         case 'P':
             mon_batalla->hp_actual += 4;
@@ -194,7 +205,7 @@ int batalla_pokemon_salvaje(Entrenador *jugador, Mon *mon_salvaje) {
             switch (tecla) {
                 case '1': {
                     dano_recibido = efectuar_dano(mon_batalla, mon_salvaje, ef_mon_jugador, defensa_mon);
-                    printf("%s le quita %d de vida a %s \n", mon_batalla->apodo, dano_recibido, mon_salvaje->apodo);
+                    imprimir_dano(mon_batalla, mon_salvaje, dano_recibido);
                     opcion_valida = true;
                     break;
                 }
@@ -231,7 +242,7 @@ int batalla_pokemon_salvaje(Entrenador *jugador, Mon *mon_salvaje) {
 
         // ATAQUE DEL MON SALVAJE
         dano_recibido = efectuar_dano(mon_salvaje, mon_batalla, ef_mon_salvaje, defensa_mon);
-        printf("%s le quita %d de vida a %s\n", mon_salvaje->apodo, dano_recibido, mon_batalla->apodo);
+        imprimir_dano(mon_salvaje, mon_batalla, dano_recibido);
         esperar_enter();
 
         if (verificar_vivos(mon_batalla, equipo)) { continue;
@@ -275,7 +286,7 @@ int batalla_entrenador(Entrenador *jugador, Entrenador *rival){
             switch (tecla) {
                 case '1': {
                     dano_recibido = efectuar_dano(mon_jugador, mon_rival, ef_mon_jugador, defensa_rival);
-                    printf("%s le quita %d de vida a %s\n", mon_jugador->apodo, dano_recibido, mon_rival->apodo);
+                    imprimir_dano(mon_jugador, mon_rival, dano_recibido);
                     opcion_valida = true;
                     break;
                 }
@@ -303,7 +314,7 @@ int batalla_entrenador(Entrenador *jugador, Entrenador *rival){
             printf("%s fue derrotado! \n", mon_rival->apodo);
             mon_rival = obtener_primer_mon_vivo(equipo_rival) ;
             if (mon_rival != NULL){
-                printf("%s saca a %s !", rival->nombre, mon_rival->nombre) ;
+                printf("%s saca a " ANSI_COLOR_WHITE "%s" ANSI_COLOR_RESET "!\n", rival->nombre, mon_rival->nombre) ;
                 esperar_enter() ;
                 continue ;
             } else {
@@ -319,8 +330,8 @@ int batalla_entrenador(Entrenador *jugador, Entrenador *rival){
             aplicar_defensa(&defensa_rival, mon_rival);
         } else {
             // ATAQUE RIVAL
-            efectuar_dano(mon_rival, mon_jugador, ef_mon_rival, defensa_mon);
-            printf("%s le quita %d de vida a %s \n", mon_rival->apodo, dano_recibido, mon_rival->apodo);
+            dano_recibido = efectuar_dano(mon_rival, mon_jugador, ef_mon_rival, defensa_mon);
+            imprimir_dano(mon_rival, mon_jugador, dano_recibido);
         }
 
         esperar_enter();

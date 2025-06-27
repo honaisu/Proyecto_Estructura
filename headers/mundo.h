@@ -35,8 +35,8 @@ typedef struct Entrenador {
     bool vivo; // Permite poder saber si el jugador se encuentra "derrotado o no". Como un Game Over
 } Entrenador;
 
-// Funcion que permite moverse dentro del mapa, y si está disponible
-void mover(Map*, Entrenador*, int*);
+// Funcion que permite moverse dentro del mapa
+void mover(Map*, Entrenador*);
 
 //Función que permite cargar el mapa CSV
 void cargar_grafo_desde_csv(Map*);
