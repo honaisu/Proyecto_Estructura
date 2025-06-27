@@ -152,7 +152,7 @@ int efectuar_dano(Mon* mon_batalla, Mon* mon_contrario, float ef, float defensa)
     int dano_recibido;
     float MC = (rand() % 100 + 1 <= 10) ? 1.5 : 1.0;
     if (MC == 1.5) puts("\nCrítico!!!");
-    dano_recibido = ceil((mon_batalla->damage_actual * ef * MC) - (mon_batalla->defense_actual * defensa));
+    dano_recibido = ceil((mon_batalla->stats_base.damage_base * ef * MC) - (mon_batalla->stats_base.defense_base * defensa));
     if (dano_recibido <= 0) dano_recibido = 1;
     mon_contrario->hp_actual -= dano_recibido;
     return dano_recibido;
@@ -170,6 +170,7 @@ bool verificar_vivos(Mon* mon_batalla, List* equipo) {
     mon_batalla->hp_actual = 0;
     mon_batalla->is_dead = true;
     printf("%s ha sido derrotado...\n", mon_batalla->apodo);
+    esperar_enter();
 
     mon_batalla = obtener_primer_mon_vivo(equipo);
     if (mon_batalla != NULL) {
@@ -253,8 +254,10 @@ int batalla_pokemon_salvaje(Entrenador *jugador, Mon *mon_salvaje) {
         imprimir_dano(mon_salvaje, mon_batalla, post_vida);
         esperar_enter();
 
-        if (verificar_vivos(mon_batalla, equipo)) { continue;
+        if (verificar_vivos(mon_batalla, equipo)) { 
+            continue;
         } else {
+            jugador->vivo = false;
             free(mon_salvaje);
             return 0;
         }

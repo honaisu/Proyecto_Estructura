@@ -113,7 +113,7 @@ void gestionar_mones_jugador(Entrenador* entrenador) {
         puts("Por favor, elija un Mon de su equipo");
         leer_entrada(entrada);
         mon_jugador = buscar_mon_equipo(entrenador, entrada);
-        if (mon_jugador == NULL) { puts("No existe ese Mon en el equipo!"); continue; }
+        if (mon_jugador == NULL) { puts("No existe ese Mon en el equipo!"); esperar_enter(); continue; }
         switch (opcion) {
             case 1: {
                 imprimir_datos_mon(mon_jugador);
@@ -122,7 +122,7 @@ void gestionar_mones_jugador(Entrenador* entrenador) {
                 break;
             }
             case 2: {
-                Mon* mon_cambio;
+                Mon* mon_cambio = (Mon*) malloc(sizeof(Mon));
                 copiar_mon(mon_jugador, mon_cambio);
                 list_popCurrent(entrenador->equipo_mon);
                 list_pushFront(entrenador->equipo_mon, mon_cambio);

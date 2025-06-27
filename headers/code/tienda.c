@@ -130,11 +130,12 @@ void ver_tienda(Entrenador* entrenador) {
                 vender_objeto(entrenador, nombre_obj) ;
                 break;
             }
-            case 5:
+            case 5: {
                 puts("CURANDO A TODOS LOS MONES....\n") ;
                 curar_equipo(entrenador) ;
                 esperar_enter() ;
                 break;
+            }
             default:
                 puts("OPCION INVALIDA. Intente de nuevo.\n") ;
                 esperar_enter() ;
