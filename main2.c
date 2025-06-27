@@ -2,11 +2,10 @@
 #include "headers/batalla.h"
 #include "headers/prints.h"
 
-
-// gcc main2.c headers/TDAs/*.c headers/code/*.c -o main -lm
+// gcc main2.c headers/TDAs/*.c headers/code/*.c -o main.exe -lm
 
 extern Map* MONDEX;
-extern List *nombres ;
+extern List *nombres ; 
 
 void liberar_recursos(Map* ubicaciones, Entrenador* entrenador) {
     if (ubicaciones) {
@@ -42,10 +41,10 @@ void mostrar_menu_principal(void) {
 
 int main(void) {
     srand(time(NULL)) ;
-    Map* ubicaciones = map_create(100);
+    Map* ubicaciones = map_create(is_equal_int);
 
-    MONDEX = map_create(100);
-    nombres = list_create();
+    MONDEX = map_create(is_equal_int);
+    nombres = list_create(); 
     cargar_archivo_mones(MONDEX, nombres);
 
     cargar_grafo_desde_csv(ubicaciones);
@@ -97,4 +96,3 @@ int main(void) {
     puts("¡Hasta luego!\n");
     return 0;
 }
-
