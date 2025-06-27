@@ -1,6 +1,11 @@
 #include "../jugador.h"
 #include "../batalla.h"
+#include "../tienda.h"
 #include "../prints.h"
+#include "../entrenadores.h"
+
+extern List* NPCs;
+char NOMBRE_JUGADOR[MAX] = "Ketchup";
 
 void inicializar_items(Entrenador* e) {
     Objeto* monball = (Objeto*) malloc (sizeof(Objeto)) ;
@@ -23,15 +28,38 @@ void inicializar_items(Entrenador* e) {
 }
 
 void primer_mon_jugador(Entrenador* e) {
-    puts("Por favor, elija su Mon Inicial");
-    MapPair* pair = map_search(MONDEX, "Arayamon");
-    if (pair == NULL) return;
-    char opcion[MAX];
-    leer_entrada(opcion);
-    list_pushBack(e->equipo_mon, pair->value);
-}
+    char mon_inicial[20] = "\0";
+    do {
+        char opcion = '\0';
+        const char* opciones[] = {
+            "Iruiza  (Tipo " ANSI_COLOR_RED "Fuego" ANSI_COLOR_RESET ")", 
+            "Alimun  (Tipo " ANSI_COLOR_BLUE "Agua" ANSI_COLOR_RESET ")", 
+            "Mecamon (Tipo " ANSI_COLOR_GREEN "Planta" ANSI_COLOR_RESET ")"
+        };
+        limpiar_pantalla();
+        imprimir_menu("Elija su Mon Inicial:", opciones, 3);
+        leer_opcion(&opcion);
+        switch (opcion) {
+            case '1':
+                strcpy(mon_inicial, "Arayamon");
+                break;
+            case '2':
+                strcpy(mon_inicial, "Alimun");
+                break;
+            case '3':
+                strcpy(mon_inicial, "Mecamon");
+                break;
+        }
+        if (opcion == '1' || opcion == '2' || opcion == '3') break;
+        else { puts("Por favor, elija un Mon Inicial."); esperar_enter(); }
+    } while (true);
 
-char NOMBRE_JUGADOR[MAX] = "Ash Ketchup";
+    MapPair* pair = map_search(MONDEX, mon_inicial);
+    if (pair == NULL) { puts("Mon No encontrado"); exit(1); }
+    Mon* mon_jugador = (Mon*) malloc(sizeof(Mon));
+    copiar_mon(pair->value, mon_jugador);
+    list_pushBack(e->equipo_mon, mon_jugador);
+}
 
 Entrenador* inicializar_entrenador(void) {
     Entrenador* nuevo_entrenador = (Entrenador*) malloc(sizeof(Entrenador));
@@ -43,6 +71,7 @@ Entrenador* inicializar_entrenador(void) {
     nuevo_entrenador->entrenadores_wins = 0 ;
     nuevo_entrenador->mons_capturados = 0 ;
     nuevo_entrenador->mons_wins = 0 ;
+    nuevo_entrenador->vivo = true;
 
     inicializar_items(nuevo_entrenador);
     primer_mon_jugador(nuevo_entrenador);
@@ -136,16 +165,24 @@ void posible_batalla(Map *ubicaciones, Entrenador *entrenador){
     MapPair* pair = map_search(ubicaciones, &entrenador->id);
     Ubicacion* ubicacion = pair->value;
     int randomizador = rand() % 100 + 1 ;
-    if (list_size(ubicacion->mones) != 0 && randomizador <= 40) {
+    if (list_size(ubicacion->mones) > 0 && randomizador <= 40) {
         Mon *mon_salvaje = aparicion_salvaje(ubicacion->mones) ;
-        printf("Un mon salvaje se acerca! \n") ;
+        puts("Un mon salvaje se acerca!") ;
         esperar_enter() ;
         int win = batalla_pokemon_salvaje(entrenador, mon_salvaje) ;
         if (win == 1) entrenador->mons_wins += 1 ;
         else if (win == 2) entrenador->mons_capturados += 1 ;
         esperar_enter() ;
     }
-    randomizador = rand() % 100 + 1 ; // para un entrenador enemigo
+    else if (*ubicacion->tipoZona == '\0' && randomizador <= 20) {
+        Entrenador* npc_batalla = aparicion_npc();
+        printf("Un entrenador cabreado llamado %s se acerca!\n", npc_batalla->nombre);
+        esperar_enter();
+        int win = batalla_entrenador(entrenador, npc_batalla);
+        if (win == 1) ++entrenador->entrenadores_wins;
+        else { puts("Mala cuea"); entrenador->vivo = false; }
+        esperar_enter();
+    }
 }
 
 void menu_jugador(Map* ubicaciones, Entrenador* entrenador) {
@@ -153,6 +190,7 @@ void menu_jugador(Map* ubicaciones, Entrenador* entrenador) {
     int se_movio = 0 ;
     while(true) {
         limpiar_pantalla() ;
+        if (!entrenador->vivo) { puts("GAME OVER!!!"); return; }
         if (se_movio == 1) {
             posible_batalla(ubicaciones, entrenador) ;
             se_movio = 0 ;
@@ -180,7 +218,7 @@ void menu_jugador(Map* ubicaciones, Entrenador* entrenador) {
             case 5: {
                 MapPair* par = map_search(ubicaciones, &entrenador -> id) ;
                 if (par == NULL) {
-                    printf("ERROR : NO SE PUDO OBTENER LA UBICACION ACTUAL\n") ;
+                    puts("ERROR : NO SE PUDO OBTENER LA UBICACION ACTUAL") ;
                     break ;
                 }
                 Ubicacion* ubicacion = par -> value ;

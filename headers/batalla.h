@@ -7,5 +7,6 @@ typedef struct Mon Mon;
 
 // Funcion que me permite luchar contra mones salvajes
 int batalla_pokemon_salvaje(Entrenador*, Mon*);
+int batalla_entrenador(Entrenador*, Entrenador*);
 
 #endif

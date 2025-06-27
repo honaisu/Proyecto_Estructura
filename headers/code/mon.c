@@ -43,6 +43,7 @@ void copiar_mon(Mon *copy, Mon *paste){
 	paste->hp_actual = paste->stats_base.hp_base ;
 	paste->damage_actual = paste->stats_base.damage_base ;
     paste->defense_actual = paste->stats_base.defense_base ;
+    paste->is_dead = false;
 }
 
 Mon * aparicion_salvaje(List *mones){
@@ -53,8 +54,8 @@ Mon * aparicion_salvaje(List *mones){
         recorrer = list_next(mones) ;
     }
     Mon *mon_final = (Mon *) malloc(sizeof(Mon));
-    copiar_mon (recorrer, mon_final);
-
+    copiar_mon(recorrer, mon_final);
+    return mon_final;
 }
 
 void meter_mon_lista(Mon* mon) {
@@ -87,9 +88,8 @@ void cargar_archivo_mones(Map* datos_mones, List *nombre_mons) {
     }
 
     fclose(archivo);
-    printf("Se cargó correctamente mones.csv\n");
+    printf("[🐱] Se cargó correctamente mones.csv\n");
 }
-
 
 void _mondex(Map* MONDEX, List *nombres) {
     while (true) {
@@ -147,6 +147,6 @@ void _mondex(Map* MONDEX, List *nombres) {
         printf("Daño: %d\n", mon->stats_base.damage_base);
         printf("Defensa: %d\n", mon->stats_base.defense_base);
         esperar_enter();
-        break; // Salir después de mostrar los datos
+        break;
     }
 }

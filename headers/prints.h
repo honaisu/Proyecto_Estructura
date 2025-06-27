@@ -24,6 +24,6 @@ void mostrar_estado(Map*, Entrenador*);
 void imprimir_menu(const char*, const char**, int);
 
 // Función que permite ver los items que puedes seleccionar para ser usados en combate
-void imprimir_seleccion_items() ;
+void imprimir_seleccion_items(void) ;
 
 #endif

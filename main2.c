@@ -1,13 +1,13 @@
 #include "headers/jugador.h"
-#include "headers/batalla.h"
+#include "headers/entrenadores.h"
 #include "headers/prints.h"
 
 // gcc main2.c headers/TDAs/*.c headers/code/*.c -o main.exe -lm
 
 extern Map* MONDEX;
 extern List *nombres ; 
-extern List *nombres ;
 extern char NOMBRE_JUGADOR[MAX];
+extern List* NPCs;
 
 void liberar_recursos(Map* ubicaciones, Entrenador* entrenador) {
     if (ubicaciones) {
@@ -15,9 +15,6 @@ void liberar_recursos(Map* ubicaciones, Entrenador* entrenador) {
         while (pair) {
             Ubicacion* ubi = (Ubicacion*)pair->value;
             list_clean(ubi->mones);
-            free(ubi->mones);
-            free(pair->key);
-            free(ubi);
             pair = map_next(ubicaciones);
         }
         map_clean(ubicaciones);
@@ -38,17 +35,24 @@ void mostrar_menu_principal(void) {
     const char* opciones[] = {"Jugar Partida", "Ingresar Nombre"};
     imprimir_separador("THE MON PROJECT", 30);
     imprimir_menu("", opciones, 2);
-    puts("(0.) Salir");
+    puts("(0.) Salir del Programa");
 }
 
 int main(void) {
     srand(time(NULL)) ;
-    Map* ubicaciones = map_create(50);
+    // UBICACIONES
+    Map* ubicaciones = map_create(MAX);
+    // NPCS
+    NPCs = list_create();
+    // NOMBRES DE MONES
+    nombres = list_create();
+    // MONDEX 
+    MONDEX = map_create(MAX);
 
-    MONDEX = map_create(20);
-    nombres = list_create(); 
+    // Parametros de MONDEX y Nombres, guardará automaticamente los mones ahi.
+    // útil también para la lista del mundo.
     cargar_archivo_mones(MONDEX, nombres);
-
+    cargar_archivo_NPCs(NPCs);
     cargar_grafo_desde_csv(ubicaciones);
     if (ubicaciones == NULL) {
         printf("No se cargó la región. Verifique los archivos CSV.\n");
@@ -56,6 +60,9 @@ int main(void) {
         free(ubicaciones);
         return 1;
     }
+    // Input del usuario para que vea que se cargo todo
+    esperar_enter();
+    limpiar_pantalla();
 
     while (true) {
         mostrar_menu_principal();
@@ -67,7 +74,6 @@ int main(void) {
                 liberar_recursos(NULL, entrenador);   
                 break;
             }
-
             case 2 : {
                 printf("Ingresa tu nombre de entrenador: ");
                 fgets(NOMBRE_JUGADOR, MAX, stdin);
@@ -83,7 +89,7 @@ int main(void) {
                 puts("Por favor, ingrese una opción válida");
                 break;
         }
-        if (opcion == 0){
+        if (opcion == 0) {
             break ;
         } 
         limpiar_pantalla();
@@ -92,7 +98,6 @@ int main(void) {
     map_clean(MONDEX);
     free(MONDEX);
 
-    free(ubicaciones);
-    puts("¡Hasta luego!\n");
+    puts("¡Hasta luego!");
     return 0;
 }

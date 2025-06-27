@@ -84,7 +84,7 @@ int batalla_pokemon_salvaje(Entrenador *jugador, Mon *mon_salvaje) {
     int obj_ocupado = 1;
     char tecla;
 
-    while (1) {
+    while (true) {
         float ef_mon_jugador = conseguir_efectividad(mon_batalla, mon_salvaje);
         float ef_mon_salvaje = conseguir_efectividad(mon_salvaje, mon_batalla);
         int opcion_valida = 0;
@@ -169,6 +169,7 @@ int batalla_pokemon_salvaje(Entrenador *jugador, Mon *mon_salvaje) {
                 }
                 case '4': {
                     printf("Huyes de la batalla \n");
+                    free(mon_salvaje);
                     return 2;
                 }
                 default: {
@@ -181,6 +182,7 @@ int batalla_pokemon_salvaje(Entrenador *jugador, Mon *mon_salvaje) {
 
         if (mon_salvaje->hp_actual <= 0) {
             printf("Mon fue derrotado! \n");
+            free(mon_salvaje);
             return 1;
         }
 
@@ -201,6 +203,7 @@ int batalla_pokemon_salvaje(Entrenador *jugador, Mon *mon_salvaje) {
                 printf("\nSacas al combate a %s \n", mon_batalla->apodo);
             } else {
                 printf("No te quedan más Mon, has perdido... \n");
+                jugador->vivo = false;
                 free(mon_salvaje);
                 return 0;
             }
@@ -282,8 +285,6 @@ int batalla_entrenador(Entrenador *jugador, Entrenador *rival){
                     break ;
                 default :
                     printf("Opcion no valida \n") ;
-
-            
         }
         while (tecla != '1' && tecla != '2' && tecla !='4' && obj_ocupado) ;
         if (tecla == '4'){

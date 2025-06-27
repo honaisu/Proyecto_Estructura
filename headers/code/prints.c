@@ -29,13 +29,11 @@ void imprimir_mondex(List* MONDEX) {
     putchar('\n');
 }
 
-void imprimir_seleccion_items(){
-    puts("1) Monball") ;
-    puts("2) Pocion") ;
-    puts("3) Revivir") ;
-    puts("4) Salir del inventario") ;
+// Items EN la batalla
+void imprimir_seleccion_items(void) {
+    const char* opciones[] = {"MonBall", "Pocion", "Revivir", "Salir del Inventario"};
+    imprimir_menu("Que objeto quieres usar:", opciones, 4);
 }
-
 
 void mostrar_estado(Map* ubicaciones, Entrenador* e) {
     limpiar_pantalla();

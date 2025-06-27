@@ -4,6 +4,7 @@
 
 // Una cadena que me guarda el nombre del jugador
 extern char NOMBRE_JUGADOR[MAX];
+extern List* NPCs;
 
 // Función que llama al menu del jugador dentro de la partida
 void menu_jugador(Map*, Entrenador*);

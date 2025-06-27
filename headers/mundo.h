@@ -32,6 +32,7 @@ typedef struct Entrenador {
     int mons_capturados ; // Un int que permite ver los mons capturados
     int mons_wins ; // Estadistica como contador, que suma cada vez que se derrota un mon salvaje
     int entrenadores_wins ; // Estadistica como contador, que suma cada vez que se derrota un entrenador 
+    bool vivo; // Permite poder saber si el jugador se encuentra "derrotado o no". Como un Game Over
 } Entrenador;
 
 // Funcion que permite moverse dentro del mapa, y si está disponible

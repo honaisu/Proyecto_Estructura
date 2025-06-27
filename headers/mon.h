@@ -38,10 +38,6 @@ typedef struct Mon {
 	int hp_actual;
 	int damage_actual;
 	int defense_actual;
-	/* STAND BY **
-	int nivel_actual;
-	int experiencia;
-	** STAND BY */
 	bool is_dead; // Verifica si está muerto el Mon o no
 } Mon;
 
@@ -56,5 +52,7 @@ void _mondex(Map*, List*);
 
 // Función para seleccionar un mon salvaje dentro de una lista
 Mon * aparicion_salvaje(List*) ;
+
+void copiar_mon(Mon*, Mon*);
 
 #endif
