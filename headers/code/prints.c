@@ -16,16 +16,15 @@ void imprimir_mones(List* mones) {
     printf("\n");
 }
 
-void imprimir_mondex(Map* MONDEX) {
-    MapPair* pair = map_first(MONDEX);
+void imprimir_mondex(List* MONDEX) {
+    Mon* pair = list_first(MONDEX);
     unsigned short sep = 0;
-
+    printf("TEST %s", pair->nombre) ;
     while (pair != NULL) {
-        Mon* mon = pair->value;
-        printf("(%2d). %s   ", mon->ID, mon->nombre);
+        printf("(%2d). %s   ", pair->ID, pair->nombre);
         if (sep == 4) { sep = 0; putchar('\n'); }
         ++sep;
-        pair = map_next(MONDEX);
+        pair = list_next(MONDEX);
     }
     putchar('\n');
 }

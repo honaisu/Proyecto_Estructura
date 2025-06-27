@@ -17,6 +17,7 @@ extern Map* MONDEX;
 extern List* MONES_FUEGO;
 extern List* MONES_AGUA;
 extern List* MONES_PLANTA;
+extern List *nombres ;
 
 // BASE DE LOS MONES. Tendrá los valores Base de cada Mon.
 typedef struct Mon_Base {
@@ -44,9 +45,9 @@ typedef struct Mon {
 	bool is_dead; // Verifica si está muerto el Mon o no
 } Mon;
 
-void cargar_archivo_mones(Map*);
+void cargar_archivo_mones(Map*, List*);
 void menu_inicial(void);
-void _mondex(Map*);
+void _mondex(Map*, List*);
 Mon * aparicion_salvaje(List*) ;
 
 #endif
