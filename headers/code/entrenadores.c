@@ -18,26 +18,6 @@ Entrenador* inicializar_NPC(char** campos) {
     return nuevo_NPC;
 }
 
-List* NPCs = NULL;
-
-void cargar_archivo_NPCs(List* NPCs) {
-    FILE* archivo = fopen("data/entrenadores.csv", "r");
-    if (!archivo) {
-        perror("Error al cargar entrenadores.csv");
-        return;
-    }
-    char buffer[MAX];
-    fgets(buffer, sizeof(buffer), archivo);
-    char** campos;
-    while ((campos = leer_linea_csv(archivo, ',')) != NULL) {
-        Entrenador* npc = inicializar_NPC(campos);
-        list_pushBack(NPCs, npc);
-    }
-
-    fclose(archivo);
-    printf("[👥] Se cargó correctamente entrenadores.csv\n");
-}
-
 void copiar_npc(Entrenador* copy, Entrenador* paste) {
     strcpy(paste->nombre, copy->nombre);
     paste->equipo_mon = list_create();
@@ -50,6 +30,44 @@ void copiar_npc(Entrenador* copy, Entrenador* paste) {
     }
     paste->vivo = true;
 }
+
+Entrenador* lider_fuego = NULL;
+Entrenador* lider_agua = NULL;
+Entrenador* lider_planta = NULL;
+List* NPCs = NULL;
+
+bool es_lider(Entrenador* npc, char** campos) {
+    if (campos[3] == NULL || strlen(campos[3]) == 0) return false;
+
+    if (strcmp(campos[3], "PLANTA") == 0)      lider_planta = npc;
+    else if (strcmp(campos[3], "AGUA") == 0)   lider_agua = npc;
+    else if (strcmp(campos[3], "FUEGO") == 0)  lider_fuego = npc;
+    else return false; // No es un tipo válido
+
+    return true;
+}
+
+void cargar_archivo_NPCs(void) {
+    FILE* archivo = fopen("data/entrenadores.csv", "r");
+    if (!archivo) {
+        perror("Error al cargar entrenadores.csv");
+        return;
+    }
+    NPCs = list_create();
+
+    char buffer[MAX];
+    fgets(buffer, sizeof(buffer), archivo);
+    char** campos;
+    while ((campos = leer_linea_csv(archivo, ',')) != NULL) {
+        Entrenador* npc = inicializar_NPC(campos);
+        if (es_lider(npc, campos)) continue; 
+        list_pushBack(NPCs, npc);
+    }
+
+    fclose(archivo);
+    printf("[👥] Se cargó correctamente entrenadores.csv\n");
+}
+
 
 Entrenador* aparicion_npc(void) {
     int tamano = list_size(NPCs) ;
@@ -64,19 +82,10 @@ Entrenador* aparicion_npc(void) {
 }
 
 Entrenador* elegir_lider(Ubicacion* ubicacion) {
-    char entrenador[MAX];
+    Entrenador* nuevo_lider = (Entrenador*) malloc(sizeof(Entrenador));
     // Elegir un entrenador final
-    if      (strcmp(ubicacion->tipoZona, "Agua") == 0) strcpy(entrenador, "Tenna") ;
-    else if (strcmp(ubicacion->tipoZona, "Planta") == 0) strcpy(entrenador, "Estela");
-    else strcpy(entrenador, "Roland") ;
-    // Crearlo
-    Entrenador* puntero_npcs = list_first(NPCs);
-    while (puntero_npcs != NULL 
-        && strcmp(entrenador, puntero_npcs->nombre) != 0) {
-        puntero_npcs = list_next(NPCs);
-    }
-    Entrenador* nuevo_lider = (Entrenador*) malloc(sizeof(Entrenador)); 
-    copiar_npc(puntero_npcs, nuevo_lider);
-    // Retornarlo
+    if      (strcmp(ubicacion->tipoZona, "Agua") == 0) copiar_npc(lider_agua, nuevo_lider);
+    else if (strcmp(ubicacion->tipoZona, "Planta") == 0) copiar_npc(lider_planta, nuevo_lider);
+    else copiar_npc(lider_fuego, nuevo_lider);
     return nuevo_lider;
 }

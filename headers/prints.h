@@ -28,4 +28,6 @@ void imprimir_seleccion_items(void) ;
 
 void mensaje_final(Entrenador*);
 
+void imprimir_datos_mon(Mon*);
+
 #endif

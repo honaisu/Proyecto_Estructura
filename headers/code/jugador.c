@@ -87,10 +87,62 @@ Objeto * buscar_objeto(Entrenador *jugador, char* obj) {
     return NULL ;
 }
 
-void gestionar_mones_jugador(Entrenador* e) {
-    MapPair* par = map_search(MONDEX, &e->id);
-    if (par == NULL) { return; }
-    
+Mon* buscar_mon_equipo(Entrenador* entrenador, char* abuscar) {
+    Mon* mon_jugador = list_first(entrenador->equipo_mon);
+    while (mon_jugador != NULL && strcmp(mon_jugador->apodo, abuscar) != 0 ) {
+        mon_jugador = list_next(entrenador->equipo_mon);
+    }
+    return mon_jugador;
+}
+
+void gestionar_mones_jugador(Entrenador* entrenador) {
+    Mon* mon_jugador = NULL;
+    char entrada[MAX];
+    const char* opciones[] = 
+    {"Ver estadísticas de un Mon", "Mover Mon al Inicio", "Renombrar Mon", "Liberar Mon"};
+    while (true) {
+        limpiar_pantalla();
+        puts("Equipo Actual:");
+        imprimir_mones(entrenador->equipo_mon);
+        imprimir_menu("Elija una opción", opciones, 4);
+        printf("Elegir ('0' - Ninguna): ");
+        
+        int opcion = leer_opcion_valida();
+        if (opcion == 0) break;
+        if (opcion < 0 || opcion > 4) { puts("Por favor, inserte una opción válida!"); esperar_enter(); continue; }
+        puts("Por favor, elija un Mon de su equipo");
+        leer_entrada(entrada);
+        mon_jugador = buscar_mon_equipo(entrenador, entrada);
+        if (mon_jugador == NULL) { puts("No existe ese Mon en el equipo!"); continue; }
+        switch (opcion) {
+            case 1:
+                imprimir_datos_mon(mon_jugador);
+                printf("\n" ANSI_COLOR_WHITE "Vida Actual: " ANSI_COLOR_RESET "%d PC\n", mon_jugador->hp_actual);
+                esperar_enter();
+                break;
+            case 2:
+                Mon* mon_cambio;
+                copiar_mon(mon_jugador, mon_cambio);
+                list_popCurrent(entrenador->equipo_mon);
+                list_pushFront(entrenador->equipo_mon, mon_cambio);
+                break;
+            case 3:
+                printf("Inserte el " ANSI_COLOR_WHITE "nuevo apodo" ANSI_COLOR_RESET " de su Mon: ");
+                leer_entrada(entrada);
+                strcpy(mon_jugador->apodo, entrada);
+                printf("El nuevo apodo de su mon es: %s\n", mon_jugador->apodo);
+                break;
+            case 4:
+                printf("El Mon eliminado del equipo es: %s\n", mon_jugador->apodo);
+                list_popCurrent(entrenador->equipo_mon);
+                if (!list_size(entrenador->equipo_mon)) {
+                    entrenador->vivo = false;
+                    return;
+                }
+            default:
+                puts("Esta opción no existe.");
+        }
+    }
 }
 
 void verInventario(Entrenador *e) {
@@ -112,47 +164,29 @@ void verInventario(Entrenador *e) {
 }
 
 Objeto * gestionar_inventario(Entrenador *jugador) {
-    verInventario(jugador) ;
-    printf("Que objeto quieres usar: \n") ;
-    imprimir_seleccion_items() ;
-
     char tecla ;
-    
-    int opcion_invalida = 1 ;
     do {
-        #ifdef _WIN32
-            tecla = getch();
-        #else
-            initscr();
-            noecho();
-            cbreak();
-            tecla = getch();
-            endwin();
-        #endif
-
+        limpiar_pantalla();
+        verInventario(jugador) ;
+        putchar('\n');
+        imprimir_seleccion_items() ;
+        esperar_tecla(&tecla);
         switch(tecla){
             case '1' :
                 return buscar_objeto(jugador, "MonBall") ;
-                break ;
             case '2' :
                 return buscar_objeto(jugador, "Pocion") ;
-                opcion_invalida = 0 ;
-                break ;
             case '3' :
                 return buscar_objeto(jugador, "Revivir") ;
-                opcion_invalida = 0 ;
-                break ;
             case '4' :
                 return NULL ;
-                break ;
             default :
-                printf("Opcion invalida, intentelo de nuevo \n") ;
+                puts("Opcion invalida, intentelo de nuevo.");
+                esperar_enter();
                 break ;
         }
     }   
-    while (opcion_invalida) ;
-
-    
+    while (true) ;
 }
 
 void mostrar_menu_jugador(void) {
@@ -208,16 +242,14 @@ void menu_jugador(Map* ubicaciones, Entrenador* entrenador) {
                 mover(ubicaciones, entrenador, &se_movio); 
                 break;
             case 2:
-                //gestionar_mones(ubicaciones, entrenador, 0);
-                imprimir_mones(entrenador->equipo_mon);
-                esperar_enter();
+                gestionar_mones_jugador(entrenador);
                 break;
             case 3: 
                 verInventario(entrenador);
                 esperar_enter();
                 break;
             case 4:
-                _mondex(MONDEX, nombres);
+                _mondex(nombres);
                 break;
             case 5: {
                 MapPair* par = map_search(ubicaciones, &entrenador -> id) ;

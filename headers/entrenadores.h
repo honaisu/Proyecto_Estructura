@@ -5,7 +5,7 @@ typedef struct List List;
 typedef struct Entrenador Entrenador;
 typedef struct Ubicacion Ubicacion;
 
-void cargar_archivo_NPCs(List*);
+void cargar_archivo_NPCs(void);
 Entrenador* aparicion_npc(void);
 Entrenador* elegir_lider(Ubicacion*);
 

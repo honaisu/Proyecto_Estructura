@@ -69,13 +69,14 @@ void meter_mon_lista(Mon* mon) {
     else if (!strcmp(mon->tipo, "FUEGO")) list_pushBack(MONES_FUEGO, mon);     
 }
 
-void cargar_archivo_mones(Map* datos_mones, List *nombre_mons) {
+void cargar_archivo_mones(List *nombre_mons) {
     FILE* archivo = fopen("data/mones.csv", "r");
     if (!archivo) {
         perror("Error al cargar mones.csv");
         return;
     }
 
+    MONDEX = map_create(100);
     MONES_AGUA = list_create();
     MONES_FUEGO = list_create();
     MONES_PLANTA = list_create();
@@ -89,14 +90,14 @@ void cargar_archivo_mones(Map* datos_mones, List *nombre_mons) {
         
         char* clave = strdup(campos[1]);
         list_pushBack(nombre_mons, mon) ;
-        map_insert(datos_mones, clave, mon);
+        map_insert(MONDEX, clave, mon);
     }
 
     fclose(archivo);
     printf("[🐱] Se cargó correctamente mones.csv\n");
 }
 
-void _mondex(Map* MONDEX, List *nombres) {
+void _mondex(List *nombres) {
     while (true) {
         imprimir_mondex(nombres);
         printf("Ingrese el " ANSI_COLOR_WHITE "nombre" ANSI_COLOR_RESET " del Mon que desee buscar ('0' - Ninguno): ");
@@ -144,13 +145,7 @@ void _mondex(Map* MONDEX, List *nombres) {
         
         Mon* mon = pair->value;
         limpiar_pantalla();
-        imprimir_separador("DATOS DEL MON", 40);
-        printf("ID. %d  Nombre: " ANSI_COLOR_WHITE "%s " ANSI_COLOR_RESET "Tipo: %s\n", mon->ID, mon->nombre, mon->tipo);
-        printf("Descripción: %s\n", mon->descripcion);
-        puts(ANSI_COLOR_WHITE "\nStats Base" ANSI_COLOR_RESET);
-        printf("Vida: %d PC\n", mon->stats_base.hp_base);
-        printf("Daño: %d DMG\n", mon->stats_base.damage_base);
-        printf("Defensa: %d DEF\n", mon->stats_base.defense_base);
+        imprimir_datos_mon(mon);
         esperar_enter();
         break;
     }

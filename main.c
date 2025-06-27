@@ -42,8 +42,6 @@ int main(void) {
     srand(time(NULL)) ;
     // UBICACIONES
     Map* ubicaciones = map_create(MAX);
-    // NPCS
-    NPCs = list_create();
     // NOMBRES DE MONES
     nombres = list_create();
     // MONDEX 
@@ -51,8 +49,8 @@ int main(void) {
 
     // Parametros de MONDEX y Nombres, guardará automaticamente los mones ahi.
     // útil también para la lista del mundo.
-    cargar_archivo_mones(MONDEX, nombres);
-    cargar_archivo_NPCs(NPCs);
+    cargar_archivo_mones(nombres);
+    cargar_archivo_NPCs();
     cargar_grafo_desde_csv(ubicaciones);
     if (ubicaciones == NULL) {
         printf("No se cargó la región. Verifique los archivos CSV.\n");

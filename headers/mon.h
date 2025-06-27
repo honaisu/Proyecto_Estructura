@@ -42,13 +42,13 @@ typedef struct Mon {
 } Mon;
 
 // Función para cargar el CSV MONES
-void cargar_archivo_mones(Map*, List*);
+void cargar_archivo_mones(List*);
 
 // Función para ver el menu inicial (1, 2, 0)
 void menu_inicial(void);
 
 // Función para ver / acceder la MONDEX
-void _mondex(Map*, List*);
+void _mondex(List*);
 
 // Función para seleccionar un mon salvaje dentro de una lista
 Mon * aparicion_salvaje(List*) ;

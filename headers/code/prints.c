@@ -9,7 +9,7 @@ void imprimir_mones(List* mones) {
     void* ptr = list_first(mones);
     while (ptr) {
         Mon* mon = (Mon*)ptr;
-        printf("    %s (%d PC)", mon->nombre, mon->stats_base.damage_base);
+        printf("    %s (%d PC)", mon->apodo, mon->stats_base.damage_base);
         ptr = list_next(mones);
         if (ptr) printf(", ");
     }
@@ -73,4 +73,14 @@ void mensaje_final(Entrenador* e) {
     printf("Batallas contra mons salvaje ganadas: %d\n",e->mons_wins) ;
     printf("Batallas contra entrenadores ganadas: %d\n", e->entrenadores_wins) ;
     printf("Dinero final: $%d\n", e->dinero) ;
+}
+
+void imprimir_datos_mon(Mon* mon) {
+    imprimir_separador("DATOS DEL MON", 40);
+    printf("ID. %d  Nombre: " ANSI_COLOR_WHITE "%s " ANSI_COLOR_RESET "Tipo: %s\n", mon->ID, mon->nombre, mon->tipo);
+    printf("Descripción: %s\n", mon->descripcion);
+    puts(ANSI_COLOR_WHITE "\nStats Base" ANSI_COLOR_RESET);
+    printf("Vida: %d PC\n", mon->stats_base.hp_base);
+    printf("Daño: %d DMG\n", mon->stats_base.damage_base);
+    printf("Defensa: %d DEF\n", mon->stats_base.defense_base);
 }

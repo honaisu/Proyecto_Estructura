@@ -90,8 +90,8 @@ void mover(Map* ubicaciones, Entrenador* e, int *se_movio) {
             limpiar_pantalla();
             int win = batalla_entrenador(e, lider) ;
             if (win) {
-                esperar_enter();
                 mensaje_final(e);
+                esperar_enter();
             }
             else {
                 puts("Estuviste cerca de ganar, pero no fue suficiente...\n") ;
