@@ -92,20 +92,20 @@ void cargar_archivo_mones(Map* datos_mones, List *nombre_mons) {
 
 
 void _mondex(Map* MONDEX, List *nombres) {
-    while (1) {
+    while (true) {
         imprimir_mondex(nombres);
         printf("Ingrese el nombre del Mon que desee buscar ('0' - Ninguno): ");
         char entrada[MAX];
         leer_entrada(entrada);
         
         // Salir si el usuario ingresa '0'
-        if (entrada[0] == '0') {
+        if (*entrada == '0') {
             puts("Saliendo...");
             break;
         }
 
         // Validar entrada vacía
-        if (entrada[0] == '\n' || entrada[0] == '\0') {
+        if (*entrada == '\n' || *entrada == '\0') {
             puts("Error: Inserte una opción correcta.");
             esperar_enter();
             limpiar_pantalla();
@@ -131,15 +131,11 @@ void _mondex(Map* MONDEX, List *nombres) {
         // Buscar en el mapa
         MapPair* pair = map_search(MONDEX, entrada);
         if (pair == NULL) {
-            
-        puts("No se encontró este Mon. Inserte una opción correcta."); 
-        esperar_enter() ;
-       
-            esperar_enter();
+            puts("No se encontró este Mon. Inserte una opción correcta."); 
+            esperar_enter() ;
             limpiar_pantalla();
             continue;
-        
-    }
+        } 
         
         Mon* mon = pair->value;
         limpiar_pantalla();

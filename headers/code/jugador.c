@@ -23,7 +23,7 @@ void inicializar_items(Entrenador* e) {
 }
 
 void primer_mon_jugador(Entrenador* e) {
-    puts("porfavor elija su mon");
+    puts("Por favor, elija su Mon Inicial");
     MapPair* pair = map_search(MONDEX, "Arayamon");
     if (pair == NULL) return;
     char opcion[MAX];
@@ -48,7 +48,7 @@ Entrenador* inicializar_entrenador(void) {
     return nuevo_entrenador;
 }
 
-Objeto * buscar_objeto(Entrenador *jugador, char obj[30]) {
+Objeto * buscar_objeto(Entrenador *jugador, char* obj) {
     Objeto *recorrer = list_first(jugador->inventario) ;
     while (recorrer != NULL){
         if (!strcmp(obj, recorrer->nombre)) return recorrer ;
@@ -56,8 +56,6 @@ Objeto * buscar_objeto(Entrenador *jugador, char obj[30]) {
     }
     return NULL ;
 }
-
-
 
 void gestionar_mones_jugador(Entrenador* e) {
     MapPair* par = map_search(MONDEX, &e->id);
