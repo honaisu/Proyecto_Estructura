@@ -19,7 +19,6 @@ void imprimir_mones(List* mones) {
 void imprimir_mondex(List* MONDEX) {
     Mon* pair = list_first(MONDEX);
     unsigned short sep = 0;
-    printf("TEST %s", pair->nombre) ;
     while (pair != NULL) {
         printf("(%2d). %s   ", pair->ID, pair->nombre);
         if (sep == 4) { sep = 0; putchar('\n'); }
