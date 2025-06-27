@@ -6,7 +6,7 @@
 #include <math.h>
 #include <time.h>
 
-// gcc main2.c headers/TDAs/*.c headers/*.c -o main -lncurses -lm
+// gcc main2.c headers/TDAs/*.c headers/code/*.c -o main -lm
 
 #define MAX 200
 
