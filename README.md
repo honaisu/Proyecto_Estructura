@@ -96,7 +96,7 @@ Las opciones del jugador son:
 1. `Moverse`: Permite poder mover el jugador utilizando las teclas **W (Norte), A (Oeste), S (Sur), D (Este)**. Al momento en que se mueve por el mundo, existe una probabilidad de poder luchar contra un **Mon** o **Entrenador** dependiendo del tipo de zona en el que se encuentre.
     - Si el jugador está en una zona con un **tipo definido** (Agua, Fuego, Planta), tendrá un 40% de probabilidad de **luchar contra un Mon salvaje**, el cuál **será un Mon del tipo de la zona**.
     - Si el jugador está en una zona sin **tipo definido**, tendrá un 20% de probabilidad de **luchar contra un Entrenador aleatorio**.
-2. `Gestionar Mon`: Permite al jugador poder gestionar su equipo, permitiéndole poder cambiar de orden a sus mones, ver sus estadísticas actuales, o liberarlos.
+2. `Gestionar Mon`: Permite al jugador poder gestionar su equipo, permitiéndole poder cambiar de orden a sus mones (poner uno al inicio), ver sus estadísticas actuales, cambiarle el apodo a un Mon, o liberarlos.
 3. `Ver Inventario`: Permite ver el inventario del jugador. Mostrará la lista de Objetos que posee y la cantidad de ellos.
 4. `MonDex`: Diccionario global que permite poder acceder a la información de un Mon que se escoja.
 5. `Entrar a CentroMon`: Función que permite poder entrar a los CentroMon que se ubiquen en el mapa. Estos no aparecen en todas las zonas, ya que solo están disponibles en las zonas de "Pueblo".
@@ -109,7 +109,10 @@ Las opciones del jugador son:
 <details>
 <summary> <b> Sistema de Combate: </b> </summary>
 
-El sistema de combate utilizado en el programa funciona en base **a turnos**.
+El sistema de combate utilizado en el programa funciona en base **a turnos**, usando un sistema simple de **cachipún**.
+
+El combate ocurre al encontrar un Mon salvaje o un entrenador. Las mecánicas se basan en fórmulas y probabilidades que existen para poder efectuar mucho más daño a un Mon o no, tomando en consideración el **ataque, defensa y multiplicadores (como criticos o efectividad)** que hayan.
+
 
 </details>
 
@@ -135,4 +138,10 @@ Este proyecto posee headers segmentados, encargados cada uno de distintas **func
 - Al momento de `leer una opción`, el programa leerá el **primer cáracter ingresado**. Si se **agregan más carácteres** después de eso no se considerará como un "problema", pero **tampoco se leerán**.
 - Si se **supera** el límite de la entrada del usuario (**200 carácteres máximo**), el programa no podrá interpretar más allá de lo que se ingrese.
 
-## Ejemplos de ejecución
+- A la hora de `Gestionar un Mon`, el jugador no podrá **ordenar correctamente mones que tengan el mismo apodo o nombre**, esto se debe a que la función busca el nombre del mon en la lista del jugador, y retorna la **primer iteración del mon que encuentre** (o nulo si no).
+
+- No existen muchas indicaciones acerca de como **moverse en el mapa**. Esto es debido a que, para el juego, recomendamos que se utilice el mapa otorgado en este README para poder moverse. Si no, no es necesario, **igualmente hace que el juego sea divertido e.e**.
+
+- Cuando se intenta `ver el CentroMon` en lugares que **no poseen** el `CentroMon`, este mostrará el mensaje de que no hay. Esto es parte de diseño, ya que se busca que **solo en los pueblos** el jugador pueda entrar a estos centros.
+
+- Al momento de moverse por el mapa, es probable que el jugador **se sienta perdido** al terminar de moverse por la forma en que se mueve por el mapa. Cuando el jugador se mueve, se utiliza el **input del jugador** en base a las funciones de **`ncurses o conio`** respectivas. Esto es **parte de diseño del juego**, ya que sentimos que el **output instantáneo** era mucho mejor para el movimiento en el mapa.

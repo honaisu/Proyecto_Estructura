@@ -3,9 +3,10 @@
 #include "../prints.h"
 #include <math.h>
 
-// Comprueba si es batalla contra entrenador
+// Comprueba si es batalla contra entrenador o no
 bool es_entrenador = false;
 
+// Imprime el menu que se ve en la batalla
 void menu_batalla(void){
     int cant_opciones = 3;
     const char* opciones[] = {"Atacar", "Defender", "Usar Objeto", "Huir"};
@@ -13,11 +14,15 @@ void menu_batalla(void){
     imprimir_menu("", opciones, cant_opciones);
 }
 
+// Muestra el estado de batalla contra un mon salvaje
+// Imprime los mones, su vida y su tipo
 void estado_batalla(Mon *mon_jugador, Mon* mon_salvaje){
     printf("Mon: " ANSI_COLOR_WHITE "%s" ANSI_COLOR_RESET ", vida: %d, tipo: %s\n", mon_jugador->nombre, mon_jugador->hp_actual, mon_jugador->tipo) ;
     printf("Mon salvaje: " ANSI_COLOR_WHITE "%s" ANSI_COLOR_RESET ", vida: %d, tipo: %s\n", mon_salvaje->nombre, mon_salvaje->hp_actual, mon_salvaje->tipo) ;
 }
 
+// Muestra el estado de batalla contra un entrenador
+// Muestra los entrenadores, sus mones y los datos de los mones (vida y tipo)
 void estado_batalla_entrenador(Entrenador *jugador, Entrenador *rival, Mon *mon_jugador, Mon *mon_rival){
     printf("Tu: " ANSI_COLOR_WHITE "%s" ANSI_COLOR_RESET 
         "  ---- Mon: " ANSI_COLOR_WHITE "%s" ANSI_COLOR_RESET 
@@ -27,6 +32,10 @@ void estado_batalla_entrenador(Entrenador *jugador, Entrenador *rival, Mon *mon_
         ", vida: %d, tipo: %s\n",rival->nombre, mon_rival->nombre, mon_rival->hp_actual, mon_rival->tipo) ;
 }
 
+// Consigue la efectividad que se usa para la batalla
+// Esta esta basada en el sistema de cachipun
+// Fuego -> Planta -> Agua -> Fuego
+// Si no es efectivo, se le quita multiplicador
 float conseguir_efectividad(Mon *mon_atacante, Mon *mon_en_contra){
     const char* tipos[3] = {"PLANTA", "FUEGO", "AGUA"};
     // Tabla de efectividad
@@ -47,7 +56,7 @@ float conseguir_efectividad(Mon *mon_atacante, Mon *mon_en_contra){
     return tabla[pos_atacante][pos_contra];
 }
 
-
+// Obtiene el primer mon vivo de la lista del jugador
 Mon* obtener_primer_mon_vivo(List *equipo) {
     Mon *actual = list_first(equipo);
     while (actual) {
@@ -57,6 +66,7 @@ Mon* obtener_primer_mon_vivo(List *equipo) {
     return NULL;
 }
 
+// Selecciona un mon muerto dentro del equipo del jugador para poder darle un revivir
 Mon* seleccionar_mon_muerto(List *equipo) {
     Mon *actual = list_first(equipo);
     int index = 1;
@@ -87,10 +97,11 @@ Mon* seleccionar_mon_muerto(List *equipo) {
     return muertos[opcion - 1];
 }
 
+// Booleano que se encarga de poder verificar si se logro atrapar un Mon o no
 bool atrapar_mon(Entrenador* jugador, Mon* mon_salvaje) {
     // Probabilidad de Captura
     float PC = ((float)(mon_salvaje->stats_base.hp_base - mon_salvaje->hp_actual) / mon_salvaje->stats_base.hp_base) * 100;
-    // Tiro, comprueba si 
+    // Tiro, valor aleatorio que es usado para darle más sazon al intentar capturar
     float tiro = rand() % 100 + 1;
     if (tiro <= PC) {
         list_pushBack(jugador->equipo_mon, mon_salvaje);
@@ -102,12 +113,18 @@ bool atrapar_mon(Entrenador* jugador, Mon* mon_salvaje) {
     return false;
 }
 
+// Imprime el daño que le hace un mon a otro en batalla
 void imprimir_dano(Mon* mon_batalla, Mon* mon_contrario, int dano_recibido) {
     printf(ANSI_COLOR_WHITE "%s" ANSI_COLOR_RESET 
     " le quita %d de vida a " 
     ANSI_COLOR_WHITE "%s" ANSI_COLOR_RESET "\n", mon_batalla->apodo, dano_recibido, mon_contrario->apodo);
 }
 
+// Usa un item del jugador en medio de la pelea
+// Retorna:
+// 0 -> Se ocupo item
+// 1 -> Se ve si es una captura
+// 2 -> No hizo nada
 int usar_item(Entrenador* jugador, Mon* mon_batalla, Mon* mon_contrario) {
     Objeto *obj = gestionar_inventario(jugador);
     if (obj == NULL) return 2;
@@ -116,8 +133,8 @@ int usar_item(Entrenador* jugador, Mon* mon_batalla, Mon* mon_contrario) {
         puts("No tienes ese objeto...");
         return 2;
     }
-    switch (*obj->nombre) {
-        case 'M':
+    switch (*obj->nombre) { // Toma el primer caracter del objeto a usar
+        case 'M': // MonBall
             if (es_entrenador) {
                 puts("No puedes usar una MonBall en una pelea contra otro entrenador!") ;
                 puts("Eso seria un robo...") ;
@@ -126,7 +143,7 @@ int usar_item(Entrenador* jugador, Mon* mon_batalla, Mon* mon_contrario) {
             if (atrapar_mon(jugador, mon_contrario)) { --obj->cantidad; return 1; }
             else { --obj->cantidad; }
             break;
-        case 'P': {
+        case 'P': { // Pocion
             mon_batalla->hp_actual += 4;
             if (mon_batalla->hp_actual > mon_batalla->stats_base.hp_base)
                 mon_batalla->hp_actual = mon_batalla->stats_base.hp_base;
@@ -134,7 +151,7 @@ int usar_item(Entrenador* jugador, Mon* mon_batalla, Mon* mon_contrario) {
             --obj->cantidad;
             break;
         }
-        case 'R': {
+        case 'R': { // Revivir
             Mon *muerto = seleccionar_mon_muerto(jugador->equipo_mon);
             if (muerto) {
                 muerto->hp_actual = muerto->stats_base.hp_base / 2;
@@ -151,16 +168,20 @@ int usar_item(Entrenador* jugador, Mon* mon_batalla, Mon* mon_contrario) {
     return 0;
 }
 
+// Daño efectuado a un mon sobre otro
+// Este esta basado en la formula que se ocupa para el daño
+// Posee un multiplicador que otorga un beneficio de 1.5x
 int efectuar_dano(Mon* mon_batalla, Mon* mon_contrario, float ef, float defensa) {
     int dano_recibido;
     float MC = (rand() % 100 + 1 <= 10) ? 1.5 : 1.0;
-    if (MC == 1.5) puts("\nCrítico!!!");
+    if (MC == 1.5) puts("Crítico!!!");
     dano_recibido = ceil((mon_batalla->stats_base.damage_base * ef * MC) - (mon_batalla->stats_base.defense_base * defensa));
     if (dano_recibido <= 0) dano_recibido = 1;
     mon_contrario->hp_actual -= dano_recibido;
     return dano_recibido;
 }
 
+// Aplica la defensa a un mon en batalla
 void aplicar_defensa(float* defensa_mon, Mon* mon_batalla) {
     *defensa_mon = (rand() % 100 + 1 <= 50) ? 1.5 : 1.0;
     if (*defensa_mon == 1.0) {
@@ -168,6 +189,8 @@ void aplicar_defensa(float* defensa_mon, Mon* mon_batalla) {
     } else printf("%s aumentó su defensa\n", mon_batalla->apodo);
 }
 
+// Verifica si los mones del jugador estan vivos o no
+// Retorna true si estan vivos y false si no
 bool verificar_vivos(Mon** mon_batalla, List* equipo) {
     if ((*mon_batalla)->hp_actual > 0) return true;
     (*mon_batalla)->hp_actual = 0;
@@ -186,6 +209,11 @@ bool verificar_vivos(Mon** mon_batalla, List* equipo) {
     return true;
 }
 
+// Batalla mon salvaje
+// Muestra el menu de opciones que utiliza el jugador para batallar contra este mon
+// 0 -> Perdiste
+// 1 -> Gano
+// 2 -> Capturo
 int batalla_pokemon_salvaje(Entrenador *jugador, Mon *mon_salvaje) {
     List *equipo = jugador->equipo_mon;
     Mon *mon_batalla = obtener_primer_mon_vivo(equipo);
@@ -194,25 +222,24 @@ int batalla_pokemon_salvaje(Entrenador *jugador, Mon *mon_salvaje) {
     es_entrenador = false;
     int dano_recibido;
     float defensa_mon = 1.0;
-    float ef_mon_jugador;
-    float ef_mon_salvaje;
+    float ef_mon_jugador = conseguir_efectividad(mon_batalla, mon_salvaje);;
+    float ef_mon_salvaje = conseguir_efectividad(mon_salvaje, mon_batalla);;
     int obj_ocupado = 1;
     char tecla;
     int pre_vida ;
     int post_vida ;
     bool opcion_valida = false;
     while (true) {
-        ef_mon_jugador = conseguir_efectividad(mon_batalla, mon_salvaje);
-        ef_mon_salvaje = conseguir_efectividad(mon_salvaje, mon_batalla);
         defensa_mon = 1.0;
-
+        opcion_valida = false;
         do {
             limpiar_pantalla();
             estado_batalla(mon_batalla, mon_salvaje);
             menu_batalla();
+            tecla = '\0';
             esperar_tecla(&tecla);
             switch (tecla) {
-                case '1': {
+                case '1': { // Atacar
                     pre_vida = mon_salvaje->hp_actual ;
                     dano_recibido = efectuar_dano(mon_batalla, mon_salvaje, ef_mon_jugador, defensa_mon);
                     post_vida = pre_vida - mon_salvaje->hp_actual ;
@@ -220,20 +247,20 @@ int batalla_pokemon_salvaje(Entrenador *jugador, Mon *mon_salvaje) {
                     opcion_valida = true;
                     break;
                 }
-                case '2': {
+                case '2': { // Defender
                     aplicar_defensa(&defensa_mon, mon_batalla);
                     opcion_valida = true;
                     break;
                 }
-                case '3': {
+                case '3': { // Usar objeto
                     // En caso que se capture al Mon (Bool) retorna 2
                     int item = usar_item(jugador, mon_batalla, mon_salvaje) ;
-                    if (item == 1) return 2 ;
-                    else if (item == 2) break ;
+                    if (item == 1) return 2 ; // Se ve si es captura
+                    else if (item == 2) break ; // No hace nada
                     opcion_valida = true;
                     break;
                 }
-                case '4': {
+                case '4': { // Huir
                     puts("Huyes de la batalla...");
                     free(mon_salvaje);
                     return 2;
@@ -246,7 +273,7 @@ int batalla_pokemon_salvaje(Entrenador *jugador, Mon *mon_salvaje) {
         } while(!opcion_valida);
         esperar_enter();
 
-        // Comprobar si muere o no.
+        // Comprobar si muere el mon salvaje o no.
         if (mon_salvaje->hp_actual <= 0) {
             puts("El Mon salvaje fue derrotado!");
             free(mon_salvaje);
@@ -260,6 +287,7 @@ int batalla_pokemon_salvaje(Entrenador *jugador, Mon *mon_salvaje) {
         imprimir_dano(mon_salvaje, mon_batalla, post_vida);
         esperar_enter();
 
+        // Verificar vivos del jugador
         if (verificar_vivos(&mon_batalla, equipo)) { 
             continue;
         } else {
@@ -272,7 +300,9 @@ int batalla_pokemon_salvaje(Entrenador *jugador, Mon *mon_salvaje) {
     return 0;
 }
 
-// retorna 1 si gana la batalla, retorna 0 si la pierde.
+// Batalla contra un entrenador
+// Es la que muestra el menú que se usa para el combate contra un entrenador
+// Retorna true si gana la batalla, retorna false si la pierde.
 int batalla_entrenador(Entrenador *jugador, Entrenador *rival){
     es_entrenador = true;
     Mon *mon_jugador = obtener_primer_mon_vivo(jugador->equipo_mon) ;
@@ -285,25 +315,24 @@ int batalla_entrenador(Entrenador *jugador, Entrenador *rival){
     int dano_recibido ; 
     float defensa_mon = 1 ;
     float defensa_rival = 1 ;
-    float ef_mon_jugador;
-    float ef_mon_rival;
+    float ef_mon_jugador = conseguir_efectividad(mon_jugador, mon_rival);;
+    float ef_mon_rival = conseguir_efectividad(mon_rival, mon_jugador);;
     int pre_vida ;
     int post_vida ;
     bool opcion_valida = false;
 
     char tecla ;
     while (true) {
-        ef_mon_jugador = conseguir_efectividad(mon_jugador, mon_rival);
-        ef_mon_rival = conseguir_efectividad(mon_rival, mon_jugador);
         defensa_mon = 1.0;
-
+        opcion_valida = false;
         do {
             limpiar_pantalla();
             estado_batalla_entrenador(jugador, rival, mon_jugador, mon_rival);
             menu_batalla();
+            tecla = '\0';
             esperar_tecla(&tecla);
             switch (tecla) {
-                case '1': {
+                case '1': { // Atacar
                     pre_vida = mon_rival->hp_actual ;
                     dano_recibido = efectuar_dano(mon_jugador, mon_rival, ef_mon_jugador, defensa_rival);
                     post_vida = pre_vida - mon_rival->hp_actual ;
@@ -311,21 +340,19 @@ int batalla_entrenador(Entrenador *jugador, Entrenador *rival){
                     opcion_valida = true;
                     break;
                 }
-                case '2': {
+                case '2': { // Defender
                     aplicar_defensa(&defensa_mon, mon_jugador);
                     opcion_valida = true;
                     break;
                 }
-                case '3': {
+                case '3': { // Usar item
                     int item = usar_item(jugador, mon_jugador, mon_rival) ;
                     if (item == 2) break ;
                     opcion_valida = true;
-                    
                     break;   
                 }
                 default: {
                     puts("Opción no válida.");
-                    esperar_enter();
                     break;
                 }
             }
@@ -333,6 +360,9 @@ int batalla_entrenador(Entrenador *jugador, Entrenador *rival){
         esperar_enter();
         defensa_rival = 1.0;
 
+        // Verifica si el mon rival fue derrotado o no.
+        // Si fue derrotado, y en caso de que el rival tenga mas, saca a otro mon.
+        // Si no, el jugador gana la batalla
         if (mon_rival->hp_actual <= 0) {
             printf("%s fue derrotado! \n", mon_rival->apodo);
             mon_rival = obtener_primer_mon_vivo(equipo_rival) ;
@@ -344,7 +374,7 @@ int batalla_entrenador(Entrenador *jugador, Entrenador *rival){
                 printf("Le has ganado a %s!\n", rival->nombre) ;
                 free(mon_rival);
                 free(rival);
-                return 1;
+                return true;
             }
         }
         
@@ -360,14 +390,16 @@ int batalla_entrenador(Entrenador *jugador, Entrenador *rival){
         }
 
         esperar_enter();
+
+        // Verifica los mones vivos del jugador
         if (verificar_vivos(&mon_jugador, jugador->equipo_mon)) continue; 
         else { 
             jugador->vivo = false; 
             free(mon_rival);
             free(rival);
-            return 0; 
+            return false; 
         }
     }
 
-    return 0;
+    return false;
 }

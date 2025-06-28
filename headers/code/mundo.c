@@ -3,10 +3,15 @@
 #include "../prints.h"
 #include "../batalla.h"
 
+// Listas externas de la lista de cada tipo de mon
+
 extern List* MONES_AGUA;
 extern List* MONES_FUEGO;
 extern List* MONES_PLANTA;
 
+bool termino_juego = false;
+
+// Crea una ubicación con todos los parametros de la fila del archivo (campos)
 Ubicacion* agregar_ubicacion(char** campos) {
     Ubicacion* ubicacion = (Ubicacion*)malloc(sizeof(Ubicacion));
     ubicacion->id = atoi(campos[0]);
@@ -23,12 +28,16 @@ Ubicacion* agregar_ubicacion(char** campos) {
     return ubicacion;
 }
 
+// Agrega la lista global de mones a la ubicación correspondiente
+// Esta es usada para que la ubicación SOLO tenga esos mones de ese tipo especifico
+// Si no, no tiene nada
 void agregar_lista_mones(Ubicacion* ubicacion) {
     if (strcmp(ubicacion->tipoZona, "Agua") == 0) ubicacion->mones = MONES_AGUA;
-    if (strcmp(ubicacion->tipoZona, "Fuego") == 0) ubicacion->mones = MONES_FUEGO;
-    if (strcmp(ubicacion->tipoZona, "Planta") == 0) ubicacion->mones = MONES_PLANTA;
+    else if (strcmp(ubicacion->tipoZona, "Fuego") == 0) ubicacion->mones = MONES_FUEGO;
+    else if (strcmp(ubicacion->tipoZona, "Planta") == 0) ubicacion->mones = MONES_PLANTA;
 }
 
+// Carga el mapa del juego desde un archivo CSV.
 void cargar_grafo_desde_csv(Map* ubicaciones) {
     FILE* archivo = fopen("data/mundo_mon.csv", "r");
     if (!archivo) {
@@ -50,6 +59,7 @@ void cargar_grafo_desde_csv(Map* ubicaciones) {
     printf("[🌐] Se cargó correctamente mundo_mon.csv\n");
 }
 
+// Función que se dedica a la batalla final contra un líder de gimnasio
 void caso_final(Entrenador* entrenador, Ubicacion* nueva_ubi) {
     Entrenador* lider = elegir_lider(nueva_ubi);
     printf("Lider %s te desafia a un combate por el titulo de campeón!\n", lider->nombre);
@@ -64,9 +74,12 @@ void caso_final(Entrenador* entrenador, Ubicacion* nueva_ubi) {
         esperar_enter() ;
     }
     
-    exit(0);
+    termino_juego = true;
 }
 
+// Mueve al jugador a lo largo del mapa. Toma la ubicación actual y el jugador decide que hacer o no.
+// Es la función que hace que el movimiento del jugador pueda efectuarse entre las zonas de nuestro juego.
+// También comprueba si una ubicación nueva es final o no, lo que permite poder saber si finalizar el juego.
 void mover(Map* ubicaciones, Entrenador* e) {
     MapPair* par = map_search(ubicaciones, &e->id);
     if (par == NULL) { puts("Ubicación no encontrada."); return; }
@@ -94,7 +107,7 @@ void mover(Map* ubicaciones, Entrenador* e) {
         if (nueva_ubicacion == -1) { puts("No hay ruta hacia esa dirección.") ; return; } // Porsiacaso
 
         MapPair* nuevo_par = map_search(ubicaciones, &nueva_ubicacion);
-        if (nuevo_par == NULL) { puts("Nueva ubicación no encontrada."); return; }
+        if (nuevo_par == NULL) { puts("Nueva ubicación no encontrada."); return; } // Si no existe ubicación muere
         
         e->id = nueva_ubicacion;
         Ubicacion* nueva_ubi = (Ubicacion*)nuevo_par->value;

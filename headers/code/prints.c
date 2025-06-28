@@ -1,6 +1,7 @@
 #include "../prints.h"
 #include "../jugador.h"
 
+// Imprime mones de una lista
 void imprimir_mones(List* mones) {
     if (!list_size(mones)) {
         printf("    Ninguno\n");
@@ -16,6 +17,7 @@ void imprimir_mones(List* mones) {
     putchar('\n');
 }
 
+// La función que pone en orden como aparece la MONDEX
 void imprimir_mondex(List* MONDEX) {
     Mon* pair = list_first(MONDEX);
     unsigned short sep = 1;
@@ -34,6 +36,8 @@ void imprimir_seleccion_items(void) {
     imprimir_menu("Que objeto quieres usar:", opciones, 4);
 }
 
+// Muestra el estado actual del jugador:
+// Su ubicación, su equipo y las rutas disponibles
 void mostrar_estado(Map* ubicaciones, Entrenador* e) {
     limpiar_pantalla();
     MapPair* par = map_search(ubicaciones, &e->id);
@@ -55,6 +59,7 @@ void mostrar_estado(Map* ubicaciones, Entrenador* e) {
     puts(ANSI_COLOR_RESET);
 }
 
+// Función que permite poder imprimir un menú de manera sencilla
 void imprimir_menu(const char *titulo, const char* opciones[], int n_opciones) {
     printf("%s\n", titulo);
     for (int i = 0; i < n_opciones; i++) {
@@ -62,6 +67,7 @@ void imprimir_menu(const char *titulo, const char* opciones[], int n_opciones) {
     }
 }
 
+// Mensaje final
 void mensaje_final(Entrenador* e) {
     puts("\n+----------------------------------+");
     puts("|      ¡CAMPEÓN DE LOS MONES!      |");
@@ -75,6 +81,7 @@ void mensaje_final(Entrenador* e) {
     printf("Dinero final: $%d\n", e->dinero) ;
 }
 
+// Imprime los datos de un mon especifico. No toma en cuenta la vida actual.
 void imprimir_datos_mon(Mon* mon) {
     imprimir_separador("DATOS DEL MON", 40);
     printf("ID. %d  Nombre: " ANSI_COLOR_WHITE "%s " ANSI_COLOR_RESET "Tipo: %s\n", mon->ID, mon->nombre, mon->tipo);

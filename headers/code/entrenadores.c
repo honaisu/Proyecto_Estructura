@@ -1,6 +1,18 @@
 #include "../entrenadores.h"
 #include "../jugador.h"
 
+// Variables Globales
+
+// Define cuál es el lider de fuego
+Entrenador* lider_fuego = NULL;
+// Define cuál es el lider de agua
+Entrenador* lider_agua = NULL;
+// Define cuál es el lider de planta
+Entrenador* lider_planta = NULL;
+// Lista de NPCs que se encuentran por el mapa
+List* NPCs = NULL;
+
+// Inicializa los NPCs con las variables que se encuentren en la fila correspondiente a campos
 Entrenador* inicializar_NPC(char** campos) {
     Entrenador* nuevo_NPC = (Entrenador*) malloc(sizeof(Entrenador));
     strcpy(nuevo_NPC->nombre, campos[1]);
@@ -18,6 +30,7 @@ Entrenador* inicializar_NPC(char** campos) {
     return nuevo_NPC;
 }
 
+// Permite crear una copia de un NPC con todos los datos que tenga.
 void copiar_npc(Entrenador* copy, Entrenador* paste) {
     strcpy(paste->nombre, copy->nombre);
     paste->equipo_mon = list_create();
@@ -31,11 +44,9 @@ void copiar_npc(Entrenador* copy, Entrenador* paste) {
     paste->vivo = true;
 }
 
-Entrenador* lider_fuego = NULL;
-Entrenador* lider_agua = NULL;
-Entrenador* lider_planta = NULL;
-List* NPCs = NULL;
-
+// Booleano que elige cual lider será cual.
+// Recorre cada fila de campos viendo un parametro especifico para identificar al lider.
+// Si hay lider retorna true, si no retorna false.
 bool es_lider(Entrenador* npc, char** campos) {
     if (campos[3] == NULL || strlen(campos[3]) == 0) return false;
 
@@ -47,13 +58,14 @@ bool es_lider(Entrenador* npc, char** campos) {
     return true;
 }
 
+// Carga los archivos de los NPCs desde un CSV
 void cargar_archivo_NPCs(void) {
     FILE* archivo = fopen("data/entrenadores.csv", "r");
     if (!archivo) {
         perror("Error al cargar entrenadores.csv");
         return;
     }
-    NPCs = list_create();
+    NPCs = list_create(); // Declaración para crear la lista global
 
     char buffer[MAX];
     fgets(buffer, sizeof(buffer), archivo);
@@ -68,7 +80,7 @@ void cargar_archivo_NPCs(void) {
     printf("[👥] Se cargó correctamente entrenadores.csv\n");
 }
 
-
+// Escoge un NPC de la lista global de forma aleatoria y retorna una copia de este.
 Entrenador* aparicion_npc(void) {
     int tamano = list_size(NPCs) ;
     int i = rand() % tamano + 1 ;
@@ -81,6 +93,8 @@ Entrenador* aparicion_npc(void) {
     return npc_final;
 }
 
+// Función que comprueba que lider es el que se va a luchar.
+// Retorna el lider correspondiente del gimnasio, si no, retorna nulo (porsiacaso).
 Entrenador* elegir_lider(Ubicacion* ubicacion) {
     Entrenador* nuevo_lider = (Entrenador*) malloc(sizeof(Entrenador));
     // Elegir un entrenador final

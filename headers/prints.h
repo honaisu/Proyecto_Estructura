@@ -14,9 +14,6 @@ void imprimir_mones(List*);
 // Funcion que recorre la lista de la Mondex y los muestra
 void imprimir_mondex(List*);
 
-// Función que permite imprimir las estadisticas finales de la partida
-void mostrar_puntajes_finales(Entrenador*, int, int);
-
 // Función que permite mostrar el estado actual del entrenador
 void mostrar_estado(Map*, Entrenador*);
 
@@ -26,8 +23,10 @@ void imprimir_menu(const char*, const char**, int);
 // Función que permite ver los items que puedes seleccionar para ser usados en combate
 void imprimir_seleccion_items(void) ;
 
+// Mensaje final cuando se gana el juego
 void mensaje_final(Entrenador*);
 
+// Función que imprime los datos de un mon
 void imprimir_datos_mon(Mon*);
 
 #endif

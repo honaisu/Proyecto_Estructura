@@ -16,6 +16,7 @@ List* MONES_PLANTA = NULL;
 // Nombres de los mones, estos se usan para la correcta impresión en la MONDEX
 List* NOMBRES_MON = NULL ;
 
+// Inicializa un mon desde cero con los parametros de una fila del archivo (campos)
 Mon* inicializar_mon(char** campos) {
     Mon* mon = (Mon*)malloc(sizeof(Mon));
     mon->ID = atoi(campos[0]);
@@ -48,12 +49,16 @@ void copiar_mon(Mon *copy, Mon *paste){
     paste->is_dead = false;
 }
 
+// Mete los mones de un tipo a su lista global correspondiente
 void meter_mon_lista(Mon* mon) {
     if (!strcmp(mon->tipo, "PLANTA")) list_pushBack(MONES_PLANTA, mon);
     else if (!strcmp(mon->tipo, "AGUA")) list_pushBack(MONES_AGUA, mon);
     else if (!strcmp(mon->tipo, "FUEGO")) list_pushBack(MONES_FUEGO, mon);     
 }
 
+// Carga los archivos de los mones desde un archivo CSV
+// A su vez, inserta en el mapa global (MONDEX) cada mon que se vaya creando
+// (También inserta los mones a la lista de nombres para mostrarlos de forma correcta en la MONDEX)
 void cargar_archivo_mones(void) {
     FILE* archivo = fopen("data/mones.csv", "r");
     if (!archivo) {
@@ -83,7 +88,7 @@ void cargar_archivo_mones(void) {
     printf("[🐱] Se cargó correctamente mones.csv\n");
 }
 
-// Aparición random que se hace para un Mon salvaje.
+// Aparición random que se hace para escoger un Mon salvaje.
 Mon* aparicion_salvaje(List *mones){
     int tamano = list_size(mones) ;
     int i = rand() % tamano + 1 ;
@@ -96,6 +101,8 @@ Mon* aparicion_salvaje(List *mones){
     return mon_final;
 }
 
+// Función de la MONDEX
+// Mostrará la lista de mones existentes en el programa y espera que el usuario ingrese un nombre (o salga).
 void _mondex(void) {
     while (true) {
         imprimir_mondex(NOMBRES_MON);

@@ -4,9 +4,17 @@
 #include "../prints.h"
 #include "../entrenadores.h"
 
+// Lista NPC externa
 extern List* NPCs;
+// Confirmación termino juego 
+extern bool termino_juego;
+
+// Declaración del nombre que el jugador utiliza
+// Ketchup es el nombre base si no se elige nombre.
 char NOMBRE_JUGADOR[MAX] = "Ketchup";
 
+// Inicializa los items del jugador.
+// Posee 5 MonBall, 3 Pocion y 1 Revivir
 void inicializar_items(Entrenador* e) {
     Objeto* monball = (Objeto*) malloc (sizeof(Objeto)) ;
     strcpy(monball -> nombre, "MonBall") ;
@@ -27,7 +35,11 @@ void inicializar_items(Entrenador* e) {
     list_pushBack(e -> inventario, revivir) ;
 }
 
+// Función que permite al jugador poder escoger el mon que desee ser su inicial.
+// Va a seguir esperando una respuesta hasta que se escoja uno válido.
+// Si escoge uno, se crea una copia de este y se almacena en el equipo del jugador.
 void primer_mon_jugador(Entrenador* e) {
+    // String que identifica al mon inicial
     char mon_inicial[20] = "\0";
     do {
         char opcion = '\0';
@@ -37,7 +49,7 @@ void primer_mon_jugador(Entrenador* e) {
             "Mecamon (Tipo " ANSI_COLOR_GREEN "Planta" ANSI_COLOR_RESET ")"
         };
         limpiar_pantalla();
-        imprimir_menu("Elija su Mon Inicial:", opciones, 3);
+        imprimir_menu("Elija el " ANSI_COLOR_WHITE "número" ANSI_COLOR_RESET " de su Mon Inicial:", opciones, 3);
         leer_opcion(&opcion);
         switch (opcion) {
             case '1':
@@ -55,12 +67,15 @@ void primer_mon_jugador(Entrenador* e) {
     } while (true);
 
     MapPair* pair = map_search(MONDEX, mon_inicial);
-    if (pair == NULL) { puts("Mon No encontrado"); exit(1); }
+    if (pair == NULL) { puts("Mon No encontrado"); termino_juego = true; return; } // Caso en el que el mon no exista
     Mon* mon_jugador = (Mon*) malloc(sizeof(Mon));
     copiar_mon(pair->value, mon_jugador);
     list_pushBack(e->equipo_mon, mon_jugador);
 }
 
+// Inicializa un entrenador desde cero.
+// Le asigna un mon inicial y los items con los que inicia.
+// Retorna el nuevo entrenador.
 Entrenador* inicializar_entrenador(void) {
     Entrenador* nuevo_entrenador = (Entrenador*) malloc(sizeof(Entrenador));
     strcpy(nuevo_entrenador->nombre, NOMBRE_JUGADOR);
@@ -78,6 +93,7 @@ Entrenador* inicializar_entrenador(void) {
     return nuevo_entrenador;
 }
 
+// Busca un objeto en la lista del jugador
 Objeto * buscar_objeto(Entrenador *jugador, char* obj) {
     Objeto *recorrer = list_first(jugador->inventario) ;
     while (recorrer != NULL){
@@ -87,6 +103,7 @@ Objeto * buscar_objeto(Entrenador *jugador, char* obj) {
     return NULL ;
 }
 
+// Busca un mon en el equipo del jugador
 Mon* buscar_mon_equipo(Entrenador* entrenador, char* abuscar) {
     Mon* mon_jugador = list_first(entrenador->equipo_mon);
     while (mon_jugador != NULL && strcmp(mon_jugador->apodo, abuscar) != 0 ) {
@@ -95,6 +112,9 @@ Mon* buscar_mon_equipo(Entrenador* entrenador, char* abuscar) {
     return mon_jugador;
 }
 
+// Gestiona las opciones de un Mon.
+// Esta función se encarga de poder mostrar el equipo del jugador, y escoger:
+// Ver las estádisticas de un mon especifico, renombrar un mon, mover un mon al inicio de la lista o liberarlo
 void gestionar_mones_jugador(Entrenador* entrenador) {
     Mon* mon_jugador = NULL;
     char entrada[MAX];
@@ -110,32 +130,32 @@ void gestionar_mones_jugador(Entrenador* entrenador) {
         int opcion = leer_opcion_valida();
         if (opcion == 0) break;
         if (opcion < 0 || opcion > 4) { puts("Por favor, inserte una opción válida!"); esperar_enter(); continue; }
-        puts("Por favor, elija un Mon de su equipo");
+        puts("Por favor, escriba el nombre de un Mon de su equipo"); // Se tiene que ingresar el nombre del mon
         leer_entrada(entrada);
         mon_jugador = buscar_mon_equipo(entrenador, entrada);
         if (mon_jugador == NULL) { puts("No existe ese Mon en el equipo!"); esperar_enter(); continue; }
         switch (opcion) {
-            case 1: {
+            case 1: { // Imprime los datos del Mon junto con la vida actual que posee
                 imprimir_datos_mon(mon_jugador);
                 printf("\n" ANSI_COLOR_WHITE "Vida Actual: " ANSI_COLOR_RESET "%d PC\n", mon_jugador->hp_actual);
                 esperar_enter();
                 break;
             }
-            case 2: {
+            case 2: { // Cambia de posición el Mon escogido al inicio de la lista. Osea, será el primero
                 Mon* mon_cambio = (Mon*) malloc(sizeof(Mon));
                 copiar_mon(mon_jugador, mon_cambio);
                 list_popCurrent(entrenador->equipo_mon);
                 list_pushFront(entrenador->equipo_mon, mon_cambio);
                 break;
             }
-            case 3: {
+            case 3: { // Cambia el apodo de un Mon del equipo. 
                 printf("Inserte el " ANSI_COLOR_WHITE "nuevo apodo" ANSI_COLOR_RESET " de su Mon: ");
                 leer_entrada(entrada);
                 strcpy(mon_jugador->apodo, entrada);
                 printf("El nuevo apodo de su mon es: %s\n", mon_jugador->apodo);
                 break;
             }
-            case 4: {
+            case 4: { // Elimina un mon de la lista, y si la lista esta vacia, hace que el jugador "muera" (Game Over)
                 printf("El Mon eliminado del equipo es: %s\n", mon_jugador->apodo);
                 list_popCurrent(entrenador->equipo_mon);
                 if (!list_size(entrenador->equipo_mon)) {
@@ -150,6 +170,7 @@ void gestionar_mones_jugador(Entrenador* entrenador) {
     }
 }
 
+// Muestra el inventario de objetos del jugador
 void verInventario(Entrenador *e) {
     limpiar_pantalla() ;
     printf("\n==== INVENTARIO DEL ENTRENADOR ====\n") ;
@@ -168,6 +189,7 @@ void verInventario(Entrenador *e) {
     }
 }
 
+// Gestiona los objetos del jugador, es utilizado en batalla
 Objeto * gestionar_inventario(Entrenador *jugador) {
     char tecla ;
     do {
@@ -194,12 +216,16 @@ Objeto * gestionar_inventario(Entrenador *jugador) {
     while (true) ;
 }
 
+// Muestra las opciones del menu del jugador
 void mostrar_menu_jugador(void) {
     const char* opciones[] = {"Moverse", "Gestionar Mon", "Ver Inventario", "MonDex", "Entrar a CentroMON"};
     imprimir_menu("Opciones del Jugador", opciones, 5);
     puts("(0.) Salir");
 }
 
+// La función que elige si existe una batalla aleatoria o no.
+// Los mones salvajes tienen un 40% de aparecer
+// Los entrenadores un 20%
 void posible_batalla(Map *ubicaciones, Entrenador *entrenador){
     MapPair* pair = map_search(ubicaciones, &entrenador->id);
     Ubicacion* ubicacion = pair->value;
@@ -227,9 +253,11 @@ void posible_batalla(Map *ubicaciones, Entrenador *entrenador){
     }
 }
 
+// Menú del jugador. Es el que utiliza para poder hacer todas las operaciones del juego.
 void menu_jugador(Map* ubicaciones, Entrenador* entrenador) {
     limpiar_pantalla();
     bool se_movio = false ;
+    termino_juego = false ;
     while(true) {
         limpiar_pantalla() ;
         if (se_movio == true) {
@@ -278,6 +306,6 @@ void menu_jugador(Map* ubicaciones, Entrenador* entrenador) {
                 puts("Por favor, ingrese una opción válida!");
         }
 
-        if (opcion_juego == 0) break;
+        if (opcion_juego == 0 || termino_juego) break;
     }
 }

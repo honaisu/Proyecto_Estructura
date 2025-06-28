@@ -4,10 +4,18 @@
 
 // gcc main2.c headers/TDAs/*.c headers/code/*.c -o main.exe -lm
 
+// Declaraciones de variables globales encontradas a lo largo del juego
+// Estas son utilizadas acá para liberar su memoria.
+
+extern List* MONES_AGUA;
+extern List* MONES_FUEGO;
+extern List* MONES_PLANTA;
 extern Map* MONDEX;
 extern List* NOMBRES_MON ; 
 extern char NOMBRE_JUGADOR[MAX];
 
+// Libera toda la memoria.
+// Elimina el mapa, y las funciones globales utilizadas
 void liberar_recursos(Map* ubicaciones) {
     MapPair* pair = map_first(ubicaciones);
     while (pair) {
@@ -20,8 +28,15 @@ void liberar_recursos(Map* ubicaciones) {
     free(MONDEX);
     list_clean(NOMBRES_MON);
     free(NOMBRES_MON);
+    list_clean(MONES_AGUA);
+    free(MONES_AGUA);
+    list_clean(MONES_FUEGO);
+    free(MONES_FUEGO);
+    list_clean(MONES_PLANTA);
+    free(MONES_PLANTA);
 }
 
+// Libera la memoria usada por un entrenador
 void liberar_jugador(Entrenador* entrenador) {
     list_clean(entrenador->equipo_mon);
     free(entrenador->equipo_mon);
@@ -32,6 +47,7 @@ void liberar_jugador(Entrenador* entrenador) {
     free(entrenador);
 }
 
+// Muestra las opciones del menu principal
 void mostrar_menu_principal(void) {
     const char* opciones[] = {"Jugar Partida", "Ingresar Nombre"};
     imprimir_separador("THE MON PROJECT", 30);
@@ -59,15 +75,16 @@ int main(void) {
     while (true) {
         limpiar_pantalla();
         mostrar_menu_principal();
-        int opcion = leer_opcion_valida();
+        char opcion;
+        leer_opcion(&opcion);
         switch (opcion) {
-            case 1: {
+            case '1': {
                 Entrenador* entrenador = inicializar_entrenador();
                 menu_jugador(ubicaciones, entrenador);
                 liberar_jugador(entrenador);
                 break;
             }
-            case 2 : {
+            case '2' : {
                 printf("Ingresa tu nombre de entrenador: ");
                 fgets(NOMBRE_JUGADOR, MAX, stdin);
                 NOMBRE_JUGADOR[strcspn(NOMBRE_JUGADOR, "\n")] = 0; // Eliminar salto de línea
@@ -75,13 +92,13 @@ int main(void) {
                 esperar_enter();
                 break;
             }
-            case 0:
+            case '0':
                 break;
             default:
                 puts("Por favor, ingrese una opción válida");
                 break;
         }
-        if (opcion == 0) break ;
+        if (opcion == '0') break ;
     }
     liberar_recursos(ubicaciones);
     puts("¡Hasta luego!");

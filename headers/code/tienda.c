@@ -2,6 +2,8 @@
 #include "../jugador.h"
 #include "../prints.h"
 
+// Función que permite poder comprar un objeto o no.
+// Solo compra un objeto. También, si el usuario no tiene un objeto, lo añade y crea.
 void comprar_objeto(int opcion, char* nombre_obj, int* precio, Entrenador* entrenador) {
     if (opcion == 1) { strcpy(nombre_obj, "MonBall") ; *precio = 100 ; }
     else if (opcion == 2) { strcpy(nombre_obj, "Pocion") ; *precio = 150 ; }
@@ -37,7 +39,7 @@ void comprar_objeto(int opcion, char* nombre_obj, int* precio, Entrenador* entre
     return;
 }
 
-// CURAR AL 100%
+// CURAR AL 100% EL EQUIPO MON
 void curar_equipo(Entrenador* entrenador) {
     if (!entrenador || !entrenador -> equipo_mon) return ;
 
@@ -51,9 +53,11 @@ void curar_equipo(Entrenador* entrenador) {
         mon = list_next(entrenador -> equipo_mon) ;
     }
 
-    printf("\nSE HAN CURADO TODOS LOS MONES DEL EQUIPO.\n") ;
+    puts("SE HAN CURADO TODOS LOS MONES DEL EQUIPO.\n") ;
 }
 
+// Vende un objeto del entrenador.
+// El jugador puede escoger que objeto va a vender, junto con una cantidad especifica (maximo de objetos de ese tipo que tenga)
 void vender_objeto(Entrenador* entrenador, char* nombre_obj) {
     printf("\nInventario Actual:\n") ;
     Objeto* obj = list_first(entrenador -> inventario) ;
@@ -74,12 +78,12 @@ void vender_objeto(Entrenador* entrenador, char* nombre_obj) {
             printf("¿Cuántos deseas vender?: ");
             fgets(buffer, sizeof(buffer), stdin);
             if (sscanf(buffer, "%d", &cantidad) != 1) {
-                printf("Entrada inválida para cantidad.\n");
+                puts("Entrada inválida para cantidad.");
                 break;
             }
 
             if (cantidad <= 0 || cantidad > obj -> cantidad ) {
-                printf("Cantidad Inválida.\n") ;
+                puts("Cantidad Inválida.") ;
                 break ;
             }
             int valor_venta = (obj -> valor * cantidad) / 2 ;
@@ -98,7 +102,8 @@ void vender_objeto(Entrenador* entrenador, char* nombre_obj) {
     if (obj == NULL) printf("No tienes este objeto en tu inventario.\n") ;
 }
 
-// VER LA TIENDA 
+// Opciones de ver la tienda
+// Muestra el menu y cada caso en el centro mon
 void ver_tienda(Entrenador* entrenador) {
     int opcion;
     while (true) {
