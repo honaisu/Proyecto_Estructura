@@ -194,6 +194,8 @@ int batalla_pokemon_salvaje(Entrenador *jugador, Mon *mon_salvaje) {
     float ef_mon_salvaje;
     int obj_ocupado = 1;
     char tecla;
+    int pre_vida ;
+    int post_vida ;
     bool opcion_valida = false;
     while (true) {
         ef_mon_jugador = conseguir_efectividad(mon_batalla, mon_salvaje);
@@ -207,8 +209,10 @@ int batalla_pokemon_salvaje(Entrenador *jugador, Mon *mon_salvaje) {
             esperar_tecla(&tecla);
             switch (tecla) {
                 case '1': {
+                    pre_vida = mon_salvaje->hp_actual ;
                     dano_recibido = efectuar_dano(mon_batalla, mon_salvaje, ef_mon_jugador, defensa_mon);
-                    imprimir_dano(mon_batalla, mon_salvaje, dano_recibido);
+                    post_vida = pre_vida - mon_salvaje->hp_actual ;
+                    imprimir_dano(mon_batalla, mon_salvaje, post_vida);
                     opcion_valida = true;
                     break;
                 }
@@ -244,8 +248,10 @@ int batalla_pokemon_salvaje(Entrenador *jugador, Mon *mon_salvaje) {
         }
 
         // ATAQUE DEL MON SALVAJE
+        pre_vida = mon_batalla->hp_actual ;
         dano_recibido = efectuar_dano(mon_salvaje, mon_batalla, ef_mon_salvaje, defensa_mon);
-        imprimir_dano(mon_salvaje, mon_batalla, dano_recibido);
+        post_vida = pre_vida - mon_batalla->hp_actual ;
+        imprimir_dano(mon_salvaje, mon_batalla, post_vida);
         esperar_enter();
 
         if (verificar_vivos(mon_batalla, equipo)) { 
@@ -275,6 +281,8 @@ int batalla_entrenador(Entrenador *jugador, Entrenador *rival){
     float defensa_rival = 1 ;
     float ef_mon_jugador;
     float ef_mon_rival;
+    int pre_vida ;
+    int post_vida ;
     bool opcion_valida = false;
 
     char tecla ;
@@ -290,8 +298,10 @@ int batalla_entrenador(Entrenador *jugador, Entrenador *rival){
             esperar_tecla(&tecla);
             switch (tecla) {
                 case '1': {
+                    pre_vida = mon_rival->hp_actual ;
                     dano_recibido = efectuar_dano(mon_jugador, mon_rival, ef_mon_jugador, defensa_rival);
-                    imprimir_dano(mon_jugador, mon_rival, dano_recibido);
+                    post_vida = pre_vida - mon_rival->hp_actual ;
+                    imprimir_dano(mon_jugador, mon_rival, post_vida);
                     opcion_valida = true;
                     break;
                 }
@@ -335,8 +345,10 @@ int batalla_entrenador(Entrenador *jugador, Entrenador *rival){
             aplicar_defensa(&defensa_rival, mon_rival);
         } else {
             // ATAQUE RIVAL
+            pre_vida = mon_jugador->hp_actual ;
             dano_recibido = efectuar_dano(mon_rival, mon_jugador, ef_mon_rival, defensa_mon);
-            imprimir_dano(mon_rival, mon_jugador, dano_recibido);
+            post_vida = pre_vida - mon_jugador->hp_actual ;
+            imprimir_dano(mon_rival, mon_jugador, post_vida);
         }
 
         esperar_enter();
