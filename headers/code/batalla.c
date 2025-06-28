@@ -165,20 +165,21 @@ void aplicar_defensa(float* defensa_mon, Mon* mon_batalla) {
     } else printf("%s aumentó su defensa\n", mon_batalla->apodo);
 }
 
-bool verificar_vivos(Mon* mon_batalla, List* equipo) {
-    if (mon_batalla->hp_actual > 0) return true;
-    mon_batalla->hp_actual = 0;
-    mon_batalla->is_dead = true;
-    printf("%s ha sido derrotado...\n", mon_batalla->apodo);
+bool verificar_vivos(Mon** mon_batalla, List* equipo) {
+    if ((*mon_batalla)->hp_actual > 0) return true;
+    (*mon_batalla)->hp_actual = 0;
+    (*mon_batalla)->is_dead = true;
+    printf("%s ha sido derrotado...\n", (*mon_batalla)->apodo);
     esperar_enter();
 
-    mon_batalla = obtener_primer_mon_vivo(equipo);
-    if (mon_batalla != NULL) {
-        printf("\nSacas al combate a %s \n", mon_batalla->apodo);
+    *mon_batalla = obtener_primer_mon_vivo(equipo);
+    if (*mon_batalla != NULL) {
+        printf("\nSacas al combate a %s \n", (*mon_batalla)->apodo);
     } else {
         puts("No te quedan más Mon, has perdido...");
         return false;
     }
+    esperar_enter() ;
     return true;
 }
 
@@ -254,7 +255,7 @@ int batalla_pokemon_salvaje(Entrenador *jugador, Mon *mon_salvaje) {
         imprimir_dano(mon_salvaje, mon_batalla, post_vida);
         esperar_enter();
 
-        if (verificar_vivos(mon_batalla, equipo)) { 
+        if (verificar_vivos(&mon_batalla, equipo)) { 
             continue;
         } else {
             jugador->vivo = false;
@@ -352,7 +353,7 @@ int batalla_entrenador(Entrenador *jugador, Entrenador *rival){
         }
 
         esperar_enter();
-        if (verificar_vivos(mon_jugador, jugador->equipo_mon)) continue; 
+        if (verificar_vivos(&mon_jugador, jugador->equipo_mon)) continue; 
         else { 
             jugador->vivo = false; 
             free(mon_rival);
