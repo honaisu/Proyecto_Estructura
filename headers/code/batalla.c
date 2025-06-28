@@ -131,7 +131,7 @@ bool usar_item(Entrenador* jugador, Mon* mon_batalla, Mon* mon_contrario) {
             if (mon_batalla->hp_actual > mon_batalla->stats_base.hp_base)
                 mon_batalla->hp_actual = mon_batalla->stats_base.hp_base;
             printf("%s recupera algo de vida! \n", mon_batalla->apodo);
-            obj->cantidad -= 1 ;
+            --obj->cantidad;
             break;
         }
         case 'R': {
@@ -140,8 +140,8 @@ bool usar_item(Entrenador* jugador, Mon* mon_batalla, Mon* mon_contrario) {
                 muerto->hp_actual = muerto->stats_base.hp_base / 2;
                 muerto->is_dead = false;
                 printf("%s ha sido revivido con mitad de vida!\n", muerto->apodo);
-                obj->cantidad -= 1;
             } else puts("No fue posible revivir ningún Mon.");
+            --obj->cantidad;
             break;
         }
     }

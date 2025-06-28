@@ -5,30 +5,31 @@
 // gcc main2.c headers/TDAs/*.c headers/code/*.c -o main.exe -lm
 
 extern Map* MONDEX;
-extern List *nombres ; 
+extern List* NOMBRES_MON ; 
 extern char NOMBRE_JUGADOR[MAX];
-extern List* NPCs;
 
-void liberar_recursos(Map* ubicaciones, Entrenador* entrenador) {
-    if (ubicaciones) {
-        MapPair* pair = map_first(ubicaciones);
-        while (pair) {
-            Ubicacion* ubi = (Ubicacion*)pair->value;
-            list_clean(ubi->mones);
-            pair = map_next(ubicaciones);
-        }
-        map_clean(ubicaciones);
+void liberar_recursos(Map* ubicaciones) {
+    MapPair* pair = map_first(ubicaciones);
+    while (pair) {
+        Ubicacion* ubi = (Ubicacion*)pair->value;
+        list_clean(ubi->mones);
+        pair = map_next(ubicaciones);
     }
+    map_clean(ubicaciones);
+    map_clean(MONDEX);
+    free(MONDEX);
+    list_clean(NOMBRES_MON);
+    free(NOMBRES_MON);
+}
 
-    if (entrenador) {
-        list_clean(entrenador->equipo_mon);
-        free(entrenador->equipo_mon);
-        entrenador->equipo_mon = NULL;
+void liberar_jugador(Entrenador* entrenador) {
+    list_clean(entrenador->equipo_mon);
+    free(entrenador->equipo_mon);
+    entrenador->equipo_mon = NULL;
 
-        list_clean(entrenador->inventario);
-        free(entrenador->inventario);
-        free(entrenador);
-    }
+    list_clean(entrenador->inventario);
+    free(entrenador->inventario);
+    free(entrenador);
 }
 
 void mostrar_menu_principal(void) {
@@ -42,20 +43,13 @@ int main(void) {
     srand(time(NULL)) ;
     // UBICACIONES
     Map* ubicaciones = map_create(MAX);
-    // NOMBRES DE MONES
-    nombres = list_create();
-    // MONDEX 
-    MONDEX = map_create(MAX);
 
-    // Parametros de MONDEX y Nombres, guardará automaticamente los mones ahi.
-    // útil también para la lista del mundo.
-    cargar_archivo_mones(nombres);
+    cargar_archivo_mones();
     cargar_archivo_NPCs();
     cargar_grafo_desde_csv(ubicaciones);
     if (ubicaciones == NULL) {
-        printf("No se cargó la región. Verifique los archivos CSV.\n");
-        liberar_recursos(ubicaciones, NULL);
-        free(ubicaciones);
+        printf("No se cargaron las regiones. Verifique los archivos CSV.\n");
+        liberar_recursos(ubicaciones);
         return 1;
     }
     // Input del usuario para que vea que se cargo todo
@@ -63,13 +57,14 @@ int main(void) {
     limpiar_pantalla();
 
     while (true) {
+        limpiar_pantalla();
         mostrar_menu_principal();
         int opcion = leer_opcion_valida();
         switch (opcion) {
             case 1: {
                 Entrenador* entrenador = inicializar_entrenador();
                 menu_jugador(ubicaciones, entrenador);
-                liberar_recursos(NULL, entrenador);   
+                liberar_jugador(entrenador);
                 break;
             }
             case 2 : {
@@ -79,23 +74,16 @@ int main(void) {
                 printf("Nombre actualizado: %s\n", NOMBRE_JUGADOR);
                 esperar_enter();
                 break;
-                }
-
+            }
             case 0:
                 break;
             default:
                 puts("Por favor, ingrese una opción válida");
                 break;
         }
-        if (opcion == 0) {
-            break ;
-        } 
-        limpiar_pantalla();
+        if (opcion == 0) break ;
     }
-    liberar_recursos(ubicaciones, NULL);
-    map_clean(MONDEX);
-    free(MONDEX);
-
+    liberar_recursos(ubicaciones);
     puts("¡Hasta luego!");
     return 0;
 }
