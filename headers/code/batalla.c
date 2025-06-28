@@ -108,22 +108,22 @@ void imprimir_dano(Mon* mon_batalla, Mon* mon_contrario, int dano_recibido) {
     ANSI_COLOR_WHITE "%s" ANSI_COLOR_RESET "\n", mon_batalla->apodo, dano_recibido, mon_contrario->apodo);
 }
 
-bool usar_item(Entrenador* jugador, Mon* mon_batalla, Mon* mon_contrario) {
+int usar_item(Entrenador* jugador, Mon* mon_batalla, Mon* mon_contrario) {
     Objeto *obj = gestionar_inventario(jugador);
-    if (obj == NULL) return false;
+    if (obj == NULL) return 2;
 
     if (obj->cantidad == 0) {
         puts("No tienes ese objeto...");
-        return false;
+        return 2;
     }
     switch (*obj->nombre) {
         case 'M':
             if (es_entrenador) {
                 puts("No puedes usar una MonBall en una pelea contra otro entrenador!") ;
                 puts("Eso seria un robo...") ;
-                return false;
+                return 2;
             }
-            if (atrapar_mon(jugador, mon_contrario)) { --obj->cantidad; return true; }
+            if (atrapar_mon(jugador, mon_contrario)) { --obj->cantidad; return 1; }
             else { --obj->cantidad; }
             break;
         case 'P': {
@@ -140,12 +140,15 @@ bool usar_item(Entrenador* jugador, Mon* mon_batalla, Mon* mon_contrario) {
                 muerto->hp_actual = muerto->stats_base.hp_base / 2;
                 muerto->is_dead = false;
                 printf("%s ha sido revivido con mitad de vida!\n", muerto->apodo);
-            } else puts("No fue posible revivir ningún Mon.");
+            } else {
+                puts("No fue posible revivir ningún Mon.");
+                return 2 ;
+            }
             --obj->cantidad;
             break;
         }
     }
-    return false;
+    return 0;
 }
 
 int efectuar_dano(Mon* mon_batalla, Mon* mon_contrario, float ef, float defensa) {
@@ -224,7 +227,9 @@ int batalla_pokemon_salvaje(Entrenador *jugador, Mon *mon_salvaje) {
                 }
                 case '3': {
                     // En caso que se capture al Mon (Bool) retorna 2
-                    if (usar_item(jugador, mon_batalla, mon_salvaje)) return 2;
+                    int item = usar_item(jugador, mon_batalla, mon_salvaje) ;
+                    if (item == 1) return 2 ;
+                    else if (item == 2) break ;
                     opcion_valida = true;
                     break;
                 }
@@ -312,8 +317,10 @@ int batalla_entrenador(Entrenador *jugador, Entrenador *rival){
                     break;
                 }
                 case '3': {
-                    usar_item(jugador, mon_jugador, mon_rival);
+                    int item = usar_item(jugador, mon_jugador, mon_rival) ;
+                    if (item == 2) break ;
                     opcion_valida = true;
+                    
                     break;   
                 }
                 default: {
