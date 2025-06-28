@@ -51,7 +51,7 @@ void curar_equipo(Entrenador* entrenador) {
         mon = list_next(entrenador -> equipo_mon) ;
     }
 
-    printf("\nSE HAN CURADO TODOS1 LOS MONES DEL EQUIPO.\n") ;
+    printf("\nSE HAN CURADO TODOS LOS MONES DEL EQUIPO.\n") ;
 }
 
 void vender_objeto(Entrenador* entrenador, char* nombre_obj) {
@@ -103,7 +103,7 @@ void ver_tienda(Entrenador* entrenador) {
     int opcion;
     while (true) {
         limpiar_pantalla();
-        puts("=== CENTRO MON ===");
+        puts("====== CENTRO MON ======");
         printf("Dinero actual: $%d\n", entrenador -> dinero);
         const char* opciones[] = 
         {"Comprar MonBall ($100)", "Comprar Pocion ($150)", "Comprar Revivir ($250)", "Vender Objeto", "Curar a todo el Equipo"};
