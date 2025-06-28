@@ -13,11 +13,11 @@
 // Variable que define cuantos Mones existen en el CSV
 #define MAX_MONES 10 
 
-extern Map* MONDEX;
+extern Map*  MONDEX;
 extern List* MONES_FUEGO;
 extern List* MONES_AGUA;
 extern List* MONES_PLANTA;
-extern List *nombres ;
+extern List* NOMBRES_MON;
 
 // BASE DE LOS MONES. Tendrá los valores Base de cada Mon.
 typedef struct Mon_Base {
@@ -40,13 +40,13 @@ typedef struct Mon {
 } Mon;
 
 // Función para cargar el CSV MONES
-void cargar_archivo_mones(List*);
+void cargar_archivo_mones(void);
 
 // Función para ver el menu inicial (1, 2, 0)
 void menu_inicial(void);
 
 // Función para ver / acceder la MONDEX
-void _mondex(List*);
+void _mondex(void);
 
 // Función para seleccionar un mon salvaje dentro de una lista
 Mon * aparicion_salvaje(List*) ;

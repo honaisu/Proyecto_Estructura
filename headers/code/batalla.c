@@ -131,7 +131,7 @@ bool usar_item(Entrenador* jugador, Mon* mon_batalla, Mon* mon_contrario) {
             if (mon_batalla->hp_actual > mon_batalla->stats_base.hp_base)
                 mon_batalla->hp_actual = mon_batalla->stats_base.hp_base;
             printf("%s recupera algo de vida! \n", mon_batalla->apodo);
-            obj->cantidad -= 1 ;
+            --obj->cantidad;
             break;
         }
         case 'R': {
@@ -140,8 +140,8 @@ bool usar_item(Entrenador* jugador, Mon* mon_batalla, Mon* mon_contrario) {
                 muerto->hp_actual = muerto->stats_base.hp_base / 2;
                 muerto->is_dead = false;
                 printf("%s ha sido revivido con mitad de vida!\n", muerto->apodo);
-                obj->cantidad -= 1;
             } else puts("No fue posible revivir ningún Mon.");
+            --obj->cantidad;
             break;
         }
     }
@@ -172,14 +172,15 @@ bool verificar_vivos(Mon* mon_batalla, List* equipo) {
     printf("%s ha sido derrotado...\n", mon_batalla->apodo);
     esperar_enter();
 
-    mon_batalla = obtener_primer_mon_vivo(equipo);
+    mon_batalla = list_next(equipo);
     if (mon_batalla != NULL) {
-        printf("\nSacas al combate a %s \n", mon_batalla->apodo);
+        printf("\nSacas al combate a %s!\n", mon_batalla->apodo);
+        return true;
     } else {
         puts("No te quedan más Mon, has perdido...");
         return false;
     }
-    return true;
+    return false;
 }
 
 int batalla_pokemon_salvaje(Entrenador *jugador, Mon *mon_salvaje) {

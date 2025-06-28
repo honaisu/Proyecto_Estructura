@@ -4,7 +4,8 @@
 
 // Declaraciones Globales de las variables que se usan de los mones
 
-// MONDEX: Mapa que guarda como clave el nombre de un Mon y de valor los datos del Mon
+// MONDEX: Mapa que guarda como clave el nombre de un Mon y de valor los datos del Mon.
+// Posee los datos de absolutamente todos los Mon del juego.
 Map* MONDEX = NULL;
 // Usado para las zonas de agua
 List* MONES_AGUA = NULL;
@@ -13,7 +14,7 @@ List* MONES_FUEGO = NULL;
 // Usado para las zonas de planta
 List* MONES_PLANTA = NULL;
 // Nombres de los mones, estos se usan para la correcta impresión en la MONDEX
-List *nombres = NULL ;
+List* NOMBRES_MON = NULL ;
 
 Mon* inicializar_mon(char** campos) {
     Mon* mon = (Mon*)malloc(sizeof(Mon));
@@ -47,7 +48,43 @@ void copiar_mon(Mon *copy, Mon *paste){
     paste->is_dead = false;
 }
 
-Mon * aparicion_salvaje(List *mones){
+void meter_mon_lista(Mon* mon) {
+    if (!strcmp(mon->tipo, "PLANTA")) list_pushBack(MONES_PLANTA, mon);
+    else if (!strcmp(mon->tipo, "AGUA")) list_pushBack(MONES_AGUA, mon);
+    else if (!strcmp(mon->tipo, "FUEGO")) list_pushBack(MONES_FUEGO, mon);     
+}
+
+void cargar_archivo_mones(void) {
+    FILE* archivo = fopen("data/mones.csv", "r");
+    if (!archivo) {
+        perror("Error al cargar mones.csv");
+        return;
+    }
+
+    MONDEX = map_create(100);
+    MONES_AGUA = list_create();
+    MONES_FUEGO = list_create();
+    MONES_PLANTA = list_create();
+    NOMBRES_MON = list_create();
+
+    char buffer[500];
+    fgets(buffer, sizeof(buffer), archivo); // Saltar encabezado
+    char** campos;
+    while ((campos = leer_linea_csv(archivo, ',')) != NULL) {
+        Mon* mon = inicializar_mon(campos);
+        meter_mon_lista(mon);
+        
+        char* clave = strdup(campos[1]);
+        list_pushBack(NOMBRES_MON, mon) ;
+        map_insert(MONDEX, clave, mon);
+    }
+
+    fclose(archivo);
+    printf("[🐱] Se cargó correctamente mones.csv\n");
+}
+
+// Aparición random que se hace para un Mon salvaje.
+Mon* aparicion_salvaje(List *mones){
     int tamano = list_size(mones) ;
     int i = rand() % tamano + 1 ;
     Mon *recorrer = list_first(mones) ;
@@ -59,43 +96,9 @@ Mon * aparicion_salvaje(List *mones){
     return mon_final;
 }
 
-void meter_mon_lista(Mon* mon) {
-    if (!strcmp(mon->tipo, "PLANTA")) list_pushBack(MONES_PLANTA, mon);
-    else if (!strcmp(mon->tipo, "AGUA")) list_pushBack(MONES_AGUA, mon);
-    else if (!strcmp(mon->tipo, "FUEGO")) list_pushBack(MONES_FUEGO, mon);     
-}
-
-void cargar_archivo_mones(List *nombre_mons) {
-    FILE* archivo = fopen("data/mones.csv", "r");
-    if (!archivo) {
-        perror("Error al cargar mones.csv");
-        return;
-    }
-
-    MONDEX = map_create(100);
-    MONES_AGUA = list_create();
-    MONES_FUEGO = list_create();
-    MONES_PLANTA = list_create();
-
-    char buffer[500];
-    fgets(buffer, sizeof(buffer), archivo); // Saltar encabezado
-    char** campos;
-    while ((campos = leer_linea_csv(archivo, ',')) != NULL) {
-        Mon* mon = inicializar_mon(campos);
-        meter_mon_lista(mon);
-        
-        char* clave = strdup(campos[1]);
-        list_pushBack(nombre_mons, mon) ;
-        map_insert(MONDEX, clave, mon);
-    }
-
-    fclose(archivo);
-    printf("[🐱] Se cargó correctamente mones.csv\n");
-}
-
-void _mondex(List *nombres) {
+void _mondex(void) {
     while (true) {
-        imprimir_mondex(nombres);
+        imprimir_mondex(NOMBRES_MON);
         printf("Ingrese el " ANSI_COLOR_WHITE "nombre" ANSI_COLOR_RESET " del Mon que desee buscar ('0' - Ninguno): ");
         char entrada[MAX];
         leer_entrada(entrada);
